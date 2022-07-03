@@ -330,11 +330,11 @@ class Invoice extends Controller
                     foreach ($dat[$key]->out as $kee => $datan) {
                         $datdetail[$key]["part_name"] = $attt->part_name;
                         $datdetail[$key]["part_no"] = $attt->part_no;
-                        $datdetail[$key]["price"] = $attt->price;
                         $datdetail[$key]["uniqe"][$ke]["nosj"] = $uniqe->nosj;
                         $datdetail[$key]["uniqe"][$ke]["nosj_link"] = date('d', strtotime($uniqe->date_sj)) . $uniqe->nosj;
                         $datdetail[$key]["uniqe"][$ke]["date_sj"] = $uniqe->date_sj;
                         if ($uniqe->nosj . $request->id_print == $datan->DetailSJ['nosj'] . $datan->DetailSJ['invoice_id']) {
+                            $datdetail[$key]["price"] = $datan->total_price / $datan->qty;
                             $datdetail[$key]["uniqe"][$ke]["sj_real"][0]["nosj"] = $datan->DetailSJ['nosj'];
                             $datdetail[$key]["uniqe"][$ke]["sj_real"][0]["qty"] = $datan->qty;
                         }

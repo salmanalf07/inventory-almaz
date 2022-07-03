@@ -9,11 +9,11 @@ LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=debug
 
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=almasds.co.id
 DB_PORT=3306
-DB_DATABASE=almaz
-DB_USERNAME=root
-DB_PASSWORD=
+DB_DATABASE=almasdsc_inventory_ads
+DB_USERNAME=almasdsc_transaction
+DB_PASSWORD=tr1sthaMaxx
 
 BROADCAST_DRIVER=log
 CACHE_DRIVER=file

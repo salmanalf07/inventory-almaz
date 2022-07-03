@@ -39,6 +39,7 @@
                                         <th>Part Name</th>
                                         <th>Price</th>
                                         <th>Periode</th>
+                                        <th>Action</th>
 
                                     </tr>
                                 </thead>
@@ -50,6 +51,7 @@
                                         <th>Part No</th>
                                         <th>Part Name</th>
                                         <th>Price</th>
+                                        <th>Periode</th>
                                         <th>Periode</th>
 
                                     </tr>
@@ -277,6 +279,10 @@
                     data: 'periode',
                     name: 'periode'
                 },
+                {
+                    data: 'aksi',
+                    name: 'aksi'
+                },
             ],
         });
     });
@@ -442,7 +448,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'update_price',
+            url: 'update_prices',
             data: {
                 '_token': "{{ csrf_token() }}",
                 'id': idPart,

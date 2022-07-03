@@ -8,6 +8,7 @@ use App\Models\DetailPartIn;
 use App\Models\DetailSJ;
 use App\Models\HistoryPart;
 use App\Models\Parts as ModelsParts;
+use App\Models\SJ;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
@@ -164,7 +165,17 @@ class Parts extends Controller
                 $post->update([
                     'total_price' => $part->price * $detail_sj[$countt]->qty,
                 ]);
+                $ur[] = $detail_sj[$countt]->sj_id;
             };
+            $unique_dataa = array_unique($ur);
+
+            foreach ($unique_dataa as $value) {
+                $detailsj = DetailSJ::where('sj_id', $value)->sum('total_price');
+
+                $update = SJ::find($value);
+                $update->grand_total = (int)$detailsj;
+                $update->save();
+            }
         }
 
         $detail_order = DetailOrder::select('id', 'qty')

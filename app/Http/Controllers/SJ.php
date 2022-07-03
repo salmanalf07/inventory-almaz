@@ -407,7 +407,8 @@ class SJ extends Controller
                 '=',
                 'sjs.cust_id'
             )
-            ->selectRaw('detail_sjs.part_id,parts.name_local,customers.code,sjs.date_sj, sum(detail_sjs.total_price) as total');
+            ->selectRaw('detail_sjs.part_id,parts.name_local,customers.code,sjs.date_sj, sum(detail_sjs.total_price) as total')
+            ->where('detail_sjs.deleted_at', '=', null);
         if ($request->cust_id != "#") {
             $data->where('sjs.cust_id', $request->cust_id);
         };

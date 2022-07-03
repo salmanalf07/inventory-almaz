@@ -180,6 +180,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/hisparts',
     return view('/MasterData/history_part', ['judul' => "History Price Part", 'customer' => $cust]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/json_hisparts', [HistoryPart::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_prices', [HistoryPart::class, 'update_price']);
 //part_in
 Route::middleware(['auth:sanctum', 'verified'])->get('/partin', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
