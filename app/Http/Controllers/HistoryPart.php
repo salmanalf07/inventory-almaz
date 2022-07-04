@@ -7,6 +7,7 @@ use App\Models\DetailOrder;
 use App\Models\DetailPartIn;
 use App\Models\DetailSJ;
 use App\Models\HistoryPart as ModelsHistoryPart;
+use App\Models\Order;
 use App\Models\Parts;
 use App\Models\SJ;
 use Illuminate\Http\Request;
@@ -87,7 +88,19 @@ class HistoryPart extends Controller
                 $post->update([
                     'total_price' => $part->price * $part_in[$count]->qty,
                 ]);
+
+                $partin_ar[] = $part_in[$count]->partin_id;
             };
+
+            $unique_partin = array_unique($partin_ar);
+
+            foreach ($unique_partin as $value) {
+                $detailsj = DetailPartIn::where('partin_id', $value)->sum('total_price');
+
+                // $up_partin = PartIn::find($value);
+                // $up_partin->grand_total = (int)$detailsj;
+                // $up_partin->save();
+            }
         }
 
         $detail_sj = DetailSJ::select('id', 'sj_id', 'qty')->with('DetailSJ')
@@ -127,7 +140,17 @@ class HistoryPart extends Controller
                 $post->update([
                     'price' => $part->price * $detail_order[$count]->qty,
                 ]);
+                $order_ar[] = $detail_order[$count]->order_id;
             };
+            $unique_order = array_unique($order_ar);
+
+            foreach ($unique_order as $value) {
+                $order = DetailOrder::where('order_id', $value)->sum('price');
+
+                $up_order = Order::find($value);
+                $up_order->total_price = (int)$order;
+                $up_order->save();
+            }
         }
 
         return response()->json($part);
