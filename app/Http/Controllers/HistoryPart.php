@@ -142,15 +142,15 @@ class HistoryPart extends Controller
                 ]);
                 $order_ar[] = $detail_order[$count]->order_id;
             };
-            $unique_order = array_unique($order_ar);
+            // $unique_order = array_unique($order_ar);
 
-            foreach ($unique_order as $value) {
-                $order = DetailOrder::where('order_id', $value)->sum('price');
+            // foreach ($unique_order as $value) {
+            //     $order = DetailOrder::where('order_id', $value)->sum('price');
 
-                $up_order = Order::find($value);
-                $up_order->total_price = (int)$order;
-                $up_order->save();
-            }
+            //     $up_order = Order::find($value);
+            //     $up_order->total_price = (int)$order;
+            //     $up_order->save();
+            // }
         }
 
         return response()->json($part);
