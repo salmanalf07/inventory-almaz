@@ -678,13 +678,14 @@
                 setTimeout(function() {
                     for (let j = 0; j < data[0].detail_invoice.length; j++) {
                         $('#part_id' + j).val(data[0].detail_invoice[j].part_id).trigger('change').attr("disabled", true);
-                        $('#qty' + j).val(data[0].detail_invoice[j].qty).trigger('change').attr("disabled", true);
+                        $('#qty' + j).val(data[0].detail_invoice[j].qty).attr("disabled", true);
                         $('#price' + [j]).val(data[0].detail_invoice[j].total_price / data[0].detail_invoice[j].qty);
                         $('#total_price' + [j]).val(data[0].detail_invoice[j].total_price);
                         autonumeric(j);
                         //$('#qty' + j).val(myArray[j].qty).trigger('change').attr("disabled", true);
                         //console.log(myArray[j]);
                     }
+                    findTotal(data[0].detail_invoice.length);
                 }, 2500);
                 $('#SJJ').show();
                 $(".multi-sjj").select2({
@@ -945,7 +946,7 @@
                         $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
                         autonumeric(matches[0]);
                     }
-                    findTotal(matches[0]);
+                    //findTotal(matches[0]);
                 },
             });
         }
@@ -1009,7 +1010,7 @@
         //var arr = document.getElementsByName('total_price[]');
         var tow = $('#grand_total').val();
         var tot = 0;
-        for (var i = 0; i <= id; i++) {
+        for (var i = 0; i < id; i++) {
             if (parseInt($('#total_price' + i).val()))
                 var total_p = $('#total_price' + i).val().replaceAll(",", "");
             tot += parseInt(total_p);

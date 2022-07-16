@@ -322,6 +322,62 @@ class SJ extends Controller
         //return view('/PrintOut/surat_sj', ['data' => $data, 'datee' => $request->datee]);
     }
 
+    public function report_partoutt(Request $request)
+    {
+        $dataa = DetailSJ::with('DetailSJ', 'part.customer');
+        if ($request->cust_id != "#" && $request->type != "#") {
+            $dataa->whereRelation('part', 'cust_id', '=', $request->cust_id);
+            $dataa->where('type', '=', $request->type);
+            $dataa->whereHas('DetailSJ', function ($query) use ($request) {
+                $query->whereDate('date_sj', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                    ->whereDate('date_sj', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+            });
+        } elseif ($request->part_id != "#" && $request->type != "#") {
+            $dataa->where([
+                ['part_id', '=', $request->part_id],
+                ['type', '=', $request->type],
+            ]);
+            $dataa->whereHas('DetailSJ', function ($query) use ($request) {
+                $query->whereDate('date_sj', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                    ->whereDate('date_sj', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+            });
+        } elseif ($request->type != "#") {
+            $dataa->where([
+                ['type', '=', $request->type],
+            ]);
+            $dataa->whereHas('DetailSJ', function ($query) use ($request) {
+                $query->whereDate('date_sj', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                    ->whereDate('date_sj', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+            });
+        } elseif ($request->part_id != "#") {
+            $dataa->where([
+                ['part_id', '=', $request->part_id],
+            ]);
+            $dataa->whereHas('DetailSJ', function ($query) use ($request) {
+                $query->whereDate('date_sj', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                    ->whereDate('date_sj', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+            });
+        } elseif ($request->cust_id != "#") {
+            $dataa->whereRelation('Parts', 'cust_id', '=', $request->cust_id);
+            $dataa->whereHas('DetailSJ', function ($query) use ($request) {
+                $query->whereDate('date_sj', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                    ->whereDate('date_sj', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+            });
+        } else {
+            $dataa->whereHas('DetailSJ', function ($query) use ($request) {
+                $query->whereDate('date_sj', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                    ->whereDate('date_sj', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+            });
+        }
+
+
+        $data = $dataa->get();
+
+
+        return DataTables::of($data)
+            ->toJson();
+        // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
+    }
 
     public function report_partout(Request $request)
     {

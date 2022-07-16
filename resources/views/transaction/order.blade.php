@@ -393,15 +393,16 @@
                 $('#roww').append(text);
                 setTimeout(function() {
                     for (let j = 0; j < data[0].detail_order.length; j++) {
-                        setTimeout(function() {
-                            $('#detail_id' + [j]).val(data[0].detail_order[j].id).attr("disabled", true);
-                            $('#total_price' + [j]).val(data[0].detail_order[j].price);
-                            $('#part_id' + [j]).val(data[0].detail_order[j].part_id).trigger('change').attr("disabled", true);
-                            $('#qty' + [j]).val(data[0].detail_order[j].qty).trigger('change').attr("disabled", true);
-                            $('#price' + [j]).val(data[0].detail_order[j].price / data[0].detail_order[j].qty);
-                            autonumeric(j);
-                        }, 1000);
+                        // setTimeout(function() {
+                        $('#detail_id' + [j]).val(data[0].detail_order[j].id).attr("disabled", true);
+                        $('#total_price' + [j]).val(data[0].detail_order[j].price);
+                        $('#part_id' + [j]).val(data[0].detail_order[j].part_id).trigger('change').attr("disabled", true);
+                        $('#qty' + [j]).val(data[0].detail_order[j].qty).attr("disabled", true);
+                        $('#price' + [j]).val(data[0].detail_order[j].price / data[0].detail_order[j].qty);
+                        autonumeric(j);
+                        // }, 1000);
                     }
+                    findTotal(data[0].detail_order.length);
                 }, 500);
 
                 $('#date').val(new Date(data[0].date).toLocaleString("id-ID", newDateOptions).split(' ')[0]).attr("disabled", true);;
@@ -529,7 +530,7 @@
                     $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
                     autonumeric(matches[0]);
                 }
-                findTotal(matches[0]);
+                findTotal(matches[0] + 1);
             },
         });
     };
@@ -559,7 +560,7 @@
                 //     $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
                 //     autonumeric(matches[0]);
                 // }
-                findTotal(matches[0]);
+                findTotal(matches[0] + 1);
             },
         });
     };
@@ -581,10 +582,11 @@
         //var arr = document.getElementsByName('total_price[]');
         var table = document.getElementById('roww');
         var rowCount = table.rows.length;
-        console.log(rowCount);
+        //console.log(rowCount);
+        console.log(id);
         var tow = $('#grand_total').val();
         var tot = 0;
-        for (var i = 0; i < rowCount; i++) {
+        for (var i = 0; i < id; i++) {
             if (parseInt($('#total_price' + i).val())) {
                 var total_p = $('#total_price' + i).val().replaceAll(",", "");
                 tot += parseInt(total_p);

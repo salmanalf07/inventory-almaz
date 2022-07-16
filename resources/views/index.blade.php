@@ -192,7 +192,7 @@
                                 $data = explode(",", $str);
                                 ?>
                                 @if($str)
-                                <li class="nav-item {{ request()->is('r_partin', 'r_partout','r_sumpart', 'r_order', 'r_invoice', 'rekap_inv','r_production') ? 'menu-open' : '' }}">
+                                <li class="nav-item {{ request()->is('r_partin','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice', 'rekap_inv','r_production') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>
@@ -207,6 +207,16 @@
                                             <a href="r_partin" class="nav-link {{ request()->is('r_partin') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Part In</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    @endif
+                                    @if($dataa == "r_partoutt" || $dataa == "ALL")
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="r_partoutt" class="nav-link {{ request()->is('r_partoutt') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Part Out</p>
                                             </a>
                                         </li>
                                     </ul>
