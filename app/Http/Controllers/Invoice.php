@@ -379,7 +379,7 @@ class Invoice extends Controller
                         $split = explode("*", $group[$i]["nosj"]);
                         $datdetail[$key]["uniqe"][$id]["nosj"] = $uniqe->nosj;
                         $datdetail[$key]["uniqe"][$id]["nosj_link"] = date('d', strtotime($split[0])) . $split[1];
-                        $datdetail[$key]["uniqe"][$id]["date_sj"] = $split[0];
+                        $datdetail[$key]["uniqe"][$id]["date_sj"] = $uniqe->date_sj;
                         if (date('d', strtotime($split[0])) . $split[1] . $split[2] == date('d', strtotime($uniqe->date_sj)) . $uniqe->nosj . $attt->id) {
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["nosj"] = $split[1];
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["qty"] = $group[$i]["qty"];
