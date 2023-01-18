@@ -374,18 +374,6 @@ class Invoice extends Controller
                     ];
                 }
 
-                // for ($i = 0; $i < count($group); $i++) {
-                //     $split = explode("*", $group[$i]["nosj"]);
-                //     if ($split[2] == $attt->id) {
-                //         $datdetail[$key]["uniqe"][$i]["nosj"] = $split[1];
-                //         $datdetail[$key]["uniqe"][$i]["nosj_link"] = date('d', strtotime($split[0])) . $split[1];
-                //         $datdetail[$key]["uniqe"][$i]["date_sj"] = $split[0];
-                //         $datdetail[$key]["uniqe"][$i]["sj_real"][0]["nosj"] = $split[1];
-                //         $datdetail[$key]["uniqe"][$i]["sj_real"][0]["qty"] = $group[$i]["qty"];
-                //     }
-                //     $datdetail[$key]["price"] = $datan->total_price / $datan->qty;
-                // }
-
                 foreach ($unique_data as $id => $uniqe) {
                     for ($i = 0; $i < count($group); $i++) {
                         $split = explode("*", $group[$i]["nosj"]);
@@ -471,18 +459,54 @@ class Invoice extends Controller
         $dat = $dataa->get();
         $datdetail = array();
         if (count($dat) > 0) {
+            // foreach ($dat as $key => $attt) {
+            //     foreach ($unique_data as $ke => $uniqe) {
+            //         foreach ($dat[$key]->out as $kee => $datan) {
+            //             //$datdetail[$key][$attt->part_name][$uniqe->nosj][$datan->DetailSJ['nosj']] = [$datan->qty];
+            //             $datdetail[$key]["name_local"] = $attt->name_local;
+            //             $datdetail[$key]["part_no"] = $attt->part_no;
+            //             $datdetail[$key]["price"] = $attt->price;
+            //             $datdetail[$key]["uniqe"][$ke]["nosj"] = $uniqe->nosj;
+            //             $datdetail[$key]["uniqe"][$ke]["date_sj"] = $uniqe->date_sj;
+            //             if ($uniqe->nosj == $datan->DetailSJ['nosj']) {
+            //                 $datdetail[$key]["uniqe"][$ke]["sj_real"][0]["nosj"] = $datan->DetailSJ['nosj'];
+            //                 $datdetail[$key]["uniqe"][$ke]["sj_real"][0]["qty"] = $datan->qty;
+            //             }
+            //         }
+            //     }
+            // }
+
+            $temp = [];
+
             foreach ($dat as $key => $attt) {
-                foreach ($unique_data as $ke => $uniqe) {
-                    foreach ($dat[$key]->out as $kee => $datan) {
-                        //$datdetail[$key][$attt->part_name][$uniqe->nosj][$datan->DetailSJ['nosj']] = [$datan->qty];
-                        $datdetail[$key]["name_local"] = $attt->name_local;
-                        $datdetail[$key]["part_no"] = $attt->part_no;
-                        $datdetail[$key]["price"] = $attt->price;
-                        $datdetail[$key]["uniqe"][$ke]["nosj"] = $uniqe->nosj;
-                        $datdetail[$key]["uniqe"][$ke]["date_sj"] = $uniqe->date_sj;
-                        if ($uniqe->nosj == $datan->DetailSJ['nosj']) {
-                            $datdetail[$key]["uniqe"][$ke]["sj_real"][0]["nosj"] = $datan->DetailSJ['nosj'];
-                            $datdetail[$key]["uniqe"][$ke]["sj_real"][0]["qty"] = $datan->qty;
+                //     foreach ($unique_data as $ke => $uniqe) {
+                $datdetail[$key]["name_local"] = $attt->part_name;
+                $datdetail[$key]["part_no"] = $attt->part_no;
+                $datdetail[$key]["price"] = $attt->price;
+                foreach ($dat[$key]->out as $kee => $datan) {
+                    if ($datan->DetailSJ['nosj'] .  $datan->part_id == $datan->DetailSJ['nosj'] . $attt->id) {
+                        if (!array_key_exists($datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id, $temp)) {
+                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id] = 0;
+                        }
+                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id] += $datan->qty;
+                    }
+                }
+
+                foreach ($temp as $ke => $value) {
+                    $group[] = [
+                        'nosj' => $ke,
+                        'qty' => $value
+                    ];
+                }
+
+                foreach ($unique_data as $id => $uniqe) {
+                    for ($i = 0; $i < count($group); $i++) {
+                        $split = explode("*", $group[$i]["nosj"]);
+                        $datdetail[$key]["uniqe"][$id]["nosj"] = $uniqe->nosj;
+                        $datdetail[$key]["uniqe"][$id]["date_sj"] = $uniqe->date_sj;
+                        if ($split[1] . $split[2]  ==  $uniqe->nosj . $attt->id) {
+                            $datdetail[$key]["uniqe"][$id]["sj_real"][0]["nosj"] = $split[1];
+                            $datdetail[$key]["uniqe"][$id]["sj_real"][0]["qty"] = $group[$i]["qty"];
                         }
                     }
                 }
