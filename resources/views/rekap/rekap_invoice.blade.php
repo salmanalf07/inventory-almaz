@@ -61,6 +61,14 @@
             margin-right: 0;
         }
 
+        @media print {
+            .headercolor {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+                background-color: #DDEBF7 !important;
+            }
+        }
+
         .container {
             display: flex;
             justify-content: space-between;
@@ -154,7 +162,7 @@
                 <td colspan="2" class="bold border-right">JASA PROSES</td>
                 <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}" class="bold">: ED-COATING</td>
             </tr>
-            <tr class="bold">
+            <tr class="bold headercolor" style="background-color: #DDEBF7">
                 <td class="center" rowspan="3">NO</td>
                 <td class="center" rowspan="3">NAMA PART</td>
                 <td class="center" rowspan="3">NO PART</td>
@@ -165,14 +173,14 @@
                 <td class="center" rowspan="3">KETERANGAN</td>
             </tr>
 
-            <tr>
+            <tr class="headercolor" style="background-color: #DDEBF7">
                 <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj') as $att) { ?>
                     <td class="center bold">
                         <?php echo date('d', strtotime($att['date_sj'])); ?>
                     </td>
                 <?php } ?>
             </tr>
-            <tr>
+            <tr class="headercolor" style="background-color: #DDEBF7">
                 <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj') as $att) { ?>
                     <td class="center bold">
                         <?php echo $att['nosj']; ?>
