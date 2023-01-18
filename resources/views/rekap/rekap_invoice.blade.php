@@ -289,9 +289,9 @@
             <tr class="center">
                 <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="">
                 </td>
-                <td colspan="2">Dibuat</td>
-                <td>Diperiksa</td>
-                <td>Diketahui</td>
+                <td colspan="2" class="headercolor" style="background-color: #DDEBF7">Dibuat</td>
+                <td class="headercolor" style="background-color: #DDEBF7">Diperiksa</td>
+                <td class="headercolor" style="background-color: #DDEBF7">Diketahui</td>
             </tr>
             <tr style="height:80px">
                 <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}"></td>
