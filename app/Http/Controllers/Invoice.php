@@ -289,7 +289,11 @@ class Invoice extends Controller
     public function tax_invoice(Request $request)
     {
         $data = ModelsInvoice::with('customer', 'order', 'DetailInvoice.Parts')->find($request->id_print);
-        $date_cetak = date("Y-m-d", strtotime(str_replace('/', '-', $request->cetak_date)));
+        if ($request->cetak_date) {
+            $date_cetak = date("Y-m-d", strtotime(str_replace('/', '-', $request->cetak_date)));
+        } else {
+            $date_cetak = null;
+        }
         $pajak = Application::find($data->tax_id);
         //$DetOrder = DetailOrder::with('Parts')->whereIn('id', explode(",", $data->detail_order))->get();
         return view('/PrintOut/tax_invoice', ['data' => $data, 'date_cetak' => $date_cetak, 'pajak' => $pajak]);

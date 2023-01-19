@@ -116,7 +116,11 @@
             </td>
             <td class="no-border center">:</td>
             <td colspan="7" class="no-border">
+                @if ($date_cetak != null)
                 {{date("d-M-Y",strtotime($date_cetak))}}
+                @else
+                {{date("d-M-Y",strtotime($data->date_inv))}}
+                @endif
             </td>
         </tr>
         <tr>
@@ -125,7 +129,11 @@
             </td>
             <td class="no-border center">:</td>
             <td colspan="7" class="no-border">
+                @if ($date_cetak != null)
                 {{date("F Y",strtotime($date_cetak))}}
+                @else
+                {{date("F Y",strtotime($data->date_inv))}}
+                @endif
             </td>
         </tr>
         <tr>
