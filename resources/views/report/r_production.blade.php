@@ -72,7 +72,7 @@
                                     <div class="col-md-12">
                                         <div class="control-group">
                                             <div class="controls pt-2">
-                                                <button id="in" onclick="reset_form()" type="button" class="form-control btn btn-secondary">Search</button>
+                                                <button id="in" type="button" class="form-control btn btn-secondary">Search</button>
                                             </div>
                                         </div>
                                     </div>
@@ -137,22 +137,22 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, ], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7], // table ke 1
                 },
                 {
                     targets: [1],
                     render: function(oTable) {
-                        return moment(oTable).format('YYYY');
+                        return moment(oTable).format('DD/MM/YYYY');
                     },
                 },
                 {
-                    targets: [2],
+                    targets: [5, 6],
                     render: function(oTable) {
-                        return moment(oTable).format('MM');
+                        return moment(oTable).format('H:mm:s');
                     },
                 },
                 {
-                    targets: [5],
+                    targets: [7],
                     render: $.fn.dataTable.render.number('.')
                 },
             ],
@@ -223,8 +223,8 @@
                     name: 'id'
                 },
                 {
-                    data: 'transaction.date_trasaction',
-                    name: 'transaction.date_trasaction'
+                    data: 'transaction.date_transaction',
+                    name: 'transaction.date_transaction'
                 },
                 {
                     data: 'customer.code',
@@ -254,7 +254,7 @@
         });
         $('.pt-2').on('click', '#in', function() {
             var date = $('#reservation').val().split(" - ");
-            // console.log($('#reservation').val().split(" - "));
+            // console.log($('#cust_id').val());
             $('#example1').data('dt_params', {
                 'cust_id': $('#cust_id').val(),
                 'dateinn': date[0],

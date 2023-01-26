@@ -11,7 +11,6 @@ class Transaction extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'cust_id',
         'user_id',
         'date_transaction',
         'no_transaction',
@@ -26,10 +25,6 @@ class Transaction extends Model
     public function detail_transaction()
     {
         return $this->hasMany(DetailTransaction::class, 'transaction_id', 'id');
-    }
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class, 'cust_id', 'id');
     }
     public function user()
     {

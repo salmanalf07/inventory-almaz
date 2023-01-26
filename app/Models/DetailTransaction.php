@@ -32,4 +32,8 @@ class DetailTransaction extends Model
     {
         return $this->hasOne(PackingTransaction::class, 'detransaction_id', 'id');
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'id');
+    }
 }

@@ -206,7 +206,7 @@ class Transaction extends Controller
             });
         }
         if ($request->dateinn && $request->dateenn) {
-            $dataa->whereHas('PartIn', function ($query) use ($request) {
+            $dataa->whereHas('Transaction', function ($query) use ($request) {
                 $query->whereDate('date_transaction', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->dateinn))))
                     ->whereDate('date_transaction', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->dateenn))));
             });
