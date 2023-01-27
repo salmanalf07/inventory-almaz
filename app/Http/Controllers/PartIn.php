@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailPartIn;
+use App\Models\DetailSJ;
 use App\Models\PartIn as ModelsPartIn;
+use App\Models\Parts;
 use App\Models\StockWip;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,13 +16,13 @@ class PartIn extends Controller
 {
     public function json(Request $request)
     {
-        $dataa = ModelsPartIn::with('DetailPartIn', 'part', 'customer');
-        if ($request->datein && $request->dateen) {
-            $dataa->whereDate('date_in', '>=', $request->datein)
-                ->whereDate('date_in', '<=', $request->dateen);
-        } else {
-            $dataa->whereDate('date_in', '=', date("Y-m-d"));
-        };
+        $dataa = ModelsPartIn::with('DetailPartIn', 'customer');
+        // if ($request->datein && $request->dateen) {
+        //     $dataa->whereDate('date_in', '>=', $request->datein)
+        //         ->whereDate('date_in', '<=', $request->dateen);
+        // } else {
+        //     $dataa->whereDate('date_in', '=', date("Y-m-d"));
+        // };
         $data = $dataa->orderBy('created_at', 'DESC');
 
 
@@ -283,5 +285,69 @@ class PartIn extends Controller
         return DataTables::of($data)
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
+    }
+
+    public function report_invsout(Request $request)
+    {
+        $date_st = "04/01/2023";
+        $date_out = "10/01/2023";
+        //partin
+        $dataa = DetailPartIn::with('PartIn.customer', 'Parts');
+        //partout
+        $dataua = DetailSJ::with('DetailSJ.customer', 'part');
+
+        $dataa->whereHas('PartIn', function ($query) use ($request) {
+            $query->whereDate('date_in', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                ->whereDate('date_in', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+        });
+        $dataua->whereHas('DetailSJ', function ($query) use ($request) {
+            $query->whereDate('date_sj', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
+                ->whereDate('date_sj', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
+        });
+
+        if ($request->cust_id != "#") {
+            $dataa->whereRelation('PartIn', 'cust_id', '=', $request->cust_id);
+            $dataua->whereRelation('DetailSJ', 'cust_id', '=', $request->cust_id);
+        }
+        if ($request->part_id != "#") {
+            $dataa->where([
+                ['part_id', '=', $request->part_id],
+                // ['type', '=', $request->type],
+            ]);
+            $dataua->where([
+                ['part_id', '=', $request->part_id],
+                // ['type', '=', $request->type],
+            ]);
+        }
+
+        $data = $dataa->get();
+        $dataa = $dataua->get();
+
+        $datdetail = array();
+        $datdetaill = array();
+
+        foreach ($data as $key => $attt) {
+            $datdetail[$key]["status"] = "in";
+            $datdetail[$key]["date"] = $attt->PartIn['date_in'];
+            $datdetail[$key]["nosj"] = $attt->PartIn['no_sj_cust'];
+            $datdetail[$key]["customer"] = $attt->PartIn->customer['code'];
+            $datdetail[$key]["part_name"] = $attt->parts['part_name'];
+            $datdetail[$key]["send"]["in"] = $attt->qty;
+            $datdetail[$key]["send"]["out"] = 0;
+        }
+        foreach ($dataa as $ky => $att) {
+            $datdetaill[$ky]["status"] = "out";
+            $datdetaill[$ky]["date"] = $att->DetailSJ['date_sj'];
+            $datdetaill[$ky]["nosj"] = $att->DetailSJ['nosj'];
+            $datdetaill[$ky]["customer"] = $att->DetailSJ->customer['code'];
+            $datdetaill[$ky]["part_name"] = $att->part['part_name'];
+            $datdetaill[$ky]["send"]["in"] = 0;
+            $datdetaill[$ky]["send"]["out"] = $att->qty;
+        }
+        $result = array_merge($datdetail, $datdetaill);
+        usort($result, fn ($a, $b) => $a['date'] <=> $b['date']);
+        // return $result;
+        return DataTables::of($result)
+            ->toJson();
     }
 }

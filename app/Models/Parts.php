@@ -30,7 +30,11 @@ class Parts extends Model
 
     public function part_in()
     {
-        return $this->hasMany(PartIn::class, 'part_id', 'id');
+        return $this->hasMany(DetailPartIn::class, 'part_id', 'id');
+    }
+    public function part_out()
+    {
+        return $this->hasMany(DetailSJ::class, 'part_id', 'id');
     }
 
     public function transactions()

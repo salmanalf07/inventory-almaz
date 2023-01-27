@@ -277,6 +277,11 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/tt_invoice', [Invoice::c
 Route::middleware(['auth:sanctum', 'verified'])->post('/tax_invoice', [Invoice::class, 'tax_invoice']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/rekap_sj', [Invoice::class, 'rekap_sj']);
 //Report
+Route::middleware(['auth:sanctum', 'verified', 'report:r_invsout'])->get('/r_invsout', function () {
+    $cust = ModelsCustomer::select(['code', 'id'])->get();
+    return view('/report/r_invsout', ['judul' => "Report Part In VS Part Out", 'customer' => $cust]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/report_invsout', [PartIn::class, 'report_invsout']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_partin'])->get('/r_partin', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
     return view('/report/r_partin', ['judul' => "Report Part In", 'customer' => $cust]);

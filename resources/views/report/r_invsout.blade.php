@@ -97,15 +97,8 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
-                                <thead>
 
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="7" style="text-align:right">Total:</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
+
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -139,7 +132,7 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, ], // table ke 1
                 },
                 {
                     targets: [1],
@@ -166,38 +159,38 @@
                     footer: true
                 }
             ],
-            footerCallback: function(row, data, start, end, display) {
-                var api = this.api();
-                // Remove the formatting to get integer data for summation
-                var intVal = function(i) {
+            // footerCallback: function(row, data, start, end, display) {
+            //     var api = this.api();
+            //     // Remove the formatting to get integer data for summation
+            //     var intVal = function(i) {
 
-                    return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
-                        typeof i === 'number' ?
-                        i : 0;
+            //         return typeof i === 'string' ?
+            //             i.replace(/[\$,]/g, '') * 1 :
+            //             typeof i === 'number' ?
+            //             i : 0;
 
-                };
+            //     };
 
-                // Total over all pages
+            //     // Total over all pages
 
-                if (api.column(7).data().length) {
-                    var total = api
-                        .column(7)
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        })
-                } else {
-                    total = 0
-                };
+            //     if (api.column(7).data().length) {
+            //         var total = api
+            //             .column(7)
+            //             .data()
+            //             .reduce(function(a, b) {
+            //                 return intVal(a) + intVal(b);
+            //             })
+            //     } else {
+            //         total = 0
+            //     };
 
-                // Update footer
-                $(api.column(7).footer()).html(
-                    new Intl.NumberFormat().format(total)
-                );
-            },
+            //     // Update footer
+            //     $(api.column(7).footer()).html(
+            //         new Intl.NumberFormat().format(total)
+            //     );
+            // },
             ajax: {
-                url: '{{ url("report_partin") }}',
+                url: '{{ url("report_invsout") }}',
                 data: function(d) {
                     // Retrieve dynamic parameters
                     var dt_params = $('#example1').data('dt_params');
@@ -211,38 +204,38 @@
                 $('td', row).eq(0).html(index + 1);
             },
             columns: [{
-                    data: 'id',
+                    data: 'customer',
                     title: 'No'
                 },
                 {
-                    data: 'part_in.date_in',
+                    data: 'date',
                     title: 'Date'
                 },
                 {
-                    data: 'parts.customer.code',
+                    data: 'nosj',
+                    title: 'No SJ'
+                },
+                {
+                    data: 'customer',
                     title: 'Customer'
                 },
                 {
-                    data: 'parts.name_local',
+                    data: 'part_name',
                     title: 'Part Name'
-                },
-                {
-                    data: 'type',
-                    title: 'Type'
                 },
 
                 {
-                    data: 'parts.price',
-                    title: 'Price'
+                    data: 'send.in',
+                    title: 'Cust'
                 },
                 {
-                    data: 'qty',
-                    title: 'Qty'
+                    data: 'send.out',
+                    title: 'ALMAZ'
                 },
-                {
-                    data: 'total_price',
-                    title: 'Total price'
-                }
+                // {
+                //     data: 'send.out',
+                //     title: 'Qty'
+                // }
             ],
         });
         $('.pt-2').on('click', '#in', function() {
@@ -252,7 +245,6 @@
                 'cust_id': $('#cust_id').val(),
                 'date_st': date[0],
                 'date_ot': date[1],
-                'type': $('#type').val(),
                 'part_id': $('#part_id').val(),
             });
             $('#example1').DataTable().draw();
