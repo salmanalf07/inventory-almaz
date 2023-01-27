@@ -44,7 +44,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="control-group">
                                             <label>Date Range</label>
                                             <div class="input-group">
@@ -57,21 +57,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="control-group">
-                                            <label class="control-label">Type</label>
-                                            <div class="controls">
-                                                <select name="type" id="type" class="form-control select2">
-                                                    <option value="#" selected="selected">Choose...</option>
-                                                    <option value="WIP">WIP</option>
-                                                    <option value="REPAINTING">REPAINTING</option>
-                                                    <option value="RETURN">RETURN</option>
-                                                    <option value="SAMPLE">SAMPLE</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
                                         <div class="control-group">
                                             <label class="control-label">Part Name</label>
                                             <div class="controls">
