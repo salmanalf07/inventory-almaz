@@ -3,7 +3,12 @@
         <x-slot name="logo">
             <img src="img/almaz.png" width="200" alt="">
         </x-slot>
-
+        <style>
+            .extends {
+                padding: 5px;
+                border: 1px solid #d2d6dc;
+            }
+        </style>
         <x-jet-validation-errors class="mb-4" />
 
         @if (session('status'))
@@ -17,12 +22,12 @@
 
             <div>
                 <x-jet-label for="username" value="{{ __('Username') }}" />
-                <x-jet-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus />
+                <x-jet-input id="username" class="block mt-1 w-full extends" type="text" name="username" :value="old('username')" required autofocus />
             </div>
 
             <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Password') }}" />
-                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <x-jet-input id="password" class="block mt-1 w-full extends" type="password" name="password" required autocomplete="current-password" />
             </div>
 
             <div class="block mt-4">
