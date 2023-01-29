@@ -37,8 +37,8 @@
                                         <th>SJ</th>
                                         <th>Customer</th>
                                         <!-- <th>Part</th>
-                                        <th>Qty</th>
-                                        <th>Type</th> -->
+                                        <th>Qty</th> -->
+                                        <th>Grand Total</th>
                                         <th>Data Create</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -50,8 +50,8 @@
                                         <th>SJ</th>
                                         <th>Customer</th>
                                         <!-- <th>Part</th>
-                                        <th>Qty</th>
-                                        <th>Type</th> -->
+                                        <th>Qty</th> -->
+                                        <th>Grand Total</th>
                                         <th>Data Create</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -551,18 +551,22 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6], // table ke 1
                 },
                 {
-                    targets: [1, 4],
+                    targets: [1, 5],
                     render: function(oTable) {
                         return moment(oTable).format('DD-MM-YYYY');
                     }
                 },
                 {
                     "visible": false,
-                    "targets": [4]
-                }
+                    "targets": [5]
+                },
+                {
+                    targets: [4],
+                    render: $.fn.dataTable.render.number('.')
+                },
             ],
             "buttons": ["add",
                 {
@@ -610,10 +614,10 @@
                 //     data: 'qty',
                 //     name: 'qty'
                 // },
-                // {
-                //     data: 'type',
-                //     name: 'type'
-                // },
+                {
+                    data: 'count',
+                    name: 'count'
+                },
                 {
                     data: 'created_at',
                     name: 'created_at'

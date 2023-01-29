@@ -27,13 +27,21 @@ class PartIn extends Controller
 
 
         return DataTables::of($data)
+            ->addColumn('count', function ($data) {
+                $partin = ModelsPartIn::select('id')->where([
+                    ['id', '=', $data->id],
+                ])->get();
+
+                $count = DetailPartIn::select('total_price')->whereIn("partin_id", $partin->toArray())->sum('total_price');
+                return $count;
+            })
             ->addColumn('aksi', function ($data) {
                 return
                     '
                     <button id="edit" data-id="' . $data->id . '" class="btn btn-warning">Update</button>
                     <button id="delete" data-id="' . $data->id . '" class="btn btn-danger">Delete</button>';
             })
-            ->rawColumns(['aksi', 'no_partin'])
+            ->rawColumns(['aksi', 'count', 'no_partin'])
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
     }
