@@ -17,6 +17,14 @@ class Order extends Controller
         $data = ModelsOrder::with('customer', 'DetailOrder.Parts')->orderBy('created_at', 'DESC');
 
         return DataTables::of($data)
+            ->addColumn('count', function ($data) {
+                $order = SJ::select('id')->where([
+                    ['order_id', '=', $data->id],
+                ])->get();
+
+                $count = SJ::select('grand_total')->whereIn("id", $order->toArray())->sum('grand_total');
+                return $count;
+            })
             ->addColumn('aksi', function ($data) {
                 return
                     '<div class="btn-group">
@@ -24,12 +32,13 @@ class Order extends Controller
                 Action
                 </button>
                 <div class="dropdown-menu">
+                <button id="count" data-id="' . $data->id . '" class="dropdown-item">Count</button>
                 <button id="edit" data-id="' . $data->id . '" class="dropdown-item">Edit</button>
                 <button id="delete" data-id="' . $data->id . '" class="dropdown-item">Delete</button>
                 </div>
                 </div>';
             })
-            ->rawColumns(['aksi', 'no_partin'])
+            ->rawColumns(['count', 'aksi', 'no_partin'])
             ->toJson();
     }
 
@@ -85,7 +94,9 @@ class Order extends Controller
     {
         $get = ModelsOrder::with('DetailOrder.Parts')->find($request->id);
         // ['order_id', "=", null],
-        $SJ = SJ::where([['cust_id', '=', $get->cust_id], ['status', "=", "INVOICE"]])->get();
+        // $SJ = SJ::where([['cust_id', '=', $get->cust_id], ['status', "=", "INVOICE"]])->get();
+        $SJ = SJ::with('customer')->where([['cust_id', '=', $get->cust_id], ['order_id', '=', $get->id]])
+            ->orWhere([['order_id', "=", null]])->get();
         $noSJ = SJ::select('id')->where('order_id', '=', $get->id)->get();
 
         //->first() = hanya menampilkan satu saja dari hasil query
@@ -192,5 +203,18 @@ class Order extends Controller
         return DataTables::of($data)
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
+    }
+    public function count($id)
+    {
+        $order = SJ::select('id')->where([
+            ['order_id', '=', $id],
+        ])->get();
+
+        $count = DetailSJ::select('qty')->whereIn("sj_id", $order->toArray())->sum('qty');
+
+        $post = DetailOrder::find($id);
+        $post->qty_progress = $count;
+        $post->save();
+        return response()->json($post);
     }
 }

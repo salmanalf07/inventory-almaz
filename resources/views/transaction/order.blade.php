@@ -42,6 +42,7 @@
                                         <th>No PO</th>
                                         <th>Date In</th>
                                         <th>Customer</th>
+                                        <th>Progress</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -52,6 +53,7 @@
                                         <th>No PO</th>
                                         <th>Date In</th>
                                         <th>Customer</th>
+                                        <th>Progress</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -126,6 +128,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12" id="SJJ">
+                                <label class="control-label">SJ</label>
+                                <div class="controls">
+                                    <select class="form-control multi-sjj" name="updSJJ[]" multiple="multiple">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-12">
                                 <label class="control-label">Part Name</label>
                                 <div class="card">
@@ -135,9 +145,10 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 40%">Part Name</th>
-                                                    <th style="width: 15%">Qty</th>
-                                                    <th style="width: 20%">Price</th>
-                                                    <th style="width: 25%">Total Price</th>
+                                                    <th style="width: 10%">Qty</th>
+                                                    <th style="width: 10%">Progress</th>
+                                                    <th style="width: 15%">Price</th>
+                                                    <th style="width: 20%">Total Price</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="roww">
@@ -152,19 +163,22 @@
                                                         <input class="form-control" type="text" name="qty[]" onchange="search_price(this)" id="qty0" placeholder="Qty" class="span15">
                                                     </td>
                                                     <td id="col2">
-                                                        <input class="form-control" type="text" name="price[]" id="price0" readonly class="span15">
+                                                        <input class="form-control" type="text" name="qty_progress[]" id="qty_progress0" readonly class="span15">
                                                     </td>
                                                     <td id="col3">
-                                                        <input class="form-control" type="text" name="total_price[]" id="total_price0" readonly class="span15">
+                                                        <input class="form-control" type="text" name="price[]" id="price0" readonly class="span15">
                                                     </td>
                                                     <td id="col4">
+                                                        <input class="form-control" type="text" name="total_price[]" id="total_price0" readonly class="span15">
+                                                    </td>
+                                                    <td id="col5">
                                                         <button id="upd_pr0" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                             <tfoot id="addfoot">
                                                 <tr>
-                                                    <td colspan="2">
+                                                    <td colspan="3">
                                                         <button id="addrow" type="button" name="add-tab" onclick="addRows()" class="btn btn-secondary">Add Row</button>
                                                         <button id="deleterow" type="button" name="add-tab" onclick="deleteRows()" class="btn btn-secondary">Delete Row</button>
                                                         <button id="revisi-tab" type="button" name="revisi-tab" class="btn btn-secondary">Revisi</button>
@@ -216,6 +230,7 @@
                 $("#in").addClass("btn btn-primary add");
                 $('#in').text('Save');
                 reset_form();
+                $('#SJJ').hide();
                 //document.getElementById("addfoot").removeAttribute("hidden");
                 $("#addrow,#deleterow").show();
                 $('#revisi-tab').hide();
@@ -276,6 +291,12 @@
                 {
                     data: 'customer.code',
                     name: 'customer.code'
+                },
+                {
+                    "data": null,
+                    "render": function(data, type, row) {
+                        return (((data['count'] / data["total_price"]) * 100) + "%")
+                    }
                 },
                 {
                     data: 'status',
@@ -384,6 +405,8 @@
                         '</select></td><td>' +
                         '<input class="form-control" type="text" name="qty[]" onchange="search_price(this)" id="qty' + i + '"  placeholder="Qty" class="span15">' +
                         '</td><td>' +
+                        '<input class="form-control" type="text" name="qty_progress[]" id="qty_progress' + i + '"  class="span15">' +
+                        '</td><td>' +
                         '<input class="form-control" type="text" name="price[]" id="price' + i + '" readonly class="span15">' +
                         '</td><td>' +
                         '<input class="form-control" type="text" name="total_price[]" id="total_price' + i + '" readonly class="span15">' +
@@ -398,6 +421,7 @@
                         $('#total_price' + [j]).val(data[0].detail_order[j].price);
                         $('#part_id' + [j]).val(data[0].detail_order[j].part_id).trigger('change').attr("disabled", true);
                         $('#qty' + [j]).val(data[0].detail_order[j].qty).attr("disabled", true);
+                        $('#qty_progress' + [j]).val(data[0].detail_order[j].qty_progress).attr("disabled", true);
                         $('#price' + [j]).val(data[0].detail_order[j].price / data[0].detail_order[j].qty);
                         autonumeric(j);
                         // }, 1000);
@@ -406,6 +430,19 @@
                 }, 500);
 
                 $('#date').val(new Date(data[0].date).toLocaleString("id-ID", newDateOptions).split(' ')[0]).attr("disabled", true);;
+                $('#SJJ').show();
+                $(".multi-sjj").select2({
+                    tags: true
+                });
+                $('[name="updSJJ[]"]').empty();
+                $.each(data[1], function(i) {
+                    $('[name="updSJJ[]"]').append('<option value="' + data[1][i].id + '">' + data[1][i].nosj + '</option>');
+                });
+                var array = Object.keys(data[2])
+                    .map(function(key) {
+                        return data[2][key].id;
+                    });
+                $('.multi-sjj').select2().val(array).trigger('change').attr("disabled", true);
 
                 id = $('#id').val();
 
@@ -468,6 +505,28 @@
                 },
                 success: function(data) {
                     alert("Data Berhasil Dihapus");
+                    $('#example1').DataTable().ajax.reload();
+                }
+            });
+
+        } else {
+            return false;
+        }
+    });
+    //kalkulasi
+    $(document).on('click', '#count', function(e) {
+        e.preventDefault();
+        if (confirm('Yakin akan menghitung ulang progress?')) {
+            //alert("Thank you for subscribing!" + $(this).data('id'));
+
+            $.ajax({
+                type: 'POST',
+                url: 'count/' + $(this).data('id'),
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                },
+                success: function(data) {
+                    alert("Data Berhasil Diupdate");
                     $('#example1').DataTable().ajax.reload();
                 }
             });
@@ -583,7 +642,7 @@
         var table = document.getElementById('roww');
         var rowCount = table.rows.length;
         //console.log(rowCount);
-        console.log(id);
+        //console.log(id);
         var tow = $('#grand_total').val();
         var tot = 0;
         for (var i = 0; i < id; i++) {
@@ -628,19 +687,27 @@
                 });
             }
             if (i == 2) {
-                var priceinput = document.getElementById('col2' + rowCount).getElementsByTagName('input');
+                var progressinput = document.getElementById('col2' + rowCount).getElementsByTagName('input');
+                progressinput[0].id = 'progress' + rowCount;
+                progressinput[0].value = "";
+                new AutoNumeric('#progress' + rowCount, {
+                    decimalPlaces: "0",
+                });
+            }
+            if (i == 3) {
+                var priceinput = document.getElementById('col3' + rowCount).getElementsByTagName('input');
                 priceinput[0].id = 'price' + rowCount;
                 priceinput[0].value = "";
 
             }
-            if (i == 3) {
-                var radioinput = document.getElementById('col3' + rowCount).getElementsByTagName('input');
+            if (i == 4) {
+                var radioinput = document.getElementById('col4' + rowCount).getElementsByTagName('input');
                 radioinput[0].id = 'total_price' + rowCount;
                 radioinput[0].value = "";
                 autonumeric(rowCount);
             }
-            if (i == 4) {
-                var upd_pr = document.getElementById('col4' + rowCount).getElementsByTagName('button');
+            if (i == 5) {
+                var upd_pr = document.getElementById('col5' + rowCount).getElementsByTagName('button');
                 upd_pr[0].id = 'upd_pr' + rowCount;
             }
         }
