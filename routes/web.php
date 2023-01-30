@@ -216,7 +216,7 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/update_order/{id}', [Con
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_order/{id}', [ControllersOrder::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'verified'])->get('/print_order/{id}', [ControllersOrder::class, 'print_partin']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/count/{id}', [ControllersOrder::class, 'count']);
-
+Route::middleware(['auth:sanctum', 'verified'])->post('/search_progress_po', [ControllersOrder::class, 'progress_po']);
 //SJ
 Route::middleware(['auth:sanctum', 'verified'])->get('/sj', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();

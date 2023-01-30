@@ -751,7 +751,16 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="6">
+                                                    <td>
+                                                        <input class="form-control" name="part_po" id="part_po" type="text" readonly>
+                                                    </td>
+                                                    <td>
+                                                        <p style="text-align: right;">Progress PO</p>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" name="qty_po" id="qty_po" type="text" readonly>
+                                                    </td>
+                                                    <td colspan="3">
                                                         <p style="text-align: right;">Grand Total</p>
                                                     </td>
                                                     <td>
@@ -1392,6 +1401,36 @@
                     // $('#qty_pack' + matches[0]).val("");
                     // $('#total_price' + matches[0]).val("");
                     //AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(data);
+                },
+            });
+        });
+
+        $('#part_id0,#part_id1,#part_id2,#part_id3,#part_id4,#part_id5,#part_id6,#part_id7,#part_id8,#part_id9').change(function(event) {
+            var matches = $(this).attr('id').match(/(\d+)/);
+            var part = $(this).val();
+            var po = $('#order_id').val();
+
+            //console.log(matches[0]);
+            $.ajax({
+                type: 'POST',
+                url: 'search_progress_po',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'po_id': po,
+                    'part_id': part
+
+                },
+                success: function(data) {
+                    if (data != "false") {
+                        $('#part_po').val(data.part);
+                        $('#qty_po').val(data.qty);
+                        new AutoNumeric('#qty_po', {
+                            decimalPlaces: "0",
+                        });
+                    } else {
+                        $('#part_po').val();
+                        $('#qty_po').val();
+                    }
                 },
             });
         });

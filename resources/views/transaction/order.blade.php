@@ -526,7 +526,11 @@
                     '_token': "{{ csrf_token() }}",
                 },
                 success: function(data) {
-                    alert("Data Berhasil Diupdate");
+                    if (data == 200) {
+                        alert("Data Berhasil Diupdate");
+                    } else {
+                        alert("Data Gagal Diupdate");
+                    }
                     $('#example1').DataTable().ajax.reload();
                 }
             });

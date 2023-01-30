@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DetailOrder;
 use App\Models\DetailSJ;
 use App\Models\Order as ModelsOrder;
+use App\Models\Parts;
 use App\Models\SJ;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -206,15 +207,42 @@ class Order extends Controller
     }
     public function count($id)
     {
-        $order = SJ::select('id')->where([
-            ['order_id', '=', $id],
-        ])->get();
+        $data = DetailOrder::find($id)->get();
 
-        $count = DetailSJ::select('qty')->whereIn("sj_id", $order->toArray())->sum('qty');
+        foreach ($data as $dataa) {
+            $order = SJ::select('id')->where([
+                ['order_id', '=', $id],
+            ])->get();
 
-        $post = DetailOrder::find($id);
-        $post->qty_progress = $count;
-        $post->save();
-        return response()->json($post);
+            $count = DetailSJ::select('qty')
+                ->where('part_id', '=', $dataa->part_id)
+                ->whereIn("sj_id", $order->toArray())
+                ->sum('qty');
+
+            $post = DetailOrder::find($dataa->id);
+            $post->qty_progress = $count;
+            $post->save();
+        }
+        return response()->json(200);
+    }
+
+    public function progress_po(Request $request)
+    {
+        try {
+            $order = SJ::select('id')->where([
+                ['order_id', '=', $request->po_id],
+            ])->get();
+
+            $count = DetailSJ::select('qty')
+                ->where('part_id', '=', $request->part_id)
+                ->whereIn("sj_id", $order->toArray())
+                ->sum('qty');
+            $part = Parts::find($request->part_id);
+            // ->get();
+
+            return response()->json(['part' => $part->name_local, 'qty' => $count]);
+        } catch (\Throwable $th) {
+            return response()->json(false);
+        }
     }
 }
