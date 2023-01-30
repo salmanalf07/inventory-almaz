@@ -8,15 +8,15 @@
     <title>Document</title>
     <style>
         body {
-            /* font-family: 'Arial' !important; */
-            /* font-family: DejaVu Sans !important; */
+            font-family: Arial, Helvetica, sans-serif !important;
             font-size: 10.5px !important;
-            font-weight: bolder;
+            /* font-weight: bolder; */
+            font-weight: 400;
         }
 
-        .font {
+        /* .font {
             font-family: DejaVu Sans;
-        }
+        } */
 
         .f8 {
             font-size: 10.5px !important;
@@ -33,13 +33,13 @@
         table {
 
             width: 100% !important;
-            border: 1pt solid black !important;
+            border: 0.5px solid black !important;
             border-collapse: collapse;
         }
 
         tr,
         td {
-            border: 1pt solid black !important;
+            border: 0.5px solid black !important;
             height: 14pt !important;
             padding-left: 3px !important;
             padding-right: 1px !important;
@@ -110,7 +110,7 @@
 
             tr,
             td {
-                border: 1pt solid black !important;
+                border: 0.5px solid black !important;
                 height: 15pt !important;
                 padding-left: 3px !important;
                 padding-right: 1px !important;
@@ -266,7 +266,7 @@
             <td colspan="2"></td>
         </tr>
         <tr>
-            <td colspan="12" style="font-weight: bold;font-size:8px">Keterangan: Putih/Asli= Tagihan, Merah = Tagihan, Kuning = Arsip, Hijau & Biru = Penerimaan (Customer), Putih/Copy = Security (Pengiriman)
+            <td colspan="12" style="font-weight: bold;">Keterangan: Putih/Asli= Tagihan, Merah = Tagihan, Kuning = Arsip, Hijau & Biru = Penerimaan (Customer), Putih/Copy = Security (Pengiriman)
             </td>
         </tr>
     </table>
