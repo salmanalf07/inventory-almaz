@@ -237,9 +237,13 @@ class Order extends Controller
                 ->whereIn("sj_id", $order->toArray())
                 ->sum('qty');
             $part = Parts::find($request->part_id);
+            $detOrder = DetailOrder::select('qty')->where([
+                ['order_id', '=', $request->po_id],
+                ['part_id', '=', $request->part_id]
+            ])->first();
             // ->get();
 
-            return response()->json(['part' => $part->name_local, 'qty' => $count]);
+            return response()->json(['part' => $part->name_local, 'qty' => $count, 'total' => $detOrder->qty]);
         } catch (\Throwable $th) {
             return response()->json(false);
         }

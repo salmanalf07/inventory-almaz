@@ -1423,7 +1423,7 @@
                 success: function(data) {
                     if (data != "false") {
                         $('#part_po').val(data.part);
-                        $('#qty_po').val(data.qty);
+                        $('#qty_po').val(data.total - data.qty);
                         new AutoNumeric('#qty_po', {
                             decimalPlaces: "0",
                         });

@@ -57,6 +57,11 @@
             font-weight: bold !important;
         }
 
+        .right_padding {
+            text-align: right;
+            padding-right: 1% !important;
+        }
+
         @page {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -206,7 +211,7 @@
                     @endif
                     @endif
                 </td>
-                <td>
+                <td class="right_padding">
                     @if(isset($data->detailinvoice[$i]->total_price))
                     {{number_format($data->detailinvoice[$i]->total_price,0,',','.')}}
                     @endif
@@ -225,34 +230,38 @@
             <td colspan="8" class="border-bottom border-left">
             </td>
             <td class="center">Harga Jual</td>
-            <td class="center">
+            <td class="right_padding">
                 <?php
                 $harga_jual = $data->harga_jual;
                 echo number_format($harga_jual, 0, ',', '.');
                 ?>
             </td>
         </tr>
+        @if($data->customer['ppn'] == "Y")
         <tr class="bold">
             <td colspan="8" class="border-left border-bottom">
             </td>
             <td class="center">PPN ({{$pajak->ppn}}%)</td>
-            <td class="center">
+            <td class="right_padding">
                 {{number_format($data->ppn, 0, ',', '.');}}
             </td>
         </tr>
+        @endif
+        @if($data->customer['pph'] == "Y")
         <tr class="bold border-left">
             <td colspan="8" class="border-left border-bottom">
             </td>
             <td class="center">PPh 23 ({{$pajak->pph}}%)</td>
-            <td class="center">
+            <td class="right_padding">
                 {{number_format($data->pph, 0, ',', '.')}}
             </td>
         </tr>
+        @endif
         <tr class="bold">
             <td colspan="8" class="border-left border-bottom">
             </td>
             <td class="center">Total Harga Jual</td>
-            <td class="center">
+            <td class="right_padding">
                 <?php
                 $total_harga = $harga_jual + $data->ppn - $data->pph;
                 echo number_format($total_harga, 0, ',', '.');
@@ -315,14 +324,14 @@
 
 </body>
 <script>
-    setTimeout(function() {
-        window.print();
-    }, 500);
-    window.onfocus = function() {
-        setTimeout(function() {
-            window.close();
-        }, 500);
-    }
+    // setTimeout(function() {
+    //     window.print();
+    // }, 500);
+    // window.onfocus = function() {
+    //     setTimeout(function() {
+    //         window.close();
+    //     }, 500);
+    // }
 </script>
 
 </html>
