@@ -33,7 +33,6 @@ class Order extends Controller
                 Action
                 </button>
                 <div class="dropdown-menu">
-                <button id="count" data-id="' . $data->id . '" class="dropdown-item">Count</button>
                 <button id="edit" data-id="' . $data->id . '" class="dropdown-item">Edit</button>
                 <button id="delete" data-id="' . $data->id . '" class="dropdown-item">Delete</button>
                 </div>

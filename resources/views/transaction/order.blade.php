@@ -421,8 +421,24 @@
                         $('#total_price' + [j]).val(data[0].detail_order[j].price);
                         $('#part_id' + [j]).val(data[0].detail_order[j].part_id).trigger('change').attr("disabled", true);
                         $('#qty' + [j]).val(data[0].detail_order[j].qty).attr("disabled", true);
-                        $('#qty_progress' + [j]).val(data[0].detail_order[j].qty_progress).attr("disabled", true);
                         $('#price' + [j]).val(data[0].detail_order[j].price / data[0].detail_order[j].qty);
+                        $.ajax({
+                            type: 'POST',
+                            url: 'search_progress_po',
+                            data: {
+                                '_token': "{{ csrf_token() }}",
+                                'po_id': data[0].detail_order[j].order_id,
+                                'part_id': data[0].detail_order[j].part_id
+
+                            },
+                            success: function(data) {
+                                if (data != "false") {
+                                    $('#qty_progress' + [j]).val(data.qty).attr("disabled", true);
+                                } else {
+                                    $('#qty_progress' + [j]).val(data.qty).attr("disabled", true);
+                                }
+                            },
+                        });
                         autonumeric(j);
                         // }, 1000);
                     }
@@ -513,32 +529,7 @@
             return false;
         }
     });
-    //kalkulasi
-    $(document).on('click', '#count', function(e) {
-        e.preventDefault();
-        if (confirm('Yakin akan menghitung ulang progress?')) {
-            //alert("Thank you for subscribing!" + $(this).data('id'));
 
-            $.ajax({
-                type: 'POST',
-                url: 'count/' + $(this).data('id'),
-                data: {
-                    '_token': "{{ csrf_token() }}",
-                },
-                success: function(data) {
-                    if (data == 200) {
-                        alert("Data Berhasil Diupdate");
-                    } else {
-                        alert("Data Gagal Diupdate");
-                    }
-                    $('#example1').DataTable().ajax.reload();
-                }
-            });
-
-        } else {
-            return false;
-        }
-    });
     $(document).ready(function() {
         // Set option selected onchange
         $('#cust_id').change(function() {
