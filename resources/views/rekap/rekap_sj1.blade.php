@@ -238,6 +238,7 @@
                 </td>
                 <td class="border-right border-bottom" rowspan="4"></td>
             </tr>
+            @if ($dat[0]->customer['ppn'] == "Y")
             <tr>
                 <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">PPN {{$pajak->ppn}}%</td>
                 <td class="bold">
@@ -247,6 +248,8 @@
                     </nav>
                 </td>
             </tr>
+            @endif
+            @if ($dat[0]->customer['pph'] == "Y")
             <tr>
                 <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">PPH 23 {{$pajak->pph}}%</td>
                 <td class="bold">
@@ -256,6 +259,7 @@
                     </nav>
                 </td>
             </tr>
+            @endif
             <tr>
                 <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">Grand Total</td>
                 <td class="bold">
