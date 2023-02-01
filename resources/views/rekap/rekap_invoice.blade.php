@@ -235,7 +235,13 @@
                         <div id="total"></div>
                     </nav>
                 </td>
+                @if ( $dat[0]->customer['ppn'] == "Y" && $dat[0]->customer['pph'] == "Y")
                 <td class="border-right border-bottom" rowspan="4"></td>
+                @elseif ($dat[0]->customer['ppn'] == "Y" || $dat[0]->customer['pph'] == "Y")
+                <td class="border-right border-bottom" rowspan="3"></td>
+                @else
+                <td class="border-right border-bottom" rowspan="2"></td>
+                @endif
             </tr>
             @if ($dat[0]->customer['ppn'] == "Y")
             <tr>
