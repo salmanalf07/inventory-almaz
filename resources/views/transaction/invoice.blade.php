@@ -652,7 +652,7 @@
                 }
                 $('#cust_id').val(data[0].cust_id).trigger('change').attr("disabled", true);
                 setTimeout(function() {
-                    if (data[0].order_id != 0) {
+                    if (data[0].order_id) {
                         $('#order_id').val(data[0].order_id).trigger('change').attr("disabled", true);
                     }
                 }, 2000);
