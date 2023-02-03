@@ -254,7 +254,11 @@
             serverSide: true,
             dom: 'Bfrtip',
             "responsive": true,
-            "lengthChange": false,
+            lengthMenu: [
+                [10, 25, 100, -1],
+                [10, 25, 100, "All"]
+            ],
+            pageLength: 10,
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
@@ -266,6 +270,13 @@
                 },
             ],
             "buttons": ["add",
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    }
+                },
+                'pageLength',
                 {
                     extend: "colvis",
                     text: '<i class="fas fa-border-all"></i>'
@@ -299,7 +310,7 @@
                 },
                 {
                     data: 'price',
-                    render: $.fn.dataTable.render.number('.', 0),
+                    render: $.fn.dataTable.render.number(',', 0),
                     name: 'price'
                 },
                 {
