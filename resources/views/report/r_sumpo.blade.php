@@ -173,7 +173,7 @@
                 },
                 success: function(data) {
                     $('[name="order_id"]').empty();
-                    $('[name="order_id"]').append('<option value="-">Choose...</option>');
+                    $('[name="order_id"]').append('<option value="#">Choose...</option>');
                     $.each(data, function(i) {
                         $('[name="order_id"]').append('<option value="' + data[i].id + '">' + data[i].no_po + '</option>');
                     })
