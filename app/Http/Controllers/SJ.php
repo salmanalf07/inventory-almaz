@@ -511,7 +511,85 @@ class SJ extends Controller
         }
 
 
-        return view('/report/r_partout_by_part', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
+        //return view('/report/r_partout_by_part', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
+        //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
+        //return $datdetail;
+        return $dataa;
+    }
+    public function report_sumpo(Request $request)
+    {
+
+        $data = DB::table('detail_sjs')
+            ->join(
+                'sjs',
+                'sjs.id',
+                '=',
+                'detail_sjs.sj_id'
+            )
+            ->leftJoin(
+                'orders',
+                'orders.id',
+                '=',
+                'sjs.order_id'
+            )
+            ->join(
+                'customers',
+                'customers.id',
+                '=',
+                'sjs.cust_id'
+            )
+            ->selectRaw('sjs.order_id,sjs.date_sj,orders.no_po, sum(detail_sjs.total_price) as total')
+            ->where('detail_sjs.deleted_at', '=', null);
+        if ($request->cust_id != "#") {
+            $data->where('sjs.cust_id', $request->cust_id);
+        };
+        if ($request->date != null) {
+            $date = explode(" - ", $request->date);
+            $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
+            $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
+
+            $data->whereDate('sjs.date_sj', '>=', $datein)
+                ->whereDate('sjs.date_sj', '<=', $dateen);
+        };
+        if ($request->order_id != "#") {
+            $data->where('sjs.order_id', $request->order_id);
+        }
+        $data->groupBy('sjs.order_id')
+            ->groupBy('orders.no_po')
+            ->groupBy('sjs.date_sj');
+        $dataa = $data->get();
+
+        $ar = array();
+        $arr = array();
+        $arrr = array();
+        foreach ($dataa as $att) {
+            $ar[] = $att->no_po;
+            $arr[] = $att->date_sj;
+            $arrr[] = $att->order_id;
+            $unique_data = array_unique($ar);
+            $unique_dataa = array_unique($arr);
+            $unique_dataaa = array_unique($arrr);
+        }
+
+
+        $datdetail = array();
+        if (count($dataa) > 0) {
+            foreach ($unique_data as $ke => $uniqe) {
+                foreach ($unique_dataa as $key => $datu) {
+                    foreach ($dataa as $kee => $datan) {
+                        $datdetail[$ke]["no_po"] = $uniqe;
+                        $datdetail[$ke]["uniqe"][$key]["date"] = $datu;
+                        if ($datu . $uniqe == $datan->date_sj . $datan->no_po) {
+                            $datdetail[$ke]["code"] = $datan->order_id;
+                            $datdetail[$ke]["uniqe"][$key]["real"][0]["total"] = $datan->total;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return view('/report/r_partout_by_po', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
         //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
         //return $datdetail;
         //return $dataa;
