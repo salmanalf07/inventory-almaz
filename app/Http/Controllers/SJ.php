@@ -538,7 +538,7 @@ class SJ extends Controller
                 '=',
                 'sjs.cust_id'
             )
-            ->selectRaw('sjs.order_id,sjs.date_sj,orders.no_po, sum(detail_sjs.total_price) as total')
+            ->selectRaw('customers.code,sjs.order_id,sjs.date_sj,orders.no_po, sum(detail_sjs.total_price) as total')
             ->where('detail_sjs.deleted_at', '=', null);
         if ($request->cust_id != "#") {
             $data->where('sjs.cust_id', $request->cust_id);
@@ -555,6 +555,7 @@ class SJ extends Controller
             $data->where('sjs.order_id', $request->order_id);
         }
         $data->groupBy('sjs.order_id')
+            ->groupBy('customers.code')
             ->groupBy('orders.no_po')
             ->groupBy('sjs.date_sj');
         $dataa = $data->get();
@@ -563,7 +564,7 @@ class SJ extends Controller
         $arr = array();
         $arrr = array();
         foreach ($dataa as $att) {
-            $ar[] = $att->no_po;
+            $ar[] = $att->code . " - " . $att->order_id;
             $arr[] = $att->date_sj;
             $arrr[] = $att->order_id;
             $unique_data = array_unique($ar);
@@ -577,10 +578,11 @@ class SJ extends Controller
             foreach ($unique_data as $ke => $uniqe) {
                 foreach ($unique_dataa as $key => $datu) {
                     foreach ($dataa as $kee => $datan) {
-                        $datdetail[$ke]["no_po"] = $uniqe;
                         $datdetail[$ke]["uniqe"][$key]["date"] = $datu;
-                        if ($datu . $uniqe == $datan->date_sj . $datan->no_po) {
-                            $datdetail[$ke]["code"] = $datan->order_id;
+                        if ($datu . $uniqe == $datan->date_sj . $datan->code . " - " . $datan->order_id) {
+                            $datdetail[$ke]["code"] = $datan->code;
+                            $datdetail[$ke]["no_po"] = $datan->no_po;
+                            //     $datdetail[$ke]["code"] = $datan->order_id;
                             $datdetail[$ke]["uniqe"][$key]["real"][0]["total"] = $datan->total;
                         }
                     }

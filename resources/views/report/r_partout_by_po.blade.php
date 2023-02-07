@@ -144,6 +144,7 @@
             <tr class="bold">
                 <td class="center" rowspan="2">NO</td>
                 <td class="center" rowspan="2">CUSTOMER</td>
+                <td class="center" rowspan="2">NO PO</td>
                 <td class="center" colspan="{{ count($datdetail[0]['uniqe']) }}">TANGGAL</td>
                 <td class="center" rowspan="2">GRAND TOTAL</td>
                 <td class="center" rowspan="2">KETERANGAN</td>
@@ -160,10 +161,15 @@
         <tbody>
             <?php $no = 1;
             $ur = array();
-            foreach ($datdetail as $datdetaill) { ?>
+            foreach (collect($datdetail)->sortBy('code') as $datdetaill) { ?>
                 <tr>
                     <td class="center">
                         {{$no++}}
+                    </td>
+                    <td>
+                        <?php
+                        echo $datdetaill['code'];
+                        ?>
                     </td>
                     <td>
                         <?php
@@ -191,7 +197,7 @@
             <?php } ?>
 
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="2">TOTAL</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="3">TOTAL</td>
                 <?php
                 foreach (collect($datdetaill['uniqe'])->sortBy('date') as $keyy => $tot) { ?>
                     <td class="right bold">
