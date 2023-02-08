@@ -551,7 +551,10 @@ class SJ extends Controller
             $data->whereDate('sjs.date_sj', '>=', $datein)
                 ->whereDate('sjs.date_sj', '<=', $dateen);
         };
-        if ($request->order_id != "#") {
+        if ($request->order_id == "blank") {
+            $data->where('sjs.order_id', '=', null);
+        };
+        if ($request->order_id != "#" && $request->order_id != "blank") {
             $data->where('sjs.order_id', $request->order_id);
         }
         $data->groupBy('sjs.order_id')
