@@ -153,7 +153,7 @@
                                         <select name="booking_month" id="booking_month" class="form-control select2" style="width: 100%;">
                                             <option value="" selected="selected">Choose...</option>
                                             <option value="1">JANUARI</option>
-                                            <option value="2">FABRUARI</option>
+                                            <option value="2">FEBRUARI</option>
                                             <option value="3">MARET</option>
                                             <option value="4">APRIL</option>
                                             <option value="5">MEI</option>
@@ -298,7 +298,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -346,7 +346,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -394,7 +394,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -442,7 +442,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -490,7 +490,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -538,7 +538,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -586,7 +586,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -637,7 +637,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -682,7 +682,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
@@ -730,7 +730,7 @@
                                                             <option value="-">-</option>
                                                             <option value="BOX">BOX</option>
                                                             <option value="PALLET">PALLET</option>
-                                                            <option value="KRETA">KRETA</option>
+                                                            <option value="KERETA">KERETA</option>
                                                             <option value="KARDUS">KARDUS</option>
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
