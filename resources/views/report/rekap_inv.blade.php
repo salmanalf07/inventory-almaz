@@ -51,6 +51,8 @@
                                             <div class="controls">
                                                 <select name="order_id" id="order_id" class="form-control select2" style="width: 100%;">
                                                     <option value="#" selected="selected">Choose...</option>
+                                                    <option value="blank">BLANK (NO PO)</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -124,6 +126,7 @@
                 success: function(data) {
                     $('[name="order_id"]').empty();
                     $('[name="order_id"]').append('<option value="#">Choose...</option>');
+                    $('[name="order_id"]').append('<option value="blank">BLANK (NO PO)</option>');
                     $.each(data, function(i) {
                         $('[name="order_id"]').append('<option value="' + data[i]
                             .id + '">' + data[i].no_po + '</option>');

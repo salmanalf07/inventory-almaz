@@ -400,7 +400,7 @@ class Invoice extends Controller
 
     public function rekap_invoice(Request $request)
     {
-        if ($request->order_id != "#") {
+        if ($request->order_id != "#" && $request->order_id != "blank") {
             $po = Order::select('no_po')->find($request->order_id);
         } else {
             $po = "#";
@@ -408,6 +408,7 @@ class Invoice extends Controller
         $pajak = Application::where('status', 'Active')->first();
         $datau = DetailSJ::with('DetailSJ', 'part');
         $datau->whereHas('DetailSJ', function ($query) use ($request) {
+
             if ($request->date != null) {
                 $date = explode(" - ", $request->date);
                 $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
@@ -415,7 +416,10 @@ class Invoice extends Controller
                 $query->whereDate('date_sj', '>=', $datein)
                     ->whereDate('date_sj', '<=', $dateen);
             }
-            if ($request->order_id != "#") {
+            if ($request->order_id == "blank") {
+                $query->where('order_id', null);
+            }
+            if ($request->order_id != "#" && $request->order_id != "blank") {
                 $query->where('order_id', $request->order_id);
             }
             if ($request->cust_id != "#") {
@@ -437,7 +441,10 @@ class Invoice extends Controller
                 $query->whereDate('date_sj', '>=', $datein)
                     ->whereDate('date_sj', '<=', $dateen);
             }
-            if ($request->order_id != "#") {
+            if ($request->order_id == "blank") {
+                $query->where('order_id', null);
+            }
+            if ($request->order_id != "#" && $request->order_id != "blank") {
                 $query->where('order_id', $request->order_id);
             }
             if ($request->cust_id != "#") {

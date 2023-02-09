@@ -154,9 +154,11 @@
             <tr>
                 <td colspan="2" class="bold border-right">NO PO</td>
 
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}" class="bold">: <?php if ($po != "#") {
-                                                                                            echo $po->no_po;
-                                                                                        } ?></td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}" class="bold">:
+                    <?php if ($po != "#") {
+                        echo $po->no_po;
+                    } ?>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">JASA PROSES</td>
