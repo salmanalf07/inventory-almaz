@@ -613,7 +613,7 @@
                 setTimeout(function() {
                     for (let i = 0; i < data.detail_transaction.length; i++) {
                         $('#cust_id' + i).val(data.detail_transaction[i].cust_id).trigger(
-                            'change');
+                            'change').attr("disabled", true);
                     }
                 }, 1000);
                 setTimeout(function() {
@@ -623,9 +623,9 @@
                         AutoNumeric.getAutoNumericElement('#price' + [m]).set(data
                             .detail_transaction[m].price / data.detail_transaction[m].qty_in);
                         $('#part_id' + m).val(data.detail_transaction[m].part_id).trigger(
-                            'change');
+                            'change').attr("disabled", true);
                         $('#type' + m).val(data.detail_transaction[m].type).trigger(
-                            'change');
+                            'change').attr("disabled", true);
                         $('#detail_id' + m).val(data.detail_transaction[m].id);
                         $('#qty_in' + m).val(data.detail_transaction[m].qty_in).trigger('change');
                         $('#sa' + m).val(data.detail_transaction[m].sa).trigger('change');

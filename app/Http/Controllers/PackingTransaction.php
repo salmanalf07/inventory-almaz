@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailTransaction;
+use App\Models\NgTransaction;
 use App\Models\PackingTransaction as ModelsPackingTransaction;
 use App\Models\Stock;
 use App\Models\Transaction;
@@ -32,7 +33,7 @@ class PackingTransaction extends Controller
         return DataTables::of($data)
             ->addColumn('aksi', function ($data) {
                 return
-                    '<button id="edit" data-id="' . $data->detail_transaction->Transaction->id . '" class="btn btn-warning">Update</button>';
+                    '<button id="edit" data-id="' . $data->detail_transaction->id . '" class="btn btn-warning">Update</button>';
             })
             ->rawColumns(['aksi', 'no_partin'])
             ->toJson();
@@ -41,7 +42,7 @@ class PackingTransaction extends Controller
 
     public function edit(Request $request)
     {
-        $get = Transaction::with('user', 'detail_transaction.Part', 'detail_transaction.Packing')->find($request->id);
+        $get = DetailTransaction::with('Part', 'Transaction.user', 'Packing', 'NG')->find($request->id);
         //->first() = hanya menampilkan satu saja dari hasil query
         //->get() = returnnya berbentuk array atau harus banyak data
         return response()->json($get);
@@ -49,53 +50,50 @@ class PackingTransaction extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
-                'time_end' => ['required', 'string', 'max:255'],
-                'operator' => ['required', 'string', 'max:255'],
+            if ($request->time_end && $request->operator) {
+                $request->validate([
+                    'time_end' => ['required', 'string', 'max:255'],
+                    'operator' => ['required', 'string', 'max:255'],
 
-            ]);
+                ]);
+            }
 
             $post = Transaction::find($id);
-            $post->time_end = date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_end)));
+            if ($request->time_end) {
+                $post->time_end = date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_end)));
+            }
             $post->status = $request->status;
             $post->save();
+            if ($request->detail_id) {
 
-            $detail_id = collect($request->detail_id)->filter()->all();
-            $qty_out = collect($request->qty_out)->filter()->all();
-            $total_ng = array_filter($request->total_ng, function ($value) {
-                return ($value !== null && $value !== false && $value !== '');
-            });
-            $type_ng = collect($request->type_ng)->filter()->all();
-
-            for ($count = 0; $count < count($detail_id); $count++) {
-                $recent = ModelsPackingTransaction::where(['detransaction_id' => $detail_id[$count]]);
-                $recentt = $recent->first();
-                $qty_up = str_replace(",", "", $qty_out[$count]) - $recentt->qty_out;
-                $ng_up = str_replace(",", "", $total_ng[$count]) - $recentt->total_ng;
-                $recent->update([
-                    'qty_out'  => str_replace(",", "", $qty_up),
-                    'total_ng'  => str_replace(",", "", $ng_up),
-                    'type_ng' => $type_ng[$count],
+                $packing = ModelsPackingTransaction::firstWhere(['detransaction_id' => $request->detail_id]);
+                $packing->update([
+                    'qty_out'  => str_replace(",", "", $request->qty_out),
+                    'total_ng'  => str_replace(",", "", $request->total_ng),
                     'operator' => $request->operator,
                     'updated_at' => date("Y-m-d H:i:s", strtotime('now'))
                 ]);
 
-                $recenttt = $recent->with('detail_transaction')->first();
-                if ($stock = Stock::where('part_id', $recenttt['detail_transaction']->part_id)->first()) {
-                    $stock = Stock::where('part_id', $recenttt['detail_transaction']->part_id)->first();
-                    Stock::where('part_id', $recenttt['detail_transaction']->part_id)
-                        ->update([
-                            'part_id' => $recenttt['detail_transaction']->part_id,
-                            'qty'  => $stock['qty'] + str_replace(",", "", $qty_out[$count]),
-                        ]);
-                } else {
-                    $datawip = array(
-                        'part_id' => $recenttt['detail_transaction']->part_id,
-                        'qty'  => str_replace(",", "", $qty_out[$count]),
-                        'created_at' => date("Y-m-d H:i:s", strtotime('now'))
-                    );
-                    Stock::insert($datawip);
-                };
+                $ng = NgTransaction::firstOrNew(['detransaction_id' => $request->detail_id]);
+                $ng->detransaction_id = $request->detail_id;
+                $ng->over_paint = $request->over_paint;
+                $ng->bintik_or_pin_hole = $request->bintik_or_pin_hole;
+                $ng->minyak_or_map = $request->minyak_or_map;
+                $ng->cotton = $request->cotton;
+                $ng->no_paint_or_tipis = $request->no_paint_or_tipis;
+                $ng->scratch = $request->scratch;
+                $ng->air_pocket = $request->air_pocket;
+                $ng->kulit_jeruk = $request->kulit_jeruk;
+                $ng->kasar = $request->kasar;
+                $ng->karat = $request->karat;
+                $ng->water_over = $request->water_over;
+                $ng->minyak_kering = $request->minyak_kering;
+                $ng->dented = $request->dented;
+                $ng->keropos = $request->keropos;
+                $ng->nempel_jig = $request->nempel_jig;
+                $ng->lainnya = $request->lainnya;
+
+                $ng->save();
             }
 
             $data = [$post];

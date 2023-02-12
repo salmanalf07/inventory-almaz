@@ -321,6 +321,7 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_invoice'])->get('/r_inv
     return view('/report/r_invoice', ['judul' => "Report Invoice", 'customer' => $cust]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/report_invoice', [Invoice::class, 'report_invoice']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/rekap_invoice', [Invoice::class, 'rekap_invoice']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_production'])->get('/r_production', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
     return view('/report/r_production', ['judul' => "Rekap Production", 'customer' => $cust]);
@@ -330,7 +331,7 @@ Route::middleware(['auth:sanctum', 'verified', 'report:rekap_inv'])->get('/rekap
     $cust = ModelsCustomer::select(['code', 'id'])->get();
     return view('/report/rekap_inv', ['judul' => "Rekap Invoice", 'customer' => $cust]);
 });
-Route::middleware(['auth:sanctum', 'verified'])->post('/rekap_invoice', [Invoice::class, 'rekap_invoice']);
+Route::middleware(['auth:sanctum', 'verified'])->get('/grafik_packing', [Transaction::class, 'grafik_packing']);
 // Route::middleware(['auth:sanctum', 'verified'])->get('/rekap_sj', function () {
 //     return view('/rekap/rekap_sj', ['judul' => "Customer", 'days_count' => 30]);
 // });

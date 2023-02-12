@@ -511,10 +511,10 @@ class SJ extends Controller
         }
 
 
-        //return view('/report/r_partout_by_part', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
+        return view('/report/r_partout_by_part', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
         //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
         //return $datdetail;
-        return $dataa;
+        //return $dataa;
     }
     public function report_sumpo(Request $request)
     {

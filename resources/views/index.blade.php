@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="assets/css/daterangepicker/daterangepicker.css">
     <!-- tracking -->
     <link rel="stylesheet" href="assets/css/tracking.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <style>
         #pageloader {
             background: rgba(255, 255, 255, 0.8);

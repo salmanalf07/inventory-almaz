@@ -33,7 +33,7 @@
         table {
 
             width: 100% !important;
-            border: 0.5px solid black !important;
+            border: 1px solid black !important;
             border-collapse: collapse;
         }
 
@@ -97,9 +97,9 @@
         @page {
             /* margin-top: 0;
             margin-bottom: 0; */
-            margin-left: 15px;
-            margin-right: 15px;
-            margin-top: 5px;
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 15px;
             margin-bottom: 0px;
         }
 
@@ -132,8 +132,9 @@
             }
 
             @page {
-                margin-top: 0;
+                margin-top: 10px;
                 margin-bottom: 0;
+                margin-right: 5px;
             }
         }
     </style>
@@ -156,7 +157,7 @@
             <td style="width: 13%;" class="border-left border-right border-top"></td>
         </tr>
         <tr>
-            <td colspan="2" rowspan="2" class="center"><img src="./img/almaz.png" width="50"></td>
+            <td colspan="2" rowspan="2" class="center"><img src="./img/almaz.jpg" width="65"></td>
             <td colspan="4" class="border-left border-bottom">
                 <h1>PT. ALMAS DAYA SINERGI</h1>
             </td>
@@ -272,14 +273,14 @@
     </table>
 </body>
 <script>
-    setTimeout(function() {
-        window.print();
-    }, 500);
-    window.onfocus = function() {
-        setTimeout(function() {
-            window.location = "{{ url('/sj') }}";
-        }, 500);
-    }
+    // setTimeout(function() {
+    //     window.print();
+    // }, 500);
+    // window.onfocus = function() {
+    //     setTimeout(function() {
+    //         window.location = "{{ url('/sj') }}";
+    //     }, 500);
+    // }
 </script>
 <!-- <script type="text/javascript">
     try {

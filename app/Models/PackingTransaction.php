@@ -14,7 +14,7 @@ class PackingTransaction extends Model
         'label_pack',
         'qty_out',
         'total_fg',
-        'tota_ng',
+        'total_ng',
         'type_ng',
         'tota_pack',
         'operator',

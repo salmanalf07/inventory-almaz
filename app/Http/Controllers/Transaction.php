@@ -8,6 +8,7 @@ use App\Models\Stock;
 use App\Models\Transaction as ModelsTransaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -221,5 +222,54 @@ class Transaction extends Controller
 
         return DataTables::of($data)
             ->toJson();
+    }
+
+    public function grafik_packing(Request $request)
+    {
+        $dataa = DB::table('detail_transactions')
+            ->join(
+                'transactions',
+                'transactions.id',
+                '=',
+                'detail_transactions.transaction_id'
+            )
+            ->join(
+                'packing_transactions',
+                'packing_transactions.detransaction_id',
+                '=',
+                'detail_transactions.id'
+            )
+            ->join(
+                'ng_transactions',
+                'ng_transactions.detransaction_id',
+                '=',
+                'detail_transactions.id'
+            )
+            ->selectRaw('transactions.date_transaction, sum(detail_transactions.qty_in) as total,sum(packing_transactions.total_ng) as NG,
+            sum(ng_transactions.over_paint) as over_paint,
+            sum(ng_transactions.bintik_or_pin_hole) as bintik_or_pin_hole,
+            sum(ng_transactions.minyak_or_map) as minyak_or_map,
+            sum(ng_transactions.cotton) as cotton,
+            sum(ng_transactions.no_paint_or_tipis) as no_paint_or_tipis,
+            sum(ng_transactions.scratch) as scratch,
+            sum(ng_transactions.air_pocket) as air_pocket,
+            sum(ng_transactions.kulit_jeruk) as kulit_jeruk,
+            sum(ng_transactions.kasar) as kasar,
+            sum(ng_transactions.karat) as karat,
+            sum(ng_transactions.water_over) as water_over,
+            sum(ng_transactions.minyak_kering) as minyak_kering,
+            sum(ng_transactions.dented) as dented,
+            sum(ng_transactions.keropos) as keropos,
+            sum(ng_transactions.nempel_jig) as nempel_jig,
+            sum(ng_transactions.lainnya) as lainnya
+            ');
+        $dataa->whereDate('transactions.date_transaction', '>=', date("Y-m-d", strtotime(str_replace('/', '-', "05/02/2023"))))
+            ->whereDate('transactions.date_transaction', '<=', date("Y-m-d", strtotime(str_replace('/', '-', "12/02/2023"))));
+
+        $dataa->groupBy('transactions.date_transaction');
+        $data = $dataa->get();
+
+        // return $data;
+        return view('/report/r_summary_ng', ['judul' => "User", "data" => $data]);
     }
 }
