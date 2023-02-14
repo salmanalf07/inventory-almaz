@@ -186,12 +186,12 @@
                     {{$i+1}}
                     @endif
                 </td>
-                <td style="white-space: nowrap !important; ">
+                <td style="white-space: nowrap !important;text-align:left ">
                     @if(isset($data->detailinvoice[$i]->parts->part_no))
                     {{$data->detailinvoice[$i]->parts->part_no}}
                     @endif
                 </td>
-                <td colspan="4">
+                <td style="text-align:left" colspan="4">
                     @if(isset($data->detailinvoice[$i]->parts->part_name))
                     {{$data->detailinvoice[$i]->parts->part_name}}
                     @endif
