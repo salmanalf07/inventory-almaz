@@ -31,7 +31,7 @@
                                 @csrf
                                 <span id="peringatan"></span>
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="control-group">
                                             <label class="control-label">Customer</label>
                                             <div class="controls">
@@ -57,6 +57,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-2">
+                                        <div class="control-group">
+                                            <label class="control-label">Number INV</label>
+                                            <div class="controls">
+                                                <select name="invoice_id" id="invoice_id" class="form-control select2" style="width: 100%;">
+                                                    <option value="#" selected="selected">Choose...</option>
+                                                    <option value="blank">BLANK (NO INV)</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-3">
                                         <div class="control-group">
                                             <label>Date Range</label>
@@ -70,7 +82,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="control-group">
                                             <label class="control-label">Status</label>
                                             <div class="controls">
@@ -134,6 +146,25 @@
 
                 },
             });
+            $.ajax({
+                type: 'POST',
+                url: 'search_invoice',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'cust_id': $(this).val(),
+
+                },
+                success: function(data) {
+                    $('[name="invoice_id"]').empty();
+                    $('[name="invoice_id"]').append('<option value="#">Choose...</option>');
+                    $('[name="invoice_id"]').append('<option value="blank">BLANK (NO INV)</option>');
+                    $.each(data, function(i) {
+                        $('[name="invoice_id"]').append('<option value="' + data[i]
+                            .id + '">' + data[i].no_invoice + '</option>');
+                    })
+
+                },
+            });
 
         });
     });
@@ -141,7 +172,7 @@
 <script>
     $(function() {
         //Initialize Select2 Elements
-        $('[name="part_id"],#status,#cust_id,#order_id').select2({
+        $('#invoice_id,#status,#cust_id,#order_id').select2({
             placeholder: "Choose..",
             theme: 'bootstrap4'
         })

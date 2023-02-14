@@ -416,6 +416,12 @@ class Invoice extends Controller
                 $query->whereDate('date_sj', '>=', $datein)
                     ->whereDate('date_sj', '<=', $dateen);
             }
+            if ($request->invoice_id == "blank") {
+                $query->where('invoice_id', null);
+            }
+            if ($request->invoice_id != "#" && $request->invoice_id != "blank") {
+                $query->where('invoice_id', $request->invoice_id);
+            }
             if ($request->order_id == "blank") {
                 $query->where('order_id', null);
             }
