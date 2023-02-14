@@ -54,6 +54,12 @@
             border: hidden !important;
         }
 
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
         @page {
             /* margin-top: 5px;
             margin-bottom: 0;
@@ -62,16 +68,16 @@
             margin: 10px;
         }
 
-        .container {
-            display: flex;
-            justify-content: space-between;
-        }
-
         @media print {
             .headercolor {
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
                 background-color: #DDEBF7 !important;
+            }
+
+            @page {
+                margin-top: 20px;
+                margin: 10px;
             }
         }
     </style>
@@ -174,14 +180,14 @@
             </tr>
 
             <tr class="headercolor" style="background-color: #DDEBF7">
-                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj_link') as $att) { ?>
+                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj') as $att) { ?>
                     <td class="center bold">
                         <?php echo date('d', strtotime($att['date_sj'])); ?>
                     </td>
                 <?php } ?>
             </tr>
             <tr class="headercolor" style="background-color: #DDEBF7">
-                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj_link') as $att) { ?>
+                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj') as $att) { ?>
                     <td class="center bold">
                         <?php echo $att['nosj']; ?>
                     </td>
