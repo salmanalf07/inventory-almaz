@@ -139,29 +139,29 @@
                 <td colspan="2" rowspan="2">
                     <img src="./img/tt_invoice.jpg" width="300" alt="">
                 </td>
-                <td class="center bold" style="font-size:20pt" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">
-                    REKAP DELIVERY & TAGIHAN ED-COATING
+                <td class="center bold" style="font-size:20pt" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">
+                    REKAP DELIVERY & TAGIHAN ED-COATING (Jasa Proses EDP)
                 </td>
             </tr>
             <tr>
-                <td class="center bold" style="font-size: 18pt;" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">
+                <td class="center bold" style="font-size: 18pt;" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">
                     {{ $dat[0]->customer['name'] }}
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">PERIODE</td>
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}" class="bold">: <?php echo strtoupper(tanggal_indonesia($datdetail[0]['uniqe'][0]['date_sj'], 'periode')); ?></td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 4 }}" class="bold">: <?php echo strtoupper(tanggal_indonesia($datdetail[0]['uniqe'][0]['date_sj'], 'periode')); ?></td>
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">NO PO</td>
 
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}" class="bold">: <?php if ($po) {
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 4 }}" class="bold">: <?php if ($po) {
                                                                                             echo $po->no_po;
                                                                                         } ?></td>
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">JASA PROSES</td>
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}" class="bold">: ED-COATING</td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 4 }}" class="bold">: ED-COATING</td>
             </tr>
             <tr class="bold headercolor" style="background-color: #DDEBF7">
                 <td class="center" rowspan="3">NO</td>
@@ -171,7 +171,6 @@
                 <td class="center" rowspan="3">TOTAL QTY</td>
                 <td class="center" rowspan="3">PRICE</td>
                 <td class="center" rowspan="3">TOTAL AMOUNT</td>
-                <td class="center" rowspan="3">KETERANGAN</td>
             </tr>
 
             <tr class="headercolor" style="background-color: #DDEBF7">
@@ -222,14 +221,11 @@
                             <div id="amount"></div>
                         </nav>
                     </td>
-                    <td class="center">
-                        Jasa Proses EDP
-                    </td>
                 </tr>
             <?php } ?>
 
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">TOTAL</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">TOTAL</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
@@ -246,7 +242,7 @@
             </tr>
             @if ($dat[0]->customer['ppn'] == "Y")
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">PPN {{$pajak->ppn}}%</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">PPN {{$pajak->ppn}}%</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
@@ -257,7 +253,7 @@
             @endif
             @if ($dat[0]->customer['pph'] == "Y")
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">PPH 23 {{$pajak->pph}}%</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">PPH 23 {{$pajak->pph}}%</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
@@ -267,7 +263,7 @@
             </tr>
             @endif
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">Grand Total</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">Grand Total</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
@@ -276,13 +272,13 @@
                 </td>
             </tr>
             <tr>
-                <td class="border-left border-right border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class=""></td>
+                <td class="border-left border-right border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class=""></td>
                 <td colspan="2" class=" border-right"></td>
                 <td class="border-right"></td>
                 <td class="border-right"></td>
             </tr>
             <tr class="center">
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="">
+                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
                 </td>
                 <?php
                 $date_sj = array();
@@ -298,27 +294,27 @@
                 <td colspan="4">Bekasi, <?php echo tanggal_indonesia($datdetail[0]['uniqe'][$product_key]['date_sj'], 'ttd'); ?></td>
             </tr>
             <tr class="center">
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="">
+                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
                 </td>
                 <td colspan="2" class="headercolor" style="background-color: #DDEBF7">Dibuat</td>
                 <td class="headercolor" style="background-color: #DDEBF7">Diperiksa</td>
                 <td class="headercolor" style="background-color: #DDEBF7">Diketahui</td>
             </tr>
             <tr style="height:80px">
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}"></td>
+                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}"></td>
                 <td colspan="2"></td>
                 <td></td>
                 <td></td>
             </tr>
             <tr>
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="">
+                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
                 </td>
                 <td colspan="2"></td>
                 <td></td>
                 <td></td>
             </tr>
             <tr>
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="">
+                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
                 </td>
                 <td colspan="2"></td>
                 <td></td>
