@@ -174,9 +174,9 @@
                 <td class="center" rowspan="3">NAMA PART</td>
                 <td class="center" rowspan="3">NO PART</td>
                 <td class="center" colspan="{{ count($datdetail[0]['uniqe']) }}">SURAT JALAN</td>
-                <td class="center" rowspan="3">TOTAL QTY</td>
-                <td class="center" rowspan="3">PRICE</td>
-                <td class="center" rowspan="3">TOTAL AMOUNT</td>
+                <td class="center" width="180" rowspan="3">TOTAL QTY</td>
+                <td class="center" width="180" rowspan="3">PRICE</td>
+                <td class="center" width="180" rowspan="3">TOTAL AMOUNT</td>
             </tr>
 
             <tr class="headercolor" style="background-color: #DDEBF7">
@@ -277,58 +277,49 @@
                     </nav>
                 </td>
             </tr>
-            <tr>
-                <td class="border-left border-right border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class=""></td>
-                <td colspan="2" class=" border-right"></td>
-                <td class="border-right"></td>
-                <td class="border-right"></td>
-            </tr>
-            <tr class="center">
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
-                </td>
-                <?php
-                $date_sj = array();
 
-                foreach ($datdetail[0]['uniqe'] as $g => $f) {
-                    // use the key $g in the $date_sj array
-                    $date_sj[$g] = $f['date_sj'];
-                }
-                $maxdate = max($date_sj);
-                $product_key = array_search($maxdate, $date_sj);
-                // return $datdetail[0]['uniqe'][$product_key]['date_sj'];
-                ?>
-                <td colspan="4">Bekasi, <?php echo tanggal_indonesia($datdetail[0]['uniqe'][$product_key]['date_sj'], 'ttd'); ?></td>
-            </tr>
-            <tr class="center">
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
-                </td>
-                <td colspan="2" class="headercolor" style="background-color: #DDEBF7">Dibuat</td>
-                <td class="headercolor" style="background-color: #DDEBF7">Diperiksa</td>
-                <td class="headercolor" style="background-color: #DDEBF7">Diketahui</td>
-            </tr>
-            <tr style="height:80px">
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}"></td>
-                <td colspan="2"></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
-                </td>
-                <td colspan="2"></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
-                </td>
-                <td colspan="2"></td>
-                <td></td>
-                <td></td>
-            </tr>
 
         </tbody>
 
+    </table>
+    <table style="margin-top: 20px;">
+
+        <tr class="center">
+            <td class=" border-top border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" width="400">
+            </td>
+            <?php
+            $date_sj = array();
+
+            foreach ($datdetail[0]['uniqe'] as $g => $f) {
+                // use the key $g in the $date_sj array
+                $date_sj[$g] = $f['date_sj'];
+            }
+            $maxdate = max($date_sj);
+            $product_key = array_search($maxdate, $date_sj);
+            // return $datdetail[0]['uniqe'][$product_key]['date_sj'];
+            ?>
+            <td colspan="4">Bekasi, <?php echo tanggal_indonesia($datdetail[0]['uniqe'][$product_key]['date_sj'], 'ttd'); ?></td>
+        </tr>
+        <tr class="center">
+            <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="">
+            </td>
+            <td width="150" class="headercolor" style="background-color: #DDEBF7">Dibuat</td>
+            <td width="150" class="headercolor" style="background-color: #DDEBF7">Diperiksa</td>
+            <td width="150" class="headercolor" style="background-color: #DDEBF7">Diketahui</td>
+        </tr>
+        <tr style="height:80px">
+            <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}"></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="border-left border-bottom" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="">
+            </td>
+            <td colspan="2"></td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 
 
