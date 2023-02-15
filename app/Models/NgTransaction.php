@@ -11,7 +11,7 @@ class NgTransaction extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'detransaction_id',
+        'packing_id',
         'over_paint',
         'bintik_or_pin_hole',
         'minyak_or_map',

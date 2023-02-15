@@ -18,31 +18,84 @@ class PackingTransaction extends Controller
 {
     public function json(Request $request)
     {
-        $dataa = ModelsPackingTransaction::with('detail_transaction', 'detail_transaction.Transaction', 'detail_transaction.Part', 'detail_transaction.Part.customer')
-            ->whereHas('detail_transaction.Transaction', function ($query) use ($request) {
-                if ($request->datein && $request->dateen) {
-                    $query->whereDate('date_transaction', '>=', $request->datein)
-                        ->whereDate('date_transaction', '<=', $request->dateen);
-                } else {
-                    $query->whereDate('date_transaction', '=', date("Y-m-d"));
-                }
-            });
+        $dataa = ModelsPackingTransaction::with('customer', 'Part');
+        if ($request->datein && $request->dateen) {
+            $dataa->whereDate('date_packing', '>=', $request->datein)
+                ->whereDate('date_packing', '<=', $request->dateen);
+        } else {
+            $dataa->whereDate('date_packing', '=', date("Y-m-d"));
+        };
         $data = $dataa->orderBy('created_at', 'DESC');
 
 
         return DataTables::of($data)
             ->addColumn('aksi', function ($data) {
                 return
-                    '<button id="edit" data-id="' . $data->detail_transaction->id . '" class="btn btn-warning">Update</button>';
+                    '<button id="edit" data-id="' . $data->id . '" class="btn btn-warning">Update</button>
+                    <button id="delete" data-id="' . $data->id . '" class="btn btn-danger">Delete</button>';
             })
-            ->rawColumns(['aksi', 'no_partin'])
+            ->rawColumns(['aksi'])
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
     }
 
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                'date_packing' => ['required', 'string', 'max:255'],
+                'part_id' => ['required', 'string', 'max:255'],
+                'cust_id' => ['required', 'string', 'max:255'],
+                'operator' => ['required', 'string', 'max:255'],
+            ]);
+
+            $get_user = User::where("name", $request->user_id)->first();
+
+            $post = new ModelsPackingTransaction();
+
+            $post->date_packing = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_packing)));
+            $post->user_id = $get_user->id;
+            $post->cust_id = $request->cust_id;
+            $post->part_id = $request->part_id;
+            $post->operator = $request->operator;
+            $post->total_fg = str_replace(",", "", $request->total_fg);
+            $post->total_ng = str_replace(",", "", $request->total_ng);
+            $post->status = $request->status;
+            $post->save();
+
+            $postt = new NgTransaction();
+
+            $postt->packing_id = $post->id;
+            $postt->over_paint = $request->over_paint;
+            $postt->bintik_or_pin_hole = $request->bintik_or_pin_hole;
+            $postt->minyak_or_map = $request->minyak_or_map;
+            $postt->cotton = $request->cotton;
+            $postt->no_paint_or_tipis = $request->no_paint_or_tipis;
+            $postt->scratch = $request->scratch;
+            $postt->air_pocket = $request->air_pocket;
+            $postt->kulit_jeruk = $request->kulit_jeruk;
+            $postt->kasar = $request->kasar;
+            $postt->karat = $request->karat;
+            $postt->water_over = $request->water_over;
+            $postt->minyak_kering = $request->minyak_kering;
+            $postt->dented = $request->dented;
+            $postt->keropos = $request->keropos;
+            $postt->nempel_jig = $request->nempel_jig;
+            $postt->lainnya = $request->lainnya;
+
+            $postt->save();
+
+            $data = [$post];
+            return response()->json($data);
+        } catch (ValidationException $error) {
+            $data = [$error->errors(), "error"];
+            return response($data);
+        }
+    }
+
     public function edit(Request $request)
     {
-        $get = DetailTransaction::with('Part', 'Transaction.user', 'Packing', 'NG')->find($request->id);
+        $get = ModelsPackingTransaction::with('Part', 'customer', 'ng', 'user')->find($request->id);
         //->first() = hanya menampilkan satu saja dari hasil query
         //->get() = returnnya berbentuk array atau harus banyak data
         return response()->json($get);
@@ -50,32 +103,20 @@ class PackingTransaction extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if ($request->time_end && $request->operator) {
-                $request->validate([
-                    'time_end' => ['required', 'string', 'max:255'],
-                    'operator' => ['required', 'string', 'max:255'],
+            $request->validate([
+                'status' => ['required', 'string', 'max:255'],
 
-                ]);
-            }
+            ]);
 
-            $post = Transaction::find($id);
-            if ($request->time_end) {
-                $post->time_end = date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_end)));
-            }
-            $post->status = $request->status;
-            $post->save();
-            if ($request->detail_id) {
+            if ($request->status == "CLOSE" && $request->detail_id) {
+                $packing = ModelsPackingTransaction::find($request->id);
+                $packing->total_ng = str_replace(",", "", $request->total_ng);
+                $packing->total_fg = str_replace(",", "", $request->total_fg);
+                $packing->status = $request->status;
+                $packing->save();
 
-                $packing = ModelsPackingTransaction::firstWhere(['detransaction_id' => $request->detail_id]);
-                $packing->update([
-                    'qty_out'  => str_replace(",", "", $request->qty_out),
-                    'total_ng'  => str_replace(",", "", $request->total_ng),
-                    'operator' => $request->operator,
-                    'updated_at' => date("Y-m-d H:i:s", strtotime('now'))
-                ]);
-
-                $ng = NgTransaction::firstOrNew(['detransaction_id' => $request->detail_id]);
-                $ng->detransaction_id = $request->detail_id;
+                $ng = NgTransaction::firstOrNew(['packing_id' => $request->id]);
+                $ng->packing_id = $request->id;
                 $ng->over_paint = $request->over_paint;
                 $ng->bintik_or_pin_hole = $request->bintik_or_pin_hole;
                 $ng->minyak_or_map = $request->minyak_or_map;
@@ -94,14 +135,29 @@ class PackingTransaction extends Controller
                 $ng->lainnya = $request->lainnya;
 
                 $ng->save();
+            } else {
+                $packing = ModelsPackingTransaction::find($request->id);
+                $packing->status = $request->status;
+                $packing->save();
             }
 
-            $data = [$post];
+            $data = [$packing];
             return response()->json($data);
         } catch (ValidationException $error) {
             $data = [$error->errors(), "error"];
             return response($data);
         }
+    }
+
+    public function destroy($id)
+    {
+        $post = ModelsPackingTransaction::find($id);
+        $post->delete();
+
+        $postt = NgTransaction::where('packing_id', $id);
+        $postt->delete();
+
+        return response()->json($post);
     }
 
     public function report_partin(Request $request)

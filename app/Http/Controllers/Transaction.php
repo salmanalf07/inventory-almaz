@@ -99,9 +99,9 @@ class Transaction extends Controller
                 $postt->price  = str_replace(",", "", $price[$count]);
                 $postt->save();
 
-                $posttt = new PackingTransaction();
-                $posttt->detransaction_id = $postt->id;
-                $posttt->save();
+                // $posttt = new PackingTransaction();
+                // $posttt->detransaction_id = $postt->id;
+                // $posttt->save();
             }
 
             $data = [$post];

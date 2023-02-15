@@ -33,26 +33,22 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Date Transaction</th>
-                                        <th>Time End</th>
+                                        <th>Date Packing</th>
                                         <th>Customer</th>
                                         <th>Part Name</th>
-                                        <th>Qty In</th>
-                                        <th>Qty Out</th>
-                                        <th>Status</th>
+                                        <th>OK</th>
+                                        <th>NG</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
-                                        <th>Date Transaction</th>
-                                        <th>Time End</th>
+                                        <th>Date Packing</th>
                                         <th>Customer</th>
                                         <th>Part Name</th>
-                                        <th>Qty In</th>
-                                        <th>Qty Out</th>
-                                        <th>Status</th>
+                                        <th>OK</th>
+                                        <th>NG</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
@@ -87,7 +83,7 @@
                                 <div class="control-group">
                                     <label>Date</label>
                                     <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                        <input type="text" name="date_transaction" id="date_transaction" class="form-control datetimepicker-input" data-target="#reservationdate" />
+                                        <input type="text" name="date_packing" id="date_packing" class="form-control datetimepicker-input" data-target="#reservationdate" />
                                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -96,26 +92,22 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="control-group">
-                                    <label class="control-label">No Transaction</label>
+                                    <label class="control-label">Operator Packing</label>
                                     <div class="controls">
-                                        <input class="form-control" type="text" name="no_transaction" id="no_transaction" class="span15" readonly>
+                                        <input class="form-control" type="text" name="operator" id="operator" placeholder="Type something here..." class="span15">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="control-group">
-                                    <label class="control-label">No Rak</label>
+                                    <label class="control-label">User</label>
                                     <div class="controls">
-                                        <input class="form-control" type="text" name="no_rak" id="no_rak" placeholder="Type something here..." class="span15">
+                                        <input class="form-control" type="text" name="user_id" id="user_id" value="{{ Auth::user()->name }}" readonly class="span15">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <label class="control-label">Part Name</label>
-                                <div class="card" style=" width: 15rem">
-                                    <button type="button" name="add-tab" id="add-tab" class="btn btn-secondary">Add More
-                                        Row</button>
-                                </div>
                                 <div class="card">
                                     <!-- /.card-header -->
                                     <div class="card-body p-0">
@@ -123,10 +115,9 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 15%">Customer</th>
-                                                    <th style="width: 40%;">Part Name</th>
-                                                    <th style="width: 15%">Qty In</th>
-                                                    <th style="width: 15%">Qty Out</th>
-                                                    <th style="width: 15%">Total NG</th>
+                                                    <th style="width: 45%;">Part Name</th>
+                                                    <th style="width: 20%">Qty Out</th>
+                                                    <th style="width: 20%">Total NG</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -147,10 +138,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control autonumeric-integer" type="text" name="qty_in" id="qty_in" placeholder="Qty" class="span15">
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-control autonumeric-integer" type="text" name="qty_out" id="qty_out" class="span15">
+                                                        <input class="form-control autonumeric-integer" type="text" name="total_fg" id="total_fg" class="span15">
                                                     </td>
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_ng" id="total_ng" class="span15">
@@ -160,6 +148,7 @@
                                         </table>
                                     </div>
                                     <!-- /.card-body -->
+
                                 </div>
                                 <div class="card">
                                     <div class="card-body p-0">
@@ -268,45 +257,7 @@
                                 </div>
                                 <!-- /.card -->
                             </div>
-                            <div class="col-md-3">
-                                <div class="control-group">
-                                    <label class="control-label">Time Start</label>
-                                    <div class="input-group date" id="reservationtime" data-target-input="nearest">
-                                        <input type="text" name="time_start" id="time_start" class="form-control datetimepicker-input" data-target="#reservationtime" />
-                                        <div class="input-group-append" data-target="#reservationtime" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="control-group">
-                                    <label class="control-label">Time End</label>
-                                    <div class="input-group date" id="reservationtimeend" data-target-input="nearest">
-                                        <input type="text" name="time_end" id="time_end" class="form-control datetimepicker-input" data-target="#reservationtimeend" />
-                                        <div class="input-group-append" data-target="#reservationtimeend" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="control-group">
-                                    <label class="control-label">Operator Raking</label>
-                                    <div class="controls">
-                                        <input class="form-control" type="text" id="operator" placeholder="Type something here..." class="span15">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="control-group">
-                                    <label class="control-label">Operator Packing</label>
-                                    <div class="controls">
-                                        <input class="form-control" type="text" name="operator" id="operator_packing" placeholder="Type something here..." class="span15">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="control-group">
                                     <label class="control-label">Status</label>
                                     <div class="controls">
@@ -318,14 +269,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="control-group">
-                                    <label class="control-label">User</label>
-                                    <div class="controls">
-                                        <input class="form-control" type="text" name="user_id" id="user_id" value="{{ Auth::user()->name }}" readonly class="span15">
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
 
                     </form>
@@ -344,6 +288,24 @@
 <script>
     $(document).ready(function() {
         //open-user
+        $.fn.dataTable.ext.buttons.add = {
+            text: 'Add Packing',
+            action: function(e, dt, node, config) {
+                var newDateOptions = {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
+                };
+                $('.modal-title').text('Tambah Data');
+                $("#in").show();
+                $("#in").removeClass("btn btn-primary update");
+                $("#in").addClass("btn btn-primary add");
+                $('#in').text('Save');
+                $('#add-tab').show();
+                rtab = 1;
+                $('#myModal').modal('show');
+            }
+        };
         $.fn.dataTable.ext.buttons.filter = {
             text: '<div class="input-group">' +
                 '<button type="button" class="btn btn-default float-right" id="daterange-btn">' +
@@ -362,7 +324,7 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6], // table ke 1
                 },
                 {
                     targets: [1],
@@ -370,14 +332,8 @@
                         return moment(oTable).format('DD-MM-YYYY');
                     }
                 },
-                {
-                    targets: [2],
-                    render: function(oTable) {
-                        return moment(oTable).format('DD-MM-YYYY HH:mm');
-                    }
-                },
             ],
-            "buttons": [{
+            "buttons": ["add", {
                     extend: "colvis",
                     text: '<i class="fas fa-border-all"></i>'
                 },
@@ -403,32 +359,24 @@
                     name: 'id'
                 },
                 {
-                    data: 'detail_transaction.transaction.date_transaction',
-                    name: 'detail_transaction.transaction.date_transaction'
+                    data: 'date_packing',
+                    name: 'date_packing'
                 },
                 {
-                    data: 'detail_transaction.transaction.time_end',
-                    name: 'detail_transaction.transaction.time_end'
+                    data: 'customer.code',
+                    name: 'customer.code'
                 },
                 {
-                    data: 'detail_transaction.part.customer.code',
-                    name: 'detail_transaction.part.customer.code'
+                    data: 'part.name_local',
+                    name: 'part.name_local'
                 },
                 {
-                    data: 'detail_transaction.part.name_local',
-                    name: 'detail_transaction.part.name_local'
+                    data: 'total_fg',
+                    name: 'total_fg'
                 },
                 {
-                    data: 'detail_transaction.qty_in',
-                    name: 'detail_transaction.qty_in'
-                },
-                {
-                    data: 'qty_out',
-                    name: 'qty_out'
-                },
-                {
-                    data: 'detail_transaction.transaction.status',
-                    name: 'detail_transaction.transaction.status'
+                    data: 'total_ng',
+                    name: 'total_ng'
                 },
                 {
                     data: 'aksi',
@@ -460,12 +408,37 @@
                 $('#example1').DataTable().draw();
             }
         );
-        $("#tr2,#tr3,#tr4,#tr5").hide();
-        $('#add-tab').show();
-        var rtab = 1;
-        $('#add-tab').click(function() {
-            rtab++;
-            $("#tr" + rtab).show();
+    });
+    //add data
+    $('.modal-footer').on('click', '.add', function() {
+        var form = document.getElementById("form-add");
+        var fd = new FormData(form);
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'POST',
+            url: '{{ url("store_packing") }}',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data[1]) {
+                    let text = "";
+                    var dataa = Object.assign({}, data[0])
+                    for (let x in dataa) {
+                        text +=
+                            "<div class='alert alert-dismissible hide fade in alert-danger show'><strong>Errorr!</strong> " +
+                            dataa[x] +
+                            "<a href='#' class='close float-close' data-dismiss='alert' aria-label='close'>×</a></div>";
+                    }
+                    $('#peringatan').append(text);
+                } else {
+                    $('#myModal').modal('hide');
+                    reset_form();
+                }
+
+            },
         });
     });
     //edit data
@@ -498,11 +471,9 @@
 
                 //isi form
                 //reset_form();
-                $('#id').val(data.transaction.id);
-                $('#date_transaction').val(new Date(data.transaction.date_transaction).toLocaleString("id-ID", newDateOptions)
+                $('#id').val(data.id);
+                $('#date_packing').val(new Date(data.date_packing).toLocaleString("id-ID", newDateOptions)
                     .split(' ')[0]).attr("disabled", true);
-                $('#no_rak').val(data.transaction.no_rak).attr("disabled", true);
-                $('#no_transaction').val(data.transaction.no_transaction);
                 setTimeout(function() {
                     $('#cust_id').val(data.cust_id).trigger(
                         'change').attr("disabled", true);
@@ -511,27 +482,25 @@
                     $('#part_id').val(data.part_id).trigger(
                         'change').attr("disabled", true);
                     $('#detail_id').val(data.id);
-                    $('#qty_in').val(data.qty_in).attr("disabled", true);
-                    $('#qty_out').val(data.packing['qty_out']);
-                    $('#total_ng').val(data.packing['total_ng']);
-                    $('#type_ng').val(data.packing['type_ng']);
-                    if (data.n_g) {
-                        $('#over_paint').val(data.n_g.over_paint);
-                        $('#bintik_or_pin_hole').val('data.n_g.bintik_or_pin_hole');
-                        $('#minyak_or_map').val(data.n_g.minyak_or_map);
-                        $('#cotton').val(data.n_g.cotton);
-                        $('#no_paint_or_tipis').val(data.n_g.no_paint_or_tipis);
-                        $('#scratch').val(data.n_g.scratch);
-                        $('#air_pocket').val(data.n_g.air_pocket);
-                        $('#kulit_jeruk').val(data.n_g.kulit_jeruk);
-                        $('#kasar').val(data.n_g.kasar);
-                        $('#karat').val(data.n_g.karat);
-                        $('#water_over').val(data.n_g.water_over);
-                        $('#minyak_kering').val(data.n_g.minyak_kering);
-                        $('#dented').val(data.n_g.dented);
-                        $('#keropos').val(data.n_g.keropos);
-                        $('#nempel_jig').val(data.n_g.nempel_jig);
-                        $('#lainnya').val(data.n_g.lainnya);
+                    $('#total_ng').val(data.total_ng);
+                    $('#total_fg').val(data.total_fg);
+                    if (data.ng) {
+                        $('#over_paint').val(data.ng.over_paint);
+                        $('#bintik_or_pin_hole').val(data.ng.bintik_or_pin_hole);
+                        $('#minyak_or_map').val(data.ng.minyak_or_map);
+                        $('#cotton').val(data.ng.cotton);
+                        $('#no_paint_or_tipis').val(data.ng.no_paint_or_tipis);
+                        $('#scratch').val(data.ng.scratch);
+                        $('#air_pocket').val(data.ng.air_pocket);
+                        $('#kulit_jeruk').val(data.ng.kulit_jeruk);
+                        $('#kasar').val(data.ng.kasar);
+                        $('#karat').val(data.ng.karat);
+                        $('#water_over').val(data.ng.water_over);
+                        $('#minyak_kering').val(data.ng.minyak_kering);
+                        $('#dented').val(data.ng.dented);
+                        $('#keropos').val(data.ng.keropos);
+                        $('#nempel_jig').val(data.ng.nempel_jig);
+                        $('#lainnya').val(data.ng.lainnya);
                     }
 
 
@@ -539,19 +508,14 @@
                 setTimeout(function() {
                     AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 }, 1500);
-                $('#user_id').val(data.transaction.user.name);
-                $('#time_start').val(new Date(data.transaction.time_start).toLocaleString("id-ID", newDateOptionall)).attr("disabled", true);
-                if (data.transaction.time_end !== null) {
-                    $('#time_end').val(new Date(data.transaction.time_end).toLocaleString("id-ID", newDateOptionall));
-                }
-                $('#operator').val(data.transaction.operator).attr("disabled", true);
-                $('#operator_packing').val(data.packing.operator);
-                $('#status').val(data.transaction.status).trigger('change');
-                if (data.transaction.status == "CLOSE") {
+                $('#user_id').val(data.user.name);
+                $('#operator').val(data.operator).attr("disabled", true);
+                $('#status').val(data.status).trigger('change');
+                if (data.status == "CLOSE") {
                     $("#form-add input").prop("disabled", true);
                 }
 
-                id = data.transaction.id;
+                id = data.id;
 
                 $('.modal-title').text('Edit Data');
                 $("#in").removeClass("btn btn-primary add");
@@ -599,6 +563,30 @@
         });
     });
     //end update
+    //delete
+
+    $(document).on('click', '#delete', function(e) {
+        e.preventDefault();
+        if (confirm('Yakin akan menghapus data ini?')) {
+            // alert("Thank you for subscribing!" + $(this).data('id') );
+
+            $.ajax({
+                type: 'DELETE',
+                url: 'delete_packing/' + $(this).data('id'),
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                },
+                success: function(data) {
+                    alert("Data Berhasil Dihapus");
+                    //$('#example1').DataTable().ajax.reload();
+                    location.reload();
+                }
+            });
+
+        } else {
+            return false;
+        }
+    });
     $(document).ready(function() {
         //part
         $('#cust_id').change(function(event) {
@@ -628,22 +616,13 @@
 <script>
     $(function() {
         //Initialize Select2 Elements
-        $('[name="part_id"],[name="type"],[name="cust_id"],#order_id').select2({
+        $('#part_id,#cust_id').select2({
             placeholder: "Choose..",
             theme: 'bootstrap4'
         })
         //Date picker
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY',
-        });
-        //time picker
-        $('#reservationtime,#reservationtimeend').datetimepicker({
-            pickDate: false,
-            minuteStepping: 30,
-            format: 'DD/MM/YYYY HH:mm',
-            pickTime: true,
-            locale: 'id',
-            use24hours: true
         });
         // AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
     })

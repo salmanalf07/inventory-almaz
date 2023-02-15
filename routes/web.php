@@ -370,5 +370,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/packing', function () {
     return view('/production/packing', ['judul' => "Packing", 'customer' => $cust]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/json_packing', [PackingTransaction::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_packing', [PackingTransaction::class, 'store']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/edit_packing', [PackingTransaction::class, 'edit']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_packing/{id}', [PackingTransaction::class, 'update']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_packing/{id}', [PackingTransaction::class, 'destroy']);
