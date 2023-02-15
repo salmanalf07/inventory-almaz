@@ -146,7 +146,7 @@
                     <img src="./img/tt_invoice.jpg" width="300" alt="">
                 </td>
                 <td class="center bold" style="font-size:20pt" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">
-                    REKAP DELIVERY & TAGIHAN ED-COATING (Jasa Proses EDP)
+                    REKAP DELIVERY & TAGIHAN ED-COATING (JASA PROSES EDP)
                 </td>
             </tr>
             <tr>

@@ -650,16 +650,16 @@
                     ppn_st = 0;
                     pph_st = 0;
                 }
-                $('#cust_id').val(data[0].cust_id).trigger('change').attr("disabled", true);
+                $('#cust_id').val(data[0].cust_id).trigger('change');
                 setTimeout(function() {
                     if (data[0].order_id) {
-                        $('#order_id').val(data[0].order_id).trigger('change').attr("disabled", true);
+                        $('#order_id').val(data[0].order_id).trigger('change');
                     }
                 }, 2000);
                 $('#no_invoice').val(data[0].no_invoice);
                 $('#no_faktur').val(data[0].no_faktur);
-                $('#book_month').val(data[0].book_month).trigger('change').attr("disabled", true);
-                $('#book_year').val(data[0].book_year).trigger('change').attr("disabled", true);
+                $('#book_month').val(data[0].book_month).trigger('change');
+                $('#book_year').val(data[0].book_year).trigger('change');
                 $('#status').val(data[0].status).trigger('change');
                 $('#date_inv').val(new Date(data[0].date_inv).toLocaleString("id-ID", newDateOptions).split(' ')[0]);
                 if (data[0].jatuh_tempo != null) {
