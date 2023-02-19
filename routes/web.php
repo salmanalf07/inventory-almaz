@@ -293,6 +293,12 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_partoutt'])->get('/r_pa
     return view('/report/r_partoutt', ['judul' => "Report Part Out", 'customer' => $cust]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/report_partin', [PartIn::class, 'report_partin']);
+Route::middleware(['auth:sanctum', 'verified', 'report:r_partout'])->get('/r_partinn', function () {
+    $user = ModelsUser::get();
+    $cust = ModelsCustomer::select(['code', 'id'])->get();
+    return view('/report/r_partinn', ['judul' => "Summary In By Customer", 'customer' => $cust, 'user' => $user]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/summary_partin', [PartIn::class, 'summary_partin']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_partout'])->get('/r_partout', function () {
     $user = ModelsUser::get();
     $cust = ModelsCustomer::select(['code', 'id'])->get();

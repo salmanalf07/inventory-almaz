@@ -9,6 +9,7 @@ use App\Models\Parts;
 use App\Models\StockWip;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -357,5 +358,69 @@ class PartIn extends Controller
         // return $result;
         return DataTables::of($result)
             ->toJson();
+    }
+
+    public function summary_partin(Request $request)
+    {
+        $date = explode(" - ", $request->date);
+        $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
+        $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
+        $dauu = DB::table('detail_part_ins')
+            ->join(
+                'part_ins',
+                'part_ins.id',
+                '=',
+                'detail_part_ins.partin_id'
+            )
+            ->join(
+                'customers',
+                'customers.id',
+                '=',
+                'part_ins.cust_id'
+            )->selectRaw('(DATE_FORMAT(part_ins.date_in, "%d-%m-%Y")) as my_date,customers.code, sum(total_price) as total');
+        if ($request->date != null) {
+            $dauu->whereDate('part_ins.date_in', '>=', $datein)
+                ->whereDate('part_ins.date_in', '<=', $dateen);
+        }
+        if ($request->cust_id != "#") {
+            $dauu->where('part_ins.cust_id', $request->cust_id);
+        }
+
+        $dauu->groupBy("customers.code")
+            ->groupBy('my_date');
+        $dauu->where('detail_part_ins.deleted_at', '=', null);
+        $dau = $dauu->get();
+
+        $ur = array();
+        $urr = array();
+        foreach ($dau as $att) {
+            $ur[] = $att->my_date;
+            $urr[] = $att->code;
+            $unique_dataa = array_unique($ur);
+            $unique_dataaa = array_unique($urr);
+        }
+
+        $datdetaill = array();
+        if (count($dau) > 0) {
+            foreach ($unique_dataaa as $key => $attt) {
+                foreach ($unique_dataa as $ke => $uniqe) {
+                    foreach ($dau as $kee => $dauu) {
+                        //$datdetail[$key][$attt->part_name][$uniqe->nosj][$datan->DetailSJ['nosj']] = [$datan->qty];
+                        $datdetaill[$key]["cust_id"] = $attt;
+                        $datdetaill[$key]["uniqe"][$ke]["date"] = $uniqe;
+                        if ($uniqe . $attt == $dauu->my_date . $dauu->code) {
+                            $datdetaill[$key]["uniqe"][$ke]["real"][0]["total"] = $dauu->total;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return view('/report/r_partin_by_cust', ['judul' => "User", "datdetail" => $datdetaill, "date" => $request->date]);
+        //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
+        //return $datdetaill;
+        //return view('/report/r_partout_tab', ['judul' => "User", "datdetail" => $dau, "date" => $request->date]);
+        //return $dau;
     }
 }

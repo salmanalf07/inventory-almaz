@@ -172,7 +172,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item {{ request()->is('dashboard', 'r_partin','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo') ? 'menu-open' : '' }}">
+                        <li class="nav-item {{ request()->is('dashboard', 'r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
@@ -193,7 +193,7 @@
                                 $data = explode(",", $str);
                                 ?>
                                 @if($str)
-                                <li class="nav-item {{ request()->is('r_partin','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo') ? 'menu-open' : '' }}">
+                                <li class="nav-item {{ request()->is('r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>
@@ -202,12 +202,32 @@
                                         </p>
                                     </a>
                                     @foreach($data as $dataa)
+                                    @if($dataa == "r_invsout" || $dataa == "ALL")
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="r_invsout" class="nav-link {{ request()->is('r_invsout') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>In VS Out</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    @endif
                                     @if($dataa == "r_partin" || $dataa == "ALL")
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_partin" class="nav-link {{ request()->is('r_partin') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Part In</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    @endif
+                                    @if($dataa == "r_partinn" || $dataa == "ALL")
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="r_partinn" class="nav-link {{ request()->is('r_partinn') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Summary In By Cust</p>
                                             </a>
                                         </li>
                                     </ul>
@@ -222,22 +242,12 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_invsout" || $dataa == "ALL")
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="r_invsout" class="nav-link {{ request()->is('r_invsout') ? 'active' : '' }}">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>In VS Out</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    @endif
                                     @if($dataa == "r_partout" || $dataa == "ALL")
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_partout" class="nav-link {{ request()->is('r_partout') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Summary By Cust</p>
+                                                <p style="font-size:2vh">Summary Out By Cust</p>
                                             </a>
                                         </li>
                                     </ul>
@@ -247,7 +257,7 @@
                                         <li class="nav-item">
                                             <a href="r_sumpart" class="nav-link {{ request()->is('r_sumpart') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Summary By Part</p>
+                                                <p style="font-size:2vh">Summary Out By Part</p>
                                             </a>
                                         </li>
                                     </ul>
@@ -257,7 +267,7 @@
                                         <li class="nav-item">
                                             <a href="r_sumpo" class="nav-link {{ request()->is('r_sumpo') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Summary By PO</p>
+                                                <p style="font-size:2vh">Summary Out By PO</p>
                                             </a>
                                         </li>
                                     </ul>
