@@ -600,6 +600,112 @@ class SJ extends Controller
         //return $dataa;
     }
 
+    public function track_inv(Request $request)
+    {
+
+        $data = DB::table('detail_sjs')
+            ->join(
+                'sjs',
+                'sjs.id',
+                '=',
+                'detail_sjs.sj_id'
+            )
+            ->leftJoin(
+                'orders',
+                'orders.id',
+                '=',
+                'sjs.order_id'
+            )
+            ->leftJoin(
+                'invoices',
+                'invoices.id',
+                '=',
+                'sjs.invoice_id'
+            )
+            ->join(
+                'customers',
+                'customers.id',
+                '=',
+                'sjs.cust_id'
+            )
+            ->selectRaw('customers.code,sjs.invoice_id,invoices.no_invoice,sjs.order_id,orders.no_po, sum(detail_sjs.total_price) as total')
+            ->where('detail_sjs.deleted_at', '=', null);
+        if ($request->cust_id != "#") {
+            $data->where('sjs.cust_id', $request->cust_id);
+        };
+        if ($request->date != null) {
+            $date = explode(" - ", $request->date);
+            $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
+            $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
+
+            $data->whereDate('sjs.date_sj', '>=', $datein)
+                ->whereDate('sjs.date_sj', '<=', $dateen);
+        };
+        if ($request->order_id == "blank") {
+            $data->where('sjs.order_id', '=', null);
+        };
+        if ($request->order_id != "#" && $request->order_id != "blank") {
+            $data->where('sjs.order_id', $request->order_id);
+        }
+        if ($request->invoice_id == "blank") {
+            $data->where('invoice_id', null);
+        }
+        if ($request->invoice_id != "#" && $request->invoice_id != "blank") {
+            $data->where('invoice_id', $request->invoice_id);
+        }
+        $data->groupBy('sjs.order_id')
+            ->groupBy('sjs.invoice_id')
+            ->groupBy('customers.code')
+            ->groupBy('orders.no_po')
+            ->groupBy('invoices.no_invoice');
+        // ->groupBy('sjs.date_sj');
+        $dataa = $data->get();
+
+        $ar = array();
+        $arr = array();
+        $arrr = array();
+        foreach ($dataa as $att) {
+            if ($att->invoice_id == null) {
+                $ar[] = $att->code . " - " . $att->order_id . "+";
+            } else {
+                $ar[] = $att->code . " - " . $att->order_id . "-" . $att->invoice_id;
+            }
+            // $arr[] = $att->date_sj;
+            $arrr[] = $att->order_id;
+            $unique_data = array_unique($ar);
+            $unique_dataa = array_unique($arr);
+            $unique_dataaa = array_unique($arrr);
+        }
+
+
+        $datdetail = array();
+        if (count($dataa) > 0) {
+            foreach ($unique_data as $ke => $uniqe) {
+                foreach ($dataa as $kee => $datan) {
+                    // $datdetail[$ke]["uniqe"][$kee]["date"] = $uniqe;
+                    if ($uniqe == $datan->code . " - " . $datan->order_id . "+") {
+                        if ($datan->invoice_id == null) {
+                            $datdetail[$ke]["code"] = $datan->code;
+                            $datdetail[$ke]['PO']["no_po"] = $datan->no_po;
+                            $datdetail[$ke]["PO"]["total"] = $datan->total;
+                            $datdetail[$ke]["INV"]["no_inv"] = null;
+                            $datdetail[$ke]["INV"]["total"] = 0;
+                        } else {
+                            $datdetail[$ke]["INV"]["no_inv"] = $datan->invoice_id;
+                            $datdetail[$ke]["INV"]["total"] = $datan->total;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return view('/report/r_tracking_invoice', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
+        //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
+        //return $datdetail;
+        //return $dataa;
+    }
+
     public function update_price_sj()
     {
         $dateStart = date("Y-m-d", strtotime(str_replace('/', '-', "01/06/2022")));

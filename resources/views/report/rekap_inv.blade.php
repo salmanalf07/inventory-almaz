@@ -27,84 +27,88 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            @if(request()->is('rekap_inv'))
                             <form id="form-add" method="post" role="form" id="form-print" action="rekap_invoice" enctype="multipart/form-data" formtarget="_blank" target="_blank">
-                                @csrf
-                                <span id="peringatan"></span>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="control-group">
-                                            <label class="control-label">Customer</label>
-                                            <div class="controls">
-                                                <select name="cust_id" id="cust_id" class="form-control select2">
-                                                    <option value="#" selected="selected">Choose...</option>
-                                                    @foreach ($customer as $customer)
-                                                    <option value="{{ $customer->id }}">{{ $customer->code }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="control-group">
-                                            <label class="control-label">Number PO</label>
-                                            <div class="controls">
-                                                <select name="order_id" id="order_id" class="form-control select2" style="width: 100%;">
-                                                    <option value="#" selected="selected">Choose...</option>
-                                                    <option value="blank">BLANK (NO PO)</option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="control-group">
-                                            <label class="control-label">Number INV</label>
-                                            <div class="controls">
-                                                <select name="invoice_id" id="invoice_id" class="form-control select2" style="width: 100%;">
-                                                    <option value="#" selected="selected">Choose...</option>
-                                                    <option value="blank">BLANK (NO INV)</option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="control-group">
-                                            <label>Date Range</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                    </span>
+                                @else
+                                <form id="form-add" method="post" role="form" id="form-print" action="track_inv" enctype="multipart/form-data" formtarget="_blank" target="_blank">
+                                    @endif
+                                    @csrf
+                                    <span id="peringatan"></span>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="control-group">
+                                                <label class="control-label">Customer</label>
+                                                <div class="controls">
+                                                    <select name="cust_id" id="cust_id" class="form-control select2">
+                                                        <option value="#" selected="selected">Choose...</option>
+                                                        @foreach ($customer as $customer)
+                                                        <option value="{{ $customer->id }}">{{ $customer->code }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
-                                                <input type="text" name="date" class="form-control float-right" id="reservation">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="control-group">
-                                            <label class="control-label">Status</label>
-                                            <div class="controls">
-                                                <select name="status" id="status" class="form-control select2" style="width: 100%;">
-                                                    <option value="#" selected="selected">Choose...</option>
-                                                    <!-- <option value="OPEN">OPEN</option> -->
-                                                    <option value="INVOICE">INVOICE</option>
-                                                    <!-- <option value="CLOSE">CLOSE</option> -->
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="control-group">
-                                            <div class="controls pt-2">
-                                                <input onclick="reset_form()" id="subpr" class="btn btn-secondary btn-block" type="button" value="Rekap Surat Jalan">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                        <div class="col-md-3">
+                                            <div class="control-group">
+                                                <label class="control-label">Number PO</label>
+                                                <div class="controls">
+                                                    <select name="order_id" id="order_id" class="form-control select2" style="width: 100%;">
+                                                        <option value="#" selected="selected">Choose...</option>
+                                                        <option value="blank">BLANK (NO PO)</option>
 
-                            </form>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="control-group">
+                                                <label class="control-label">Number INV</label>
+                                                <div class="controls">
+                                                    <select name="invoice_id" id="invoice_id" class="form-control select2" style="width: 100%;">
+                                                        <option value="#" selected="selected">Choose...</option>
+                                                        <option value="blank">BLANK (NO INV)</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="control-group">
+                                                <label>Date Range</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="far fa-calendar-alt"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="date" class="form-control float-right" id="reservation">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="control-group">
+                                                <label class="control-label">Status</label>
+                                                <div class="controls">
+                                                    <select name="status" id="status" class="form-control select2" style="width: 100%;">
+                                                        <option value="#" selected="selected">Choose...</option>
+                                                        <!-- <option value="OPEN">OPEN</option> -->
+                                                        <option value="INVOICE">INVOICE</option>
+                                                        <!-- <option value="CLOSE">CLOSE</option> -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="control-group">
+                                                <div class="controls pt-2">
+                                                    <input onclick="reset_form()" id="subpr" class="btn btn-secondary btn-block" type="button" value="Rekap Surat Jalan">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
                         </div>
                     </div>
                 </div>
