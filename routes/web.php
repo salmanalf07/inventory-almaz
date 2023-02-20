@@ -328,6 +328,11 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_invoice'])->get('/r_inv
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/report_invoice', [Invoice::class, 'report_invoice']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/rekap_invoice', [Invoice::class, 'rekap_invoice']);
+Route::middleware(['auth:sanctum', 'verified', 'report:tracking_invoice'])->get('/tracking_invoice', function () {
+    $cust = ModelsCustomer::select(['code', 'id'])->get();
+    return view('/report/rekap_inv', ['judul' => "Tracking Invoice", 'customer' => $cust]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/track_inv', [SJ::class, 'track_inv']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_production'])->get('/r_production', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
     return view('/report/r_production', ['judul' => "Rekap Production", 'customer' => $cust]);
