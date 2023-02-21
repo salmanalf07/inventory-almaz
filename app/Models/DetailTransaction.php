@@ -28,10 +28,10 @@ class DetailTransaction extends Model
         return $this->belongsTo(Parts::class, 'part_id', 'id');
     }
 
-    public function Packing()
-    {
-        return $this->hasOne(PackingTransaction::class, 'detransaction_id', 'id');
-    }
+    // public function Packing()
+    // {
+    //     return $this->hasOne(PackingTransaction::class, 'detransaction_id', 'id');
+    // }
     public function NG()
     {
         return $this->hasOne(NgTransaction::class, 'detransaction_id', 'id');

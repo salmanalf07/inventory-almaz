@@ -73,7 +73,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     ])->get();
     $ordermonth = DetailSJ::select('total_price')->whereIn("sj_id", $ordermonthh->toArray())->sum('total_price');
     //production
-    $Production = DetailTransaction::with('Transaction', 'Part.customer', 'Packing')
+    $Production = DetailTransaction::with('Transaction', 'Part.customer')
         ->whereHas('Transaction', function ($query) {
             $query->whereDate('date_transaction', date("Y-m-d"));
         })->get();

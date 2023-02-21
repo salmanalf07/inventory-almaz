@@ -165,7 +165,6 @@
                                         <th>Customer</th>
                                         <th>Part</th>
                                         <th>Qty In</th>
-                                        <th>Qty Out</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -176,7 +175,6 @@
                                         <td>{{$production->part->customer['code']}}</td>
                                         <td>{{$production->part->name_local}}</td>
                                         <td>{{$production->qty_in}}</td>
-                                        <td>{{$production->packing->qty_out}}</td>
                                         <td>{{ $production->transaction->status}}</td>
                                     </tr>
                                     @endforeach
