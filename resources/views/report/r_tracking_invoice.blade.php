@@ -135,7 +135,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($datdetail as $data)
+            @foreach(collect($datdetail)->sortBy('code') as $data)
             <tr>
                 <td>{{$data['code']}}</td>
                 @if($data['PO']['no_po'] == null)
@@ -143,10 +143,16 @@
                 @else
                 <td>{{$data['PO']['no_po']}}</td>
                 @endif
-                <td class="right sum1">{{number_format($data['INV']['total']+$data['PO']['total'],0,".",".")}}</td>
+                <td class="right sum1">{{number_format($data['PO']['total'],0,".",".")}}</td>
+                @if(isset($data['INV']['total']))
                 <td class="right sum2">{{number_format($data['INV']['total'],0,".",".")}}</td>
+                <td class="right sum3">{{number_format($data['PO']['total']-$data['INV']['total'],0,".",".")}}</td>
+                <td class="right sum4">{{number_format($data['PO']['total'] == 0 ? 0 : ($data['INV']['total']/($data['PO']['total']))*100,1) . " %"}}</td>
+                @else
+                <td class="right sum2">0</td>
                 <td class="right sum3">{{number_format($data['PO']['total'],0,".",".")}}</td>
-                <td class="right sum4">{{number_format($data['PO']['total'] == 0 ? 0 : ($data['INV']['total']/($data['INV']['total']+$data['PO']['total']))*100,1) . " %"}}</td>
+                <td class="right sum4">{{number_format($data['PO']['total'] == 0 ? 0 : (0/($data['PO']['total']))*100,1) . " %"}}</td>
+                @endif
             </tr>
             @endforeach
         </tbody>

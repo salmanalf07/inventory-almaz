@@ -616,6 +616,28 @@ class SJ extends Controller
                 '=',
                 'sjs.order_id'
             )
+            ->join(
+                'customers',
+                'customers.id',
+                '=',
+                'sjs.cust_id'
+            )
+            ->selectRaw('customers.code,sjs.order_id,orders.no_po, sum(detail_sjs.total_price) as total')
+            ->where('detail_sjs.deleted_at', '=', null);
+
+        $dataa = DB::table('detail_sjs')
+            ->join(
+                'sjs',
+                'sjs.id',
+                '=',
+                'detail_sjs.sj_id'
+            )
+            ->leftJoin(
+                'orders',
+                'orders.id',
+                '=',
+                'sjs.order_id'
+            )
             ->leftJoin(
                 'invoices',
                 'invoices.id',
@@ -628,10 +650,13 @@ class SJ extends Controller
                 '=',
                 'sjs.cust_id'
             )
-            ->selectRaw('customers.code,sjs.invoice_id,invoices.no_invoice,sjs.order_id,orders.no_po, sum(detail_sjs.total_price) as total')
+            ->selectRaw('customers.code,sjs.order_id,orders.no_po, sum(detail_sjs.total_price) as total')
+            ->where('sjs.invoice_id', '!=', null)
             ->where('detail_sjs.deleted_at', '=', null);
+
         if ($request->cust_id != "#") {
             $data->where('sjs.cust_id', $request->cust_id);
+            $dataa->where('sjs.cust_id', $request->cust_id);
         };
         if ($request->date != null) {
             $date = explode(" - ", $request->date);
@@ -640,69 +665,55 @@ class SJ extends Controller
 
             $data->whereDate('sjs.date_sj', '>=', $datein)
                 ->whereDate('sjs.date_sj', '<=', $dateen);
+            $dataa->whereDate('sjs.date_sj', '>=', $datein)
+                ->whereDate('sjs.date_sj', '<=', $dateen);
         };
         if ($request->order_id == "blank") {
             $data->where('sjs.order_id', '=', null);
+            $dataa->where('sjs.order_id', '=', null);
         };
         if ($request->order_id != "#" && $request->order_id != "blank") {
             $data->where('sjs.order_id', $request->order_id);
+            $dataa->where('sjs.order_id', $request->order_id);
         }
         if ($request->invoice_id == "blank") {
             $data->where('invoice_id', null);
+            $dataa->where('invoice_id', null);
         }
         if ($request->invoice_id != "#" && $request->invoice_id != "blank") {
             $data->where('invoice_id', $request->invoice_id);
+            $dataa->where('invoice_id', $request->invoice_id);
         }
         $data->groupBy('sjs.order_id')
-            ->groupBy('sjs.invoice_id')
             ->groupBy('customers.code')
-            ->groupBy('orders.no_po')
-            ->groupBy('invoices.no_invoice');
+            ->groupBy('orders.no_po');
+        $dataa->groupBy('sjs.order_id')
+            ->groupBy('customers.code')
+            ->groupBy('orders.no_po');
         // ->groupBy('sjs.date_sj');
-        $dataa = $data->get();
-
-        $ar = array();
-        $arr = array();
-        $arrr = array();
-        foreach ($dataa as $att) {
-            if ($att->invoice_id == null) {
-                $ar[] = $att->code . " - " . $att->order_id . "+";
-            } else {
-                $ar[] = $att->code . " - " . $att->order_id . "-" . $att->invoice_id;
-            }
-            // $arr[] = $att->date_sj;
-            $arrr[] = $att->order_id;
-            $unique_data = array_unique($ar);
-            $unique_dataa = array_unique($arr);
-            $unique_dataaa = array_unique($arrr);
-        }
-
+        $datau = $data->get();
+        $datauu = $dataa->get();
 
         $datdetail = array();
-        if (count($dataa) > 0) {
-            foreach ($unique_data as $ke => $uniqe) {
-                foreach ($dataa as $kee => $datan) {
-                    // $datdetail[$ke]["uniqe"][$kee]["date"] = $uniqe;
-                    if ($uniqe == $datan->code . " - " . $datan->order_id . "+") {
-                        if ($datan->invoice_id == null) {
-                            $datdetail[$ke]["code"] = $datan->code;
-                            $datdetail[$ke]['PO']["no_po"] = $datan->no_po;
-                            $datdetail[$ke]["PO"]["total"] = $datan->total;
-                            $datdetail[$ke]["INV"]["no_inv"] = null;
-                            $datdetail[$ke]["INV"]["total"] = 0;
-                        } else {
-                            $datdetail[$ke]["INV"]["no_inv"] = $datan->invoice_id;
-                            $datdetail[$ke]["INV"]["total"] = $datan->total;
-                        }
+        if (count($datau) > 0) {
+            foreach ($datau as $kee => $datan) {
+                foreach ($datauu as $ke => $data) {
+
+                    $datdetail[$kee]["code"] = $datan->code;
+                    $datdetail[$kee]['PO']["no_po"] = $datan->no_po;
+                    $datdetail[$kee]["PO"]["total"] = $datan->total;
+                    if ($datan->code . $datan->order_id  == $data->code . $data->order_id) {
+                        $datdetail[$kee]["codee"] = $data->code;
+                        $datdetail[$kee]['INV']["no_po"] = $data->no_po;
+                        $datdetail[$kee]["INV"]["total"] = $data->total;
                     }
                 }
             }
         }
 
-
         return view('/report/r_tracking_invoice', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
         //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
-        //return $datdetail;
+        //return $datdetaill;
         //return $dataa;
     }
 
