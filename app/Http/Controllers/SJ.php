@@ -602,7 +602,7 @@ class SJ extends Controller
 
     public function track_inv(Request $request)
     {
-
+        //SUM ORDER
         $data = DB::table('detail_sjs')
             ->join(
                 'sjs',
@@ -624,7 +624,7 @@ class SJ extends Controller
             )
             ->selectRaw('customers.code,sjs.order_id,orders.no_po, sum(detail_sjs.total_price) as total')
             ->where('detail_sjs.deleted_at', '=', null);
-
+        //SUM INVOICE
         $dataa = DB::table('detail_sjs')
             ->join(
                 'sjs',
