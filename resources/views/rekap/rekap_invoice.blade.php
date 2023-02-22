@@ -226,24 +226,17 @@
             <?php } ?>
 
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">TOTAL</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">TOTAL</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
                         <div id="total"></div>
                     </nav>
                 </td>
-                @if ( $dat[0]->customer['ppn'] == "Y" && $dat[0]->customer['pph'] == "Y")
-                <td class="border-right border-bottom" rowspan="4"></td>
-                @elseif ($dat[0]->customer['ppn'] == "Y" || $dat[0]->customer['pph'] == "Y")
-                <td class="border-right border-bottom" rowspan="3"></td>
-                @else
-                <td class="border-right border-bottom" rowspan="2"></td>
-                @endif
             </tr>
             @if ($dat[0]->customer['ppn'] == "Y")
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">PPN {{$pajak->ppn}}%</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">PPN {{$pajak->ppn}}%</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
@@ -254,7 +247,7 @@
             @endif
             @if ($dat[0]->customer['pph'] == "Y")
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">PPH 23 {{$pajak->pph}}%</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">PPH 23 {{$pajak->pph}}%</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
@@ -264,7 +257,7 @@
             </tr>
             @endif
             <tr>
-                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">Grand Total</td>
+                <td class="bold" style="text-align: right;padding-right:10px" colspan="{{ count($datdetail[0]['uniqe']) + 5 }}">Grand Total</td>
                 <td class="bold">
                     <nav class="container">
                         <div>Rp</div>
