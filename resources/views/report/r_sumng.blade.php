@@ -134,25 +134,15 @@
 
         });
         $('#reservation').daterangepicker({
-                autoUpdateInput: false,
                 locale: {
-                    cancelLabel: 'Clear'
+                    format: 'DD/MM/YYYY'
                 }
             },
             function(start, end) {
                 dateinn = start.format('YYYY-MM-DD');
                 dateenn = end.format('YYYY-MM-DD');
-                //console.log(dateinn);
             }
         )
-        $('#reservation').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format(
-                'DD/MM/YYYY'));
-        });
-
-        $('#reservation').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        });
 
         AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
     })

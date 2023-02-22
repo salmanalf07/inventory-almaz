@@ -61,7 +61,7 @@
             </tr>
             <tr>
                 @foreach($data as $date)
-                <td class="center date-packing" data-date="{{date('d',strtotime($date->date_packing))}}" width="50">{{date("d",strtotime($date->date_packing))}}</td>
+                <td class="center date-packing bold" data-date="{{date('d',strtotime($date['date_packing']))}}" width="50">{{date("d",strtotime($date['date_packing']))}}</td>
                 @endforeach
             </tr>
         </thead>
@@ -69,7 +69,7 @@
             <tr>
                 <td>Total</td>
                 @foreach($data as $key => $total)
-                <td class="right qtysum sum{{$key}}">{{number_format($total->total_fg + $total->total_ng,0,".",".")}}</td>
+                <td class="right qtysum sum{{$key}}">{{number_format($total['total_fg'] + $total['total_ng'],0,".",".")}}</td>
                 @endforeach
                 <td>
                     <div class="right amount" id="qtytotal"></div>
@@ -78,7 +78,7 @@
             <tr>
                 <td>OK</td>
                 @foreach($data as $key => $ok)
-                <td class="right okcolect qtysum sum{{$key}}">{{number_format($ok->total_fg,0,".",".")}}</td>
+                <td class="right okcolect qtysum sum{{$key}}">{{number_format($ok['total_fg'],0,".",".")}}</td>
                 @endforeach
                 <td>
                     <div class="right amount" id="qtytotal"></div>
@@ -96,7 +96,7 @@
             <tr>
                 <td>NG</td>
                 @foreach($data as $key => $ng)
-                <td class="right ngcolect qtysum sum{{$key}}" id="ng">{{$ng->total_ng}}</td>
+                <td class="right ngcolect qtysum sum{{$key}}" id="ng">{{$ng['total_ng']}}</td>
                 @endforeach
                 <td>
                     <div class="right amount" id="qtytotal"></div>
@@ -108,13 +108,17 @@
                 <td class="right qtysum sum{{$key}}">1%</td>
                 @endforeach
                 <td>
-                    <div class="right amount" id="qtytotal"></div>
+                    <div class="right">1%</div>
                 </td>
             </tr>
             <tr>
                 <td>%NG</td>
                 @foreach($data as $key => $ng)
-                <td class="right nggcolect amountt">{{round(($ng->total_ng / ($ng->total_fg + $ng->total_ng)),2)."%"}}</td>
+                @if($ng['total_fg'] != 0)
+                <td class="right nggcolect amountt">{{round(($ng['total_ng'] / ($ng['total_fg'] + $ng['total_ng'])),2)."%"}}</td>
+                @else
+                <td class="right nggcolect amountt">0%</td>
+                @endif
                 @endforeach
                 <td class="right">
                     <div id="total"></div>
@@ -126,10 +130,10 @@
             <tr>
                 <td>Over Paint</td>
                 @foreach($data as $key => $ng)
-                @if($ng->over_paint == null)
+                @if($ng['over_paint'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->over_paint}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['over_paint']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -139,10 +143,10 @@
             <tr>
                 <td>Bintik / Pin Hole</td>
                 @foreach($data as $key => $ng)
-                @if($ng->bintik_or_pin_hole == null)
+                @if($ng['bintik_or_pin_hole'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->bintik_or_pin_hole}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['bintik_or_pin_hole']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -152,10 +156,10 @@
             <tr>
                 <td>Minyak / Map</td>
                 @foreach($data as $key => $ng)
-                @if($ng->minyak_or_map == null)
+                @if($ng['minyak_or_map'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->minyak_or_map}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['minyak_or_map']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -165,10 +169,10 @@
             <tr>
                 <td>Cotton</td>
                 @foreach($data as $key => $ng)
-                @if($ng->cotton == null)
+                @if($ng['cotton'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->cotton}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['cotton']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -178,10 +182,10 @@
             <tr>
                 <td>No Paint / Tipis</td>
                 @foreach($data as $key => $ng)
-                @if($ng->no_paint_or_tipis == null)
+                @if($ng['no_paint_or_tipis'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->no_paint_or_tipis}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['no_paint_or_tipis']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -191,10 +195,10 @@
             <tr>
                 <td>Scratch</td>
                 @foreach($data as $key => $ng)
-                @if($ng->scratch == null)
+                @if($ng['scratch'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->scratch}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['scratch']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -204,10 +208,10 @@
             <tr>
                 <td>Air Pocket</td>
                 @foreach($data as $key => $ng)
-                @if($ng->air_pocket == null)
+                @if($ng['air_pocket'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->air_pocket}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['air_pocket']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -217,10 +221,10 @@
             <tr>
                 <td>Kulit Jeruk</td>
                 @foreach($data as $key => $ng)
-                @if($ng->kulit_jeruk == null)
+                @if($ng['kulit_jeruk'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->kulit_jeruk}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['kulit_jeruk']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -230,10 +234,10 @@
             <tr>
                 <td>Kasar</td>
                 @foreach($data as $key => $ng)
-                @if($ng->kasar == null)
+                @if($ng['kasar'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->kasar}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['kasar']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -243,10 +247,10 @@
             <tr>
                 <td>Karat</td>
                 @foreach($data as $key => $ng)
-                @if($ng->karat == null)
+                @if($ng['karat'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->karat}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['karat']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -256,10 +260,10 @@
             <tr>
                 <td>Water Over</td>
                 @foreach($data as $key => $ng)
-                @if($ng->water_over == null)
+                @if($ng['water_over'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->water_over}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['water_over']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -269,10 +273,10 @@
             <tr>
                 <td>Minyak Kering</td>
                 @foreach($data as $key => $ng)
-                @if($ng->minyak_kering == null)
+                @if($ng['minyak_kering'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->minyak_kering}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['minyak_kering']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -282,10 +286,10 @@
             <tr>
                 <td>Dented</td>
                 @foreach($data as $key => $ng)
-                @if($ng->dented == null)
+                @if($ng['dented'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->dented}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['dented']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -295,10 +299,10 @@
             <tr>
                 <td>Keropos</td>
                 @foreach($data as $key => $ng)
-                @if($ng->keropos == null)
+                @if($ng['keropos'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->keropos}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['keropos']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -308,10 +312,10 @@
             <tr>
                 <td>Nempel Jig</td>
                 @foreach($data as $key => $ng)
-                @if($ng->nempel_jig == null)
+                @if($ng['nempel_jig'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->nempel_jig}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['nempel_jig']}}</td>
                 @endif
                 @endforeach
                 <td>
@@ -321,10 +325,10 @@
             <tr>
                 <td>Lainnya</td>
                 @foreach($data as $key => $ng)
-                @if($ng->lainnya == null)
+                @if($ng['lainnya'] == null)
                 <td class="right qtysum sum{{$key}}">0</td>
                 @else
-                <td class="red right qtysum sum{{$key}}">{{$ng->lainnya}}</td>
+                <td class="red right qtysum sum{{$key}}">{{$ng['lainnya']}}</td>
                 @endif
                 @endforeach
                 <td>

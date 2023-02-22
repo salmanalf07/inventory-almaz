@@ -271,6 +271,61 @@ class Transaction extends Controller
         $dataa->groupBy('packing_transactions.date_packing');
 
         $data = $dataa->get();
+
+        //add tanggal semua
+        $datesToAdd = [];
+
+        $currentDate = $datein;
+        while ($currentDate <= $dateen) {
+            $datesToAdd[] = $currentDate;
+            $currentDate = date("Y-m-d", strtotime("+1 day", strtotime($currentDate)));
+        }
+
+        //combine data
+        $dataArray = $data->toArray();
+        // Ambil semua tanggal pada array $data dan simpan ke dalam array $allDates
+        $allDates = array_column($dataArray, "date_packing");
+
+        // Buat objek kosong untuk menyimpan data
+        $dataObj = collect();
+
+        // Loop untuk setiap tanggal yang ingin ditambahkan
+        foreach ($datesToAdd as $date) {
+            // Cek apakah tanggal sudah ada pada array $allDates
+            if (!in_array($date, $allDates)) {
+                // Jika belum, tambahkan data baru ke dalam objek $dataObj
+                $dataObj->push([
+                    "date_packing" => $date,
+                    "total_fg" => 0,
+                    "total_ng" => 0,
+                    "over_paint" => null,
+                    "bintik_or_pin_hole" => null,
+                    "minyak_or_map" => null,
+                    "cotton" => null,
+                    "no_paint_or_tipis" => null,
+                    "scratch" => null,
+                    "air_pocket" => null,
+                    "kulit_jeruk" => null,
+                    "kasar" => null,
+                    "karat" => null,
+                    "water_over" => null,
+                    "minyak_kering" => null,
+                    "dented" => null,
+                    "keropos" => null,
+                    "nempel_jig" => null,
+                    "lainnya" => null
+                ]);
+            }
+        }
+
+        // Gabungkan objek $dataObj dengan data asli
+        $dataObj = $dataObj->merge($data);
+
+        // Gunakan $dataObj sebagai data yang akan digunakan selanjutnya
+        $data = json_decode(json_encode($dataObj), true);
+        usort($data, function ($a, $b) {
+            return strcmp($a['date_packing'], $b['date_packing']);
+        });
         //return $data;
         return view('/report/r_summary_ng', ['judul' => "User", "data" => $data]);
     }
