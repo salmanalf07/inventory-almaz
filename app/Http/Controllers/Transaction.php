@@ -226,26 +226,14 @@ class Transaction extends Controller
 
     public function grafik_packing(Request $request)
     {
-        $dataa = DB::table('detail_transactions')
-            ->join(
-                'transactions',
-                'transactions.id',
-                '=',
-                'detail_transactions.transaction_id'
-            )
-            ->join(
-                'packing_transactions',
-                'packing_transactions.detransaction_id',
-                '=',
-                'detail_transactions.id'
-            )
+        $dataa = DB::table('packing_transactions')
             ->join(
                 'ng_transactions',
-                'ng_transactions.detransaction_id',
+                'ng_transactions.packing_id',
                 '=',
-                'detail_transactions.id'
+                'packing_transactions.id'
             )
-            ->selectRaw('transactions.date_transaction, sum(detail_transactions.qty_in) as total,sum(packing_transactions.total_ng) as NG,
+            ->selectRaw('packing_transactions.date_packing, sum(packing_transactions.total_fg) as total_fg,sum(packing_transactions.total_ng) as total_ng,
             sum(ng_transactions.over_paint) as over_paint,
             sum(ng_transactions.bintik_or_pin_hole) as bintik_or_pin_hole,
             sum(ng_transactions.minyak_or_map) as minyak_or_map,
@@ -263,13 +251,27 @@ class Transaction extends Controller
             sum(ng_transactions.nempel_jig) as nempel_jig,
             sum(ng_transactions.lainnya) as lainnya
             ');
-        $dataa->whereDate('transactions.date_transaction', '>=', date("Y-m-d", strtotime(str_replace('/', '-', "05/02/2023"))))
-            ->whereDate('transactions.date_transaction', '<=', date("Y-m-d", strtotime(str_replace('/', '-', "12/02/2023"))));
+        $dataa->where('packing_transactions.deleted_at', '=', null);
 
-        $dataa->groupBy('transactions.date_transaction');
+        if ($request->date != null) {
+            $date = explode(" - ", $request->date);
+            $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
+            $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
+
+            $dataa->whereDate('packing_transactions.date_packing', '>=', $datein)
+                ->whereDate('packing_transactions.date_packing', '<=', $dateen);
+        };
+        if ($request->cust_id != "#") {
+            $dataa->where('packing_transactions.cust_id', $request->cust_id);
+        };
+        if ($request->part_id != "#") {
+            $dataa->where('packing_transactions.part_id', $request->part_id);
+        };
+
+        $dataa->groupBy('packing_transactions.date_packing');
+
         $data = $dataa->get();
-
-        // return $data;
+        //return $data;
         return view('/report/r_summary_ng', ['judul' => "User", "data" => $data]);
     }
 }

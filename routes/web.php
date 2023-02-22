@@ -317,6 +317,11 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_sumpo'])->get('/r_sumpo
     return view('/report/r_sumpo', ['judul' => "Summary By PO", 'customer' => $cust,]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/report_sumpo', [SJ::class, 'report_sumpo']);
+Route::middleware(['auth:sanctum', 'verified', 'report:r_sumng'])->get('/r_sumng', function () {
+    $cust = ModelsCustomer::select(['code', 'id'])->get();
+    return view('/report/r_sumng', ['judul' => "Grafik Summary NG", 'customer' => $cust,]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/grafik_packing', [Transaction::class, 'grafik_packing']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_order'])->get('/r_order', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
     return view('/report/r_order', ['judul' => "Report Order", 'customer' => $cust]);
