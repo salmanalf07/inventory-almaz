@@ -44,7 +44,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
+                                        <div class="control-group">
+                                            <label>Shift</label>
+                                            <div class="controls">
+                                                <select name="shift" id="shift" class="form-control select2">
+                                                    <option value="#" selected="selected">Choose...</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="control-group">
                                             <label>Date Range</label>
                                             <div class="input-group">
@@ -57,7 +70,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-4">
                                         <div class="control-group">
                                             <label class="control-label">Part Name</label>
                                             <div class="controls">

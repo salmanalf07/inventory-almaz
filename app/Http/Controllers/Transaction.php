@@ -267,6 +267,11 @@ class Transaction extends Controller
         if ($request->part_id != "#") {
             $dataa->where('packing_transactions.part_id', $request->part_id);
         };
+        if ($request->shift != "#") {
+            $dataa->where('packing_transactions.shift', $request->shift);
+        } else {
+            $dataa->where('packing_transactions.shift', 1);
+        };
 
         $dataa->groupBy('packing_transactions.date_packing');
 
@@ -327,6 +332,6 @@ class Transaction extends Controller
             return strcmp($a['date_packing'], $b['date_packing']);
         });
         //return $data;
-        return view('/report/r_summary_ng', ['judul' => "User", "data" => $data]);
+        return view('/report/r_summary_ng', ['record' => count($dataa->get()), "data" => $data]);
     }
 }

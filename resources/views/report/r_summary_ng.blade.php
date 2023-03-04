@@ -43,6 +43,28 @@
         }
     </style>
 </head>
+@if ($record === 0)
+
+<body>
+    <style>
+        body {
+            background-color: #89a6fa;
+        }
+
+        .center {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+        }
+    </style>
+    <div class="center">
+        <p style="font-size: 40pt;margin:0">Opsss...............</p>
+        <p>Data Kosong</p>
+    </div>
+</body>
+@else
 
 <body>
     <div class="chart-container">
@@ -645,5 +667,6 @@
         })
     </script>
 </body>
+@endif
 
 </html>
