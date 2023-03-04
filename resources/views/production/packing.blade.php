@@ -33,6 +33,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Shift</th>
                                         <th>Date Packing</th>
                                         <th>Customer</th>
                                         <th>Part Name</th>
@@ -44,6 +45,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
+                                        <th>Shift</th>
                                         <th>Date Packing</th>
                                         <th>Customer</th>
                                         <th>Part Name</th>
@@ -79,7 +81,7 @@
                         <span id="peringatan"></span>
                         <input class="form-control" type="text" name="id" id="id" hidden>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="control-group">
                                     <label>Date</label>
                                     <div class="input-group date" id="reservationdate" data-target-input="nearest">
@@ -90,7 +92,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="control-group">
                                     <label class="control-label">Operator Packing</label>
                                     <div class="controls">
@@ -98,11 +100,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="control-group">
                                     <label class="control-label">User</label>
                                     <div class="controls">
                                         <input class="form-control" type="text" name="user_id" id="user_id" value="{{ Auth::user()->name }}" readonly class="span15">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="control-group">
+                                    <label class="control-label">Shift</label>
+                                    <div class="controls">
+                                        <select name="shift" id="shift" class="form-control select2" style="width: 100%;">
+                                            <option selected="selected" value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -327,7 +341,7 @@
                     "targets": [0, 1, 2, 3, 4, 5, 6], // table ke 1
                 },
                 {
-                    targets: [1],
+                    targets: [2],
                     render: function(oTable) {
                         return moment(oTable).format('DD-MM-YYYY');
                     }
@@ -357,6 +371,9 @@
             columns: [{
                     data: 'id',
                     name: 'id'
+                },
+                {
+                    data: 'shift'
                 },
                 {
                     data: 'date_packing',
@@ -474,6 +491,8 @@
                 $('#id').val(data.id);
                 $('#date_packing').val(new Date(data.date_packing).toLocaleString("id-ID", newDateOptions)
                     .split(' ')[0]).attr("disabled", true);
+                $('#shift').val(data.shift).trigger(
+                    'change').attr("disabled", true);
                 setTimeout(function() {
                     $('#cust_id').val(data.cust_id).trigger(
                         'change').attr("disabled", true);

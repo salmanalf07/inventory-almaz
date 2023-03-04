@@ -10,6 +10,7 @@ class PackingTransaction extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
+        'shift',
         'user_id',
         'cust_id',
         'part_id',

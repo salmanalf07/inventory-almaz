@@ -53,6 +53,7 @@ class PackingTransaction extends Controller
 
             $post = new ModelsPackingTransaction();
 
+            $post->shift = $request->shift;
             $post->date_packing = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_packing)));
             $post->user_id = $get_user->id;
             $post->cust_id = $request->cust_id;
@@ -110,6 +111,7 @@ class PackingTransaction extends Controller
 
             if ($request->status == "CLOSE" && $request->detail_id) {
                 $packing = ModelsPackingTransaction::find($request->id);
+                $packing->shift = $request->shift;
                 $packing->total_ng = str_replace(",", "", $request->total_ng);
                 $packing->total_fg = str_replace(",", "", $request->total_fg);
                 $packing->status = $request->status;
