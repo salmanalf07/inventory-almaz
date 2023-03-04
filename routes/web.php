@@ -11,6 +11,8 @@ use App\Http\Controllers\Order as ControllersOrder;
 use App\Http\Controllers\PackingTransaction;
 use App\Http\Controllers\PartIn;
 use App\Http\Controllers\Parts;
+use App\Http\Controllers\Production;
+use App\Http\Controllers\ProductionStd;
 use App\Http\Controllers\SJ;
 use App\Http\Controllers\Stock as ControllersStock;
 use App\Http\Controllers\Transaction;
@@ -28,6 +30,7 @@ use App\Models\Invoice as ModelsInvoice;
 use App\Models\Order;
 use App\Models\PartIn as ModelsPartIn;
 use App\Models\Parts as ModelsParts;
+use App\Models\ProductionStd as ModelsProductionStd;
 use App\Models\SJ as ModelsSJ;
 use App\Models\Stock;
 use App\Models\TrackSj;
@@ -118,6 +121,14 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/store_apps', [Controller
 Route::middleware(['auth:sanctum', 'verified'])->post('/edit_apps', [ControllersApplication::class, 'edit']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_apps/{id}', [ControllersApplication::class, 'update']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_apps/{id}', [ControllersApplication::class, 'destroy']);
+//production standard
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/productStd', function () {
+    return view('/manage/productionStd', ['judul' => "Production Standard"]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_productStd', [ProductionStd::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_productStd', [ProductionStd::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_productStd', [ProductionStd::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_productStd/{id}', [ProductionStd::class, 'update']);
 //User
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/user', function () {
     return view('/manage/user', ['judul' => "User"]);
@@ -390,3 +401,13 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/store_packing', [Packing
 Route::middleware(['auth:sanctum', 'verified'])->post('/edit_packing', [PackingTransaction::class, 'edit']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_packing/{id}', [PackingTransaction::class, 'update']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_packing/{id}', [PackingTransaction::class, 'destroy']);
+//production jam kerja
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/production', function () {
+    $production = ModelsProductionStd::where('status', 'Active')->first();
+    return view('/production/production', ['judul' => "Production Input", 'production' => $production]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_production', [Production::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_production', [Production::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_production', [Production::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_production/{id}', [Production::class, 'update']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_production/{id}', [Production::class, 'destroy']);

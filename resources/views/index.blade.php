@@ -362,7 +362,7 @@
                                 @endif
                             </ul>
                         </li>
-                        <li class="nav-item {{ request()->is('partin', 'sj', 'stock','process','packing','stockfg') ? 'menu-open' : '' }}">
+                        <li class="nav-item {{ request()->is('partin', 'sj', 'production','process','packing','stockfg') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-cubes"></i>
                                 <p>
@@ -377,7 +377,7 @@
                                         <p>Part In</p>
                                     </a>
                                 </li>
-                                <li class="nav-item {{ request()->is('stock','process','packing','stockfg') ? 'menu-open' : '' }}">
+                                <li class="nav-item {{ request()->is('production','process','packing','stockfg') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>
@@ -387,9 +387,9 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="stock" class="nav-link  {{ request()->is('stock') ? 'active' : '' }}">
+                                            <a href="production" class="nav-link  {{ request()->is('production') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Early Stock</p>
+                                                <p>Production Input</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -463,7 +463,7 @@
                             </ul>
                         </li>
                         @if(Auth::user()->role != "ADMIN")
-                        <li class="nav-item {{ request()->is('user', 'car', 'driver','application') ? 'menu-open' : '' }}">
+                        <li class="nav-item {{ request()->is('user', 'car', 'driver','application','productStd') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
@@ -494,6 +494,12 @@
                                     <a href="application" class="nav-link {{ request()->is('application') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Application</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="productStd" class="nav-link {{ request()->is('productStd') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Production Standard</p>
                                     </a>
                                 </li>
                             </ul>
