@@ -11,6 +11,7 @@ class Transaction extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'shift',
         'user_id',
         'date_transaction',
         'no_transaction',

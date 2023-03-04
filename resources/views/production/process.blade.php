@@ -38,6 +38,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Shift</th>
                                         <th>Date Transaction</th>
                                         <th>Time Start</th>
                                         <th>Customer</th>
@@ -50,6 +51,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
+                                        <th>Shift</th>
                                         <th>Date Transaction</th>
                                         <th>Time Start</th>
                                         <th>Customer</th>
@@ -97,7 +99,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
+                                <div class="control-group">
+                                    <label class="control-label">Shift</label>
+                                    <div class="controls">
+                                        <select name="shift" id="shift" class="form-control select2" style="width: 100%;">
+                                            <option selected="selected" value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
                                 <div class="control-group">
                                     <label class="control-label">No Transaction</label>
                                     <div class="controls">
@@ -448,13 +462,13 @@
                     "targets": [0, 1, 2, 3, 4, 5, 6, 7], // table ke 1
                 },
                 {
-                    targets: [1],
+                    targets: [2],
                     render: function(oTable) {
                         return moment(oTable).format('DD-MM-YYYY');
                     }
                 },
                 {
-                    targets: [2],
+                    targets: [3],
                     render: function(oTable) {
                         return moment(oTable).format('DD-MM-YYYY HH:mm');
                     }
@@ -485,6 +499,10 @@
             columns: [{
                     data: 'id',
                     name: 'id'
+                },
+                {
+                    data: 'transaction.shift',
+                    name: 'transaction.shift',
                 },
                 {
                     data: 'transaction.date_transaction',
@@ -608,6 +626,7 @@
                 $('#id').val(data.id);
                 $('#date_transaction').val(new Date(data.date_transaction).toLocaleString("id-ID", newDateOptions)
                     .split(' ')[0]);
+                $('#shift').val(data.shift).trigger('change').attr("disabled", true);
                 $('#no_rak').val(data.no_rak);
                 $('#no_transaction').val(data.no_transaction);
                 setTimeout(function() {

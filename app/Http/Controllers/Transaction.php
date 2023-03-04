@@ -45,6 +45,7 @@ class Transaction extends Controller
         try {
             $request->validate([
                 'date_transaction' => ['required', 'string', 'max:255'],
+                'shift' => ['required', 'string', 'max:255'],
                 'no_rak' => ['required', 'string', 'max:255'],
                 'time_start' => ['required', 'string', 'max:255'],
                 'operator' => ['required', 'string', 'max:255'],
@@ -70,6 +71,7 @@ class Transaction extends Controller
 
             $post->date_transaction = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_transaction)));
             $post->no_rak = $request->no_rak;
+            $post->shift = $request->shift;
             $post->time_start = date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_start)));
             $post->operator = $request->operator;
             $post->grand_total = str_replace(",", "", $request->grand_total);
@@ -135,6 +137,7 @@ class Transaction extends Controller
             $post->no_transaction = $request->no_transaction;
             $post->date_transaction = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_transaction)));
             $post->no_rak = $request->no_rak;
+            $post->shift = $request->shift;
             if ($post->time_start != date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_start)))) {
                 $post->time_start = date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_start)));
             }
