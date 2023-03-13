@@ -161,7 +161,7 @@
                                             <thead>
 
                                                 <tr>
-                                                    <td colspan="16" class="bold"> Jenis NG</td>
+                                                    <td colspan="16" class="bold"> Jenis LOSS</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Hanger rusak</td>
