@@ -313,6 +313,7 @@ class Invoice extends Controller
         $pajak = Application::find($order->tax_id);
         $datau = DetailSJ::with('DetailSJ', 'part');
         //$datau->wherein('part_id', explode(",", $order->detail_order));
+        // $datau->where('type', '!=', 'BAYAR RETUR');
         $datau->whereRelation('DetailSJ', 'invoice_id', '=', $request->id_print);
 
         // $datau->whereHas('DetailSJ', function ($query) use ($order) {
@@ -407,6 +408,7 @@ class Invoice extends Controller
         }
         $pajak = Application::where('status', 'Active')->first();
         $datau = DetailSJ::with('DetailSJ', 'part');
+        $datau->where('type', '!=', 'BAYAR RETUR');
         $datau->whereHas('DetailSJ', function ($query) use ($request) {
 
             if ($request->date != null) {

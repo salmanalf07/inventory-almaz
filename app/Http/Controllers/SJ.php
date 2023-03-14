@@ -390,6 +390,7 @@ class SJ extends Controller
             DB::raw("(sum(grand_total)) as total"),
             DB::raw("(DATE_FORMAT(date_sj, '%d-%m-%Y')) as my_date")
         );
+        $dauu->where('status', '!=', 'BAYAR RETUR');
         if ($request->date != null) {
             $dauu->whereDate('date_sj', '>=', $datein)
                 ->whereDate('date_sj', '<=', $dateen);
@@ -464,7 +465,8 @@ class SJ extends Controller
                 'sjs.cust_id'
             )
             ->selectRaw('detail_sjs.part_id,parts.name_local,customers.code,sjs.date_sj, sum(detail_sjs.total_price) as total')
-            ->where('detail_sjs.deleted_at', '=', null);
+            ->where('detail_sjs.deleted_at', '=', null)
+            ->where('sjs.status', '!=', 'BAYAR RETUR');
         if ($request->cust_id != "#") {
             $data->where('sjs.cust_id', $request->cust_id);
         };
@@ -539,7 +541,8 @@ class SJ extends Controller
                 'sjs.cust_id'
             )
             ->selectRaw('customers.code,sjs.order_id,sjs.date_sj,orders.no_po, sum(detail_sjs.total_price) as total')
-            ->where('detail_sjs.deleted_at', '=', null);
+            ->where('detail_sjs.deleted_at', '=', null)
+            ->where('sjs.status', '!=', 'BAYAR RETUR');
         if ($request->cust_id != "#") {
             $data->where('sjs.cust_id', $request->cust_id);
         };
