@@ -358,7 +358,11 @@ Route::middleware(['auth:sanctum', 'verified', 'report:rekap_inv'])->get('/rekap
     $cust = ModelsCustomer::select(['code', 'id'])->get();
     return view('/report/rekap_inv', ['judul' => "Rekap Invoice", 'customer' => $cust]);
 });
-Route::middleware(['auth:sanctum', 'verified'])->get('/grafik_packing', [Transaction::class, 'grafik_packing']);
+Route::middleware(['auth:sanctum', 'verified', 'report:r_sumng'])->get('/r_sumprod', function () {
+    $cust = ModelsCustomer::select(['code', 'id'])->get();
+    return view('/report/r_sumprod', ['judul' => "Grafik Summary Production", 'customer' => $cust,]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/grafik_production', [Production::class, 'grafik_production']);
 // Route::middleware(['auth:sanctum', 'verified'])->get('/rekap_sj', function () {
 //     return view('/rekap/rekap_sj', ['judul' => "Customer", 'days_count' => 30]);
 // });

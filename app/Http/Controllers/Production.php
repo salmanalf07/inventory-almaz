@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Production as ModelsProduction;
 use App\Models\ProductionStd;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -110,5 +111,154 @@ class Production extends Controller
             $data = [$error->errors(), "error"];
             return response($data);
         }
+    }
+
+    public function grafik_production(Request $request)
+    {
+        $dataa = DB::table('productions')
+            ->join(
+                'production_stds',
+                'production_stds.id',
+                '=',
+                'productions.prodstd_id'
+            )
+            ->join(
+                'transactions',
+                'transactions.date_transaction',
+                '=',
+                'productions.date_production'
+            )
+            ->join(
+                'detail_transactions',
+                'detail_transactions.transaction_id',
+                '=',
+                'transactions.id'
+            )
+
+            ->selectRaw('
+            productions.shift,
+            productions.date_production,
+            productions.hour_actual_st,
+            productions.hour_actual_en,
+            productions.output_act,
+            productions.hanger_rusak,
+            productions.tidak_racking,
+            productions.keteter,
+            productions.tidak_ada_barang,
+            productions.trouble_mesin,
+            productions.trouble_chemical,
+            productions.trouble_utility,
+            productions.trouble_ng,
+            productions.mati_lampu,
+            production_stds.work_hours,
+            production_stds.normal_capacity,
+            production_stds.target,
+            production_stds.status,
+            sum(detail_transactions.qty_in) as qty_in
+        ');
+
+        $dataa->where('productions.deleted_at', '=', null);
+        $dataa->where('transactions.deleted_at', '=', null);
+
+        if ($request->date != null) {
+            $date = explode(" - ", $request->date);
+            $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
+            $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
+
+            $dataa->whereDate('productions.date_production', '>=', $datein)
+                ->whereDate('productions.date_production', '<=', $dateen);
+        };
+
+        if ($request->cust_id != "#") {
+            $dataa->where('transactions.cust_id', $request->cust_id);
+        };
+
+        if ($request->shift != "#") {
+            $dataa->where('productions.shift', $request->shift);
+        } else {
+            $dataa->where('productions.shift', 1);
+        };
+
+        $dataa->groupBy(
+            'productions.shift',
+            'productions.date_production',
+            'productions.hour_actual_st',
+            'productions.hour_actual_en',
+            'productions.output_act',
+            'productions.hanger_rusak',
+            'productions.tidak_racking',
+            'productions.keteter',
+            'productions.tidak_ada_barang',
+            'productions.trouble_mesin',
+            'productions.trouble_chemical',
+            'productions.trouble_utility',
+            'productions.trouble_ng',
+            'productions.mati_lampu',
+            'production_stds.work_hours',
+            'production_stds.normal_capacity',
+            'production_stds.target',
+            'production_stds.status',
+        );
+
+        $data = $dataa->get();
+
+        //add tanggal semua
+        $datesToAdd = [];
+
+        $currentDate = $datein;
+        while ($currentDate <= $dateen) {
+            $datesToAdd[] = $currentDate;
+            $currentDate = date("Y-m-d", strtotime("+1 day", strtotime($currentDate)));
+        }
+
+        //combine data
+        $dataArray = $data->toArray();
+        // Ambil semua tanggal pada array $data dan simpan ke dalam array $allDates
+        $allDates = array_column($dataArray, "date_production");
+
+        // Buat objek kosong untuk menyimpan data
+        $dataObj = collect();
+
+        // Loop untuk setiap tanggal yang ingin ditambahkan
+        foreach ($datesToAdd as $date) {
+            // Cek apakah tanggal sudah ada pada array $allDates
+            if (!in_array($date, $allDates)) {
+                // Jika belum, tambahkan data baru ke dalam objek $dataObj
+                $std = ProductionStd::where('status', 'Active')->first();
+                $dataObj->push([
+                    "shift" => $request->shift,
+                    "date_production" => $date,
+                    "hour_actual_st" => null,
+                    "hour_actual_en" => null,
+                    "output_act" => 0,
+                    "hanger_rusak" => null,
+                    "tidak_racking" => null,
+                    "keteter" => null,
+                    "tidak_ada_barang" => null,
+                    "trouble_mesin" => null,
+                    "trouble_chemical" => null,
+                    "trouble_utility" => null,
+                    "trouble_ng" => null,
+                    "mati_lampu" => null,
+                    "work_hours" => 0,
+                    "normal_capacity" => $std->normal_capacity,
+                    "target" => $std->target,
+                    "status" => $std->status,
+                    "qty_in" => 0
+                ]);
+            }
+        }
+
+        // Gabungkan objek $dataObj dengan data asli
+        $dataObj = $dataObj->merge($data);
+
+        // Gunakan $dataObj sebagai data yang akan digunakan selanjutnya
+        $data = json_decode(json_encode($dataObj), true);
+        usort($data, function ($a, $b) {
+            return strcmp($a['date_production'], $b['date_production']);
+        });
+
+        //return $data;
+        return view('/report/r_summary_prod', ['record' => count($dataa->get()), "data" => $data]);
     }
 }
