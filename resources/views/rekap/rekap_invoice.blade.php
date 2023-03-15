@@ -175,14 +175,14 @@
             </tr>
 
             <tr class="headercolor" style="background-color: #DDEBF7">
-                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj') as $att) { ?>
+                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('date_sj') as $att) { ?>
                     <td class="center bold">
                         <?php echo date('d', strtotime($att['date_sj'])); ?>
                     </td>
                 <?php } ?>
             </tr>
             <tr class="headercolor" style="background-color: #DDEBF7">
-                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('nosj') as $att) { ?>
+                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('date_sj') as $att) { ?>
                     <td class="center bold">
                         <?php echo $att['nosj']; ?>
                     </td>
@@ -202,7 +202,7 @@
                     <td class="center">
                         <?php echo $datdetail[$c]['part_no']; ?>
                     </td>
-                    <?php foreach (collect($datdetail[$c]['uniqe'])->sortBy('nosj') as $sj) {
+                    <?php foreach (collect($datdetail[$c]['uniqe'])->sortBy('date_sj') as $sj) {
                         if (isset($sj['sj_real'])) { ?>
                             <td class="center qtysum">{{ $sj['sj_real'][0]['qty'] }}</td>
                         <?php } else { ?>
