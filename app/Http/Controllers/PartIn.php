@@ -341,6 +341,7 @@ class PartIn extends Controller
             $datdetail[$key]["nosj"] = $attt->PartIn['no_sj_cust'];
             $datdetail[$key]["customer"] = $attt->PartIn->customer['code'];
             $datdetail[$key]["part_name"] = $attt->parts['part_name'];
+            $datdetail[$key]["part_no"] = $attt->parts['part_no'];
             $datdetail[$key]["send"]["in"] = $attt->qty;
             $datdetail[$key]["send"]["out"] = 0;
         }
@@ -350,6 +351,7 @@ class PartIn extends Controller
             $datdetaill[$ky]["nosj"] = $att->DetailSJ['nosj'];
             $datdetaill[$ky]["customer"] = $att->DetailSJ->customer['code'];
             $datdetaill[$ky]["part_name"] = $att->part['part_name'];
+            $datdetaill[$ky]["part_no"] = $att->part['part_no'];
             $datdetaill[$ky]["send"]["in"] = 0;
             $datdetaill[$ky]["send"]["out"] = $att->qty;
         }

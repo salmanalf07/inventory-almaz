@@ -206,10 +206,13 @@
                     title: 'Customer'
                 },
                 {
+                    data: 'part_no',
+                    title: 'Part No'
+                },
+                {
                     data: 'part_name',
                     title: 'Part Name'
                 },
-
                 {
                     data: 'send.in',
                     title: 'Cust'

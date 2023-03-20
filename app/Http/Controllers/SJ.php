@@ -626,7 +626,8 @@ class SJ extends Controller
                 'sjs.cust_id'
             )
             ->selectRaw('customers.code,sjs.order_id,orders.no_po, sum(detail_sjs.total_price) as total')
-            ->where('detail_sjs.deleted_at', '=', null);
+            ->where('detail_sjs.deleted_at', '=', null)
+            ->where('sjs.status', '!=', 'BAYAR RETUR');
         //SUM INVOICE
         $dataa = DB::table('detail_sjs')
             ->join(
