@@ -64,15 +64,19 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     $rptoday = DetailPartIn::whereIn("partin_id", $today->toArray())->sum('total_price');
     //out
     $todayoutt = ModelsSJ::select('id')->where('date_sj', date("Y-m-d"))->get();
-    $monthoutt = ModelsSJ::select('id')->whereMonth('date_sj', date("m"))->get();
+    $monthoutt = ModelsSJ::select('id')->where('status', '!=', "BAYAR RETUR")->whereMonth('date_sj', date("m"))->get();
     $monthout = DetailSJ::whereIn("sj_id", $monthoutt->toArray())->sum('total_price');
     $todayout = DetailSJ::whereIn("sj_id", $todayoutt->toArray())->sum('total_price');
     //order booking
-    $orderyearr = ModelsSJ::select('id')->where('booking_year', date("Y"))->get();
+    $orderyearr = ModelsSJ::select('id')->where([
+        ['booking_year', date("Y")],
+        ['status', '!=', "BAYAR RETUR"]
+    ])->get();
     $orderyear = DetailSJ::select('total_price')->whereIn("sj_id", $orderyearr->toArray())->sum('total_price');
     $ordermonthh = ModelsSJ::select('id')->where([
         ['booking_month', '=', date("m")],
         ['booking_year', '=', date("Y")],
+        ['status', '!=', "BAYAR RETUR"]
     ])->get();
     $ordermonth = DetailSJ::select('total_price')->whereIn("sj_id", $ordermonthh->toArray())->sum('total_price');
     //production
