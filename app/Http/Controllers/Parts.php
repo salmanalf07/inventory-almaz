@@ -28,7 +28,7 @@ class Parts extends Controller
                 Action
                 </button>
                 <div class="dropdown-menu">
-                <button id="mass-price" data-id="' . $data->id . '" class="dropdown-item">Upd. Price Mass</button>
+                <button id="mass-price" data-id="' . $data->id . '" data-cust="' . $data->cust_id . '" class="dropdown-item">Upd. Price Mass</button>
                 <button id="updSJ" data-sj="updSJ" data-id="' . $data->id . '" class="dropdown-item">Upd. Price By SJ</button>
                 <button id="edit" data-id="' . $data->id . '" class="dropdown-item">Update</button>
                 <button id="delete" data-id="' . $data->id . '" class="dropdown-item">Delete</button>
@@ -171,6 +171,21 @@ class Parts extends Controller
             ->whereHas('DetailSJ', function ($query) use ($request, $dateStart, $dateEnd) {
                 $query->whereDate('date_sj', '>=', $dateStart)
                     ->whereDate('date_sj', '<=', $dateEnd);
+
+                if ($request->order_id != "#") {
+                    if ($request->order_id == "blank") {
+                        $query->where('order_id', null);
+                    } else {
+                        $query->where('order_id', $request->order_id);
+                    }
+                }
+                if ($request->invoice_id != "#") {
+                    if ($request->invoice_id == "blank") {
+                        $query->where('invoice_id', null);
+                    } else {
+                        $query->where('invoice_id', $request->invoice_id);
+                    }
+                }
             })
             ->get();
         if (count($detail_sj) != 0) {

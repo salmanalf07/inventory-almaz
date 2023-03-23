@@ -190,6 +190,30 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="control-group">
+                                        <label class="control-label">Number PO</label>
+                                        <div class="controls">
+                                            <select name="order_id" id="order_id" class="form-control select2" style="width: 100%;">
+                                                <option value="#" selected="selected">Choose...</option>
+                                                <option value="blank">BLANK (NO PO)</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="control-group">
+                                        <label class="control-label">Number INV</label>
+                                        <div class="controls">
+                                            <select name="invoice_id" id="invoice_id" class="form-control select2" style="width: 100%;">
+                                                <option value="#" selected="selected">Choose...</option>
+                                                <option value="blank">BLANK (NO INV)</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="control-group">
                                         <label>Date Update Range</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
@@ -489,6 +513,7 @@
         document.getElementById("form-mass").reset();
         e.preventDefault();
         idPart = $(this).data('id');
+        idCust = $(this).data('cust');
         var updSJ = $(this).data('sj');
 
         if (updSJ == "updSJ") {
@@ -519,6 +544,45 @@
             });
 
         } else {
+            $.ajax({
+                type: 'POST',
+                url: 'search_order',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'cust_id': idCust,
+
+                },
+                success: function(data) {
+                    $('[name="order_id"]').empty();
+                    $('[name="order_id"]').append('<option value="#">Choose...</option>');
+                    $('[name="order_id"]').append('<option value="blank">BLANK (NO PO)</option>');
+                    $.each(data, function(i) {
+                        $('[name="order_id"]').append('<option value="' + data[i]
+                            .id + '">' + data[i].no_po + '</option>');
+                    })
+
+                },
+            });
+            $.ajax({
+                type: 'POST',
+                url: 'search_invoice',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'cust_id': idCust,
+
+                },
+                success: function(data) {
+                    $('[name="invoice_id"]').empty();
+                    $('[name="invoice_id"]').append('<option value="#">Choose...</option>');
+                    $('[name="invoice_id"]').append('<option value="blank">BLANK (NO INV)</option>');
+                    $.each(data, function(i) {
+                        $('[name="invoice_id"]').append('<option value="' + data[i]
+                            .id + '">' + data[i].no_invoice + '</option>');
+                    })
+
+                },
+            });
+
             $('#update-price').show();
             $('#update_price').hide();
             $('#mass_price').show();
@@ -539,12 +603,35 @@
                 'id': idPart,
                 'dateStart': date[0],
                 'dateEnd': date[1],
+                'order_id': $('#order_id').val(),
+                'invoice_id': $('#invoice_id').val(),
+            },
+            beforeSend: function(xhr) {
+                if (!verifyData()) {
+                    xhr.abort();
+                }
             },
             success: function(data) {
                 document.getElementById("form-mass").reset();
                 $('#mass').modal('hide');
             },
+            error: function(xhr) {
+                console.log('Error: ' + xhr.statusText);
+            }
         });
+
+        function verifyData() {
+            // Lakukan verifikasi data di sini
+            if ($('#order_id').val() === '#' && $('#invoice_id').val() === '#') {
+                alert('No PO atau No Invoice harus diisi');
+                return false;
+            }
+            if ($('#reservation').val() === '') {
+                alert('Tanggal harus diisi');
+                return false;
+            }
+            return true;
+        }
     });
     //update price by SJ
     $(document).on('click', '#update_price', function() {
@@ -572,7 +659,6 @@
     $(function() {
         //Initialize Select2 Elements
         $('.select2').select2({
-            dropdownParent: $('#myModal'),
             theme: 'bootstrap4'
         })
         $('#reservation').daterangepicker({
