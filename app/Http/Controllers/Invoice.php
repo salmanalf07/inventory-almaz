@@ -365,10 +365,10 @@ class Invoice extends Controller
                 $datdetail[$key]["part_no"] = $attt->part_no;
                 foreach ($dat[$key]->out as $kee => $datan) {
                     if ($datan->DetailSJ['nosj'] . $request->id_print == $datan->DetailSJ['nosj'] . $datan->DetailSJ['invoice_id']) {
-                        if (!array_key_exists($datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id, $temp)) {
-                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id] = 0;
+                        if (!array_key_exists($datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price, $temp)) {
+                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price] = 0;
                         }
-                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id] += $datan->qty;
+                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price] += $datan->qty;
                     }
                 }
 
@@ -388,15 +388,15 @@ class Invoice extends Controller
                         if (date('d', strtotime($split[0])) . $split[1] . $split[2] == date('d', strtotime($uniqe->date_sj)) . $uniqe->nosj . $attt->id) {
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["nosj"] = $split[1];
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["qty"] = $group[$i]["qty"];
+                            $datdetail[$key]["price"] = $split[3] / $group[$i]["qty"];
                         }
-                        $datdetail[$key]["price"] = $datan->total_price / $datan->qty;
                     }
                 }
             }
         }
         //return view('/rekap/rekap_sj1', ['judul' => "User", 'data' => $data, 'dat' => $dat, "datdetail" => $datdetail, 'invoice' => $order]);
         return view('/rekap/rekap_sj1', ['judul' => "User", 'dat' => $dat, "datdetail" => $datdetail, "po" => $po, 'pajak' => $pajak, "nosj" => $unique_data]);
-        //return $datdetail;
+        //return $group;
     }
 
     public function rekap_invoice(Request $request)
@@ -507,13 +507,12 @@ class Invoice extends Controller
                 //     foreach ($unique_data as $ke => $uniqe) {
                 $datdetail[$key]["name_local"] = $attt->part_name;
                 $datdetail[$key]["part_no"] = $attt->part_no;
-                $datdetail[$key]["price"] = $attt->price;
                 foreach ($dat[$key]->out as $kee => $datan) {
                     if ($datan->DetailSJ['nosj'] .  $datan->part_id == $datan->DetailSJ['nosj'] . $attt->id) {
-                        if (!array_key_exists($datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id, $temp)) {
-                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id] = 0;
+                        if (!array_key_exists($datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price, $temp)) {
+                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price] = 0;
                         }
-                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id] += $datan->qty;
+                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price] += $datan->qty;
                     }
                 }
 
@@ -529,9 +528,10 @@ class Invoice extends Controller
                         $split = explode("*", $group[$i]["nosj"]);
                         $datdetail[$key]["uniqe"][$id]["nosj"] = $uniqe->nosj;
                         $datdetail[$key]["uniqe"][$id]["date_sj"] = $uniqe->date_sj;
-                        if ($split[1] . $split[2]  ==  $uniqe->nosj . $attt->id) {
+                        if (date('d', strtotime($split[0])) . $split[1] . $split[2] == date('d', strtotime($uniqe->date_sj)) . $uniqe->nosj . $attt->id) {
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["nosj"] = $split[1];
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["qty"] = $group[$i]["qty"];
+                            $datdetail[$key]["price"] = $split[3] / $group[$i]["qty"];
                         }
                     }
                 }
@@ -539,7 +539,7 @@ class Invoice extends Controller
         }
         return view('/rekap/rekap_invoice', ['judul' => "User", 'dat' => $dat, "datdetail" => $datdetail, "po" => $po, 'pajak' => $pajak]);
         //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
-        //return $datdetail;
+        //return $group;
     }
 
     public function report_invoice(Request $request)

@@ -111,7 +111,7 @@ class PackingTransaction extends Controller
 
             if ($request->status == "CLOSE" && $request->detail_id) {
                 $packing = ModelsPackingTransaction::find($request->id);
-                $packing->shift = $request->shift;
+                // $packing->shift = $request->shift;
                 $packing->total_ng = str_replace(",", "", $request->total_ng);
                 $packing->total_fg = str_replace(",", "", $request->total_fg);
                 $packing->status = $request->status;

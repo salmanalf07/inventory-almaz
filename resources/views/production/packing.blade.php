@@ -523,7 +523,7 @@
                     }
 
 
-                }, 1500);
+                }, 1800);
                 setTimeout(function() {
                     AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 }, 1500);
