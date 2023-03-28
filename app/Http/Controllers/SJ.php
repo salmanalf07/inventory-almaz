@@ -390,7 +390,7 @@ class SJ extends Controller
             DB::raw("(sum(grand_total)) as total"),
             DB::raw("(DATE_FORMAT(date_sj, '%d-%m-%Y')) as my_date")
         );
-        $dauu->where('status', '!=', 'BAYAR RETUR');
+        $dauu->where('status', '!=', 'BAYAR_RETUR');
         if ($request->date != null) {
             $dauu->whereDate('date_sj', '>=', $datein)
                 ->whereDate('date_sj', '<=', $dateen);
@@ -466,7 +466,7 @@ class SJ extends Controller
             )
             ->selectRaw('detail_sjs.part_id,parts.name_local,customers.code,sjs.date_sj, sum(detail_sjs.total_price) as total')
             ->where('detail_sjs.deleted_at', '=', null)
-            ->where('sjs.status', '!=', 'BAYAR RETUR');
+            ->where('sjs.status', '!=', 'BAYAR_RETUR');
         if ($request->cust_id != "#") {
             $data->where('sjs.cust_id', $request->cust_id);
         };
@@ -542,7 +542,7 @@ class SJ extends Controller
             )
             ->selectRaw('customers.code,sjs.order_id,sjs.date_sj,orders.no_po, sum(detail_sjs.total_price) as total')
             ->where('detail_sjs.deleted_at', '=', null)
-            ->where('sjs.status', '!=', 'BAYAR RETUR');
+            ->where('sjs.status', '!=', 'BAYAR_RETUR');
         if ($request->cust_id != "#") {
             $data->where('sjs.cust_id', $request->cust_id);
         };
@@ -627,7 +627,7 @@ class SJ extends Controller
             )
             ->selectRaw('customers.code,sjs.order_id,orders.no_po, sum(detail_sjs.total_price) as total')
             ->where('detail_sjs.deleted_at', '=', null)
-            ->where('sjs.status', '!=', 'BAYAR RETUR');
+            ->where('sjs.status', '!=', 'BAYAR_RETUR');
         //SUM INVOICE
         $dataa = DB::table('detail_sjs')
             ->join(

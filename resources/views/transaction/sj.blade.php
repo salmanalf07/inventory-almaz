@@ -805,6 +805,7 @@
                                             <option value="" selected="selected">Choose...</option>
                                             <option value="OPEN">OPEN</option>
                                             <option value="INVOICE">INVOICE</option>
+                                            <option value="BAYAR_RETUR">BAYAR RETUR</option>
                                             <option value="CLOSE">CLOSE</option>
                                         </select>
                                     </div>
