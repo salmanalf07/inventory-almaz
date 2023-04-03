@@ -915,7 +915,7 @@
                 $("#nosj").val(parseInt("{{$sj->nosj}}") + 1);
                 rtab = 1;
                 $('[name="part_id[]"],[name="type_pack[]"],[name="qty[]"],[name="qty_pack[]"]').attr("disabled", false);
-                AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
+                //AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 $('#myModal').modal('show');
             }
         };
@@ -1137,16 +1137,17 @@
                 let grand_total = 0;
                 setTimeout(function() {
                     for (let k = 0; k < data.detail_s_j.length; k++) {
-                        $('#qty' + k).val(data.detail_s_j[k].qty).attr("disabled", true);
-                        $('#price' + k).val(data.detail_s_j[k].total_price / data.detail_s_j[k].qty);
-                        $('#total_price' + k).val(data.detail_s_j[k].total_price);
-                        grand_total += parseInt(data.detail_s_j[k].total_price);
-                        $('#grand_total').val(grand_total);
+                        AutoNumeric.getAutoNumericElement('#qty' + k).set(data.detail_s_j[k].qty);
+                        $('#qty' + k).attr("disabled", true);
+                        AutoNumeric.getAutoNumericElement('#price' + k).set(data.detail_s_j[k].total_price / data.detail_s_j[k].qty);
+                        AutoNumeric.getAutoNumericElement('#total_price' + k).set(data.detail_s_j[k].total_price);
+                        grand_total += parseFloat(data.detail_s_j[k].total_price);
+                        AutoNumeric.getAutoNumericElement('#grand_total').set(grand_total);
                     }
                 }, 2000);
-                setTimeout(function() {
-                    AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
-                }, 2100);
+                // setTimeout(function() {
+                //     AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
+                // }, 2100);
                 $('#add-tab').hide();
                 $('#revisi-tab').show();
                 $("#del_part0,#del_part1,#del_part2,#del_part3,#del_part4,#del_part5,#del_part6,#del_part7,#del_part8,#del_part9").show()
@@ -1450,6 +1451,24 @@
         });
 
         //AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
+        // inisialisasi AutoNumeric
+        const mixedOptions = {
+            ...AutoNumeric.getPredefinedOptions().all,
+            unformatOnSubmit: true,
+        };
+
+        // tambahkan event listener untuk mengatur opsi decimalPlaces secara dinamis
+        const mixedInput = document.querySelector('.autonumeric-integer');
+        mixedInput.addEventListener('input', () => {
+            const value = mixedInput.value;
+            const decimalIndex = value.indexOf('.');
+
+            // set opsi decimalPlaces ke null jika tidak ada angka desimal atau set opsi decimalPlaces ke 2 jika ada angka desimal
+            mixedOptions.decimalPlaces = decimalIndex === -1 ? null : 2;
+        });
+
+        // terapkan AutoNumeric pada input field
+        AutoNumeric.multiple('.autonumeric-integer', mixedOptions);
     })
 
     function findTotal(id) {
@@ -1459,17 +1478,13 @@
         //console.log(rowCount);
         var tot = 0;
         for (var i = 0; i < rowCount; i++) {
-            if (parseInt($('#total_price' + i).val())) {
+            if (parseFloat($('#total_price' + i).val())) {
                 var total_p = $('#total_price' + i).val().replaceAll(",", "");
                 //console.log(total_p);
-                tot += parseInt(total_p);
+                tot += parseFloat(total_p);
             }
         }
-        //document.getElementById('grand_total').value = tot;
-        $('#grand_total').val(tot);
-        new AutoNumeric('#grand_total', {
-            decimalPlaces: "0",
-        });
+        AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
     }
 
     function reset_form() {

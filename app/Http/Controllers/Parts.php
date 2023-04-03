@@ -47,11 +47,17 @@ class Parts extends Controller
                 'part_no' => ['required', 'string', 'max:255'],
                 'part_name' => ['required', 'string', 'max:255'],
             ]);
-            if ($request->price) {
-                $price = str_replace(",", "", $request->price);
+
+            $angka = $request->price;
+
+            if ($angka &&  $angka % 1 == 0) {
+                $angka = round($angka);
+                $angka = str_replace(",", "", $request->price);
             } else {
-                $price = 0;
+                $angka = 0;
             }
+
+
             $get = Customer::find($request->cust_id);
 
             $post = new ModelsParts();
@@ -59,7 +65,7 @@ class Parts extends Controller
             $post->name_local = $request->part_name . '-' . $get->code . '-' . substr($request->part_no, -5);
             $post->part_no = $request->part_no;
             $post->part_name = $request->part_name;
-            $post->price = $price;
+            $post->price = $angka;
             $post->sa_dm = $request->sa_dm;
             $post->qty_pack = $request->qty_pack;
             $post->type_pack = $request->type_pack;
@@ -107,7 +113,13 @@ class Parts extends Controller
                 $postt->periode = date("d-m-Y", strtotime($post->updated_at)) . " - " . date("d-m-Y", strtotime('now'));
                 $postt->save();
 
-                $post->price = str_replace(",", "", $request->price);
+                $angka = str_replace(",", "", $request->price);
+
+                if ($angka % 1 == 0) {
+                    $angka = rtrim($angka, '0');
+                    $angka = rtrim($angka, '.');
+                }
+                $post->price = $angka;
             }
             $post->cust_id = $request->cust_id;
             $post->name_local = $request->part_name . '-' . $get->code . '-' . substr($request->part_no, -5);
@@ -202,7 +214,8 @@ class Parts extends Controller
                 $detailsj = DetailSJ::where('sj_id', $value)->sum('total_price');
 
                 $update = SJ::find($value);
-                $update->grand_total = (int)$detailsj;
+                // $update->grand_total = (int)$detailsj;
+                $update->grand_total = $detailsj;
                 $update->save();
             }
         }
@@ -257,7 +270,8 @@ class Parts extends Controller
                 $detailsj = DetailSJ::where('sj_id', $sjj->id)->sum('total_price');
 
                 $update = SJ::find($sjj->id);
-                $update->grand_total = (int)$detailsj;
+                //$update->grand_total = (int)$detailsj;
+                $update->grand_total = $detailsj;
                 $update->save();
             }
             return response()->json(count($updsj));

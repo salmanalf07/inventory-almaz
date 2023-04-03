@@ -124,6 +124,12 @@ class SJ extends Controller
                 } else {
                     $keterangann = $keterangan[$count];
                 }
+                $angka = str_replace(",", "", $total_price[$count]);
+
+                if ($angka % 1 == 0) {
+                    $angka = rtrim($angka, '0');
+                    $angka = rtrim($angka, '.');
+                }
                 $data = array(
                     'sj_id' => $post->id,
                     'part_id' => $part_id[$count],
@@ -131,7 +137,7 @@ class SJ extends Controller
                     'qty'  => str_replace(",", "", $qty[$count]),
                     'qty_pack'  => $qty_pack[$count],
                     'type_pack'  => $type_pack[$count],
-                    'total_price'  => str_replace(",", "", $total_price[$count]),
+                    'total_price'  => $angka,
                     'keterangan'  => $keterangann,
                     'created_at' => date("Y-m-d H:i:s", strtotime('now'))
                 );
@@ -236,13 +242,19 @@ class SJ extends Controller
                     } else {
                         $keterangann = $keterangan[$count];
                     }
+                    $angka = str_replace(",", "", $total_price[$count]);
+
+                    if ($angka % 1 == 0) {
+                        $angka = rtrim($angka, '0');
+                        $angka = rtrim($angka, '.');
+                    }
                     DetailSJ::where(['id' => $detail_id[$count]])
                         ->update([
                             'part_id' => $part_id[$count],
                             'qty'  => str_replace(",", "", $qty[$count]),
                             'qty_pack'  => str_replace(",", "", $qty_pack[$count]),
                             'type_pack'  => str_replace(",", "", $type_pack[$count]),
-                            'total_price'  => str_replace(",", "", $total_price[$count]),
+                            'total_price'  => $angka,
                             'keterangan'  => $keterangann,
                         ]);
                 }
