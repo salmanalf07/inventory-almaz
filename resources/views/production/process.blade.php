@@ -354,7 +354,7 @@
                                                         <input class="form-control" name="total_sa" id="total_sa" type="text" readonly>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control" name="grand_total" id="grand_total" type="text" readonly>
+                                                        <input class="form-control autonumeric-integer" name="grand_total" id="grand_total" type="text" readonly>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -802,20 +802,16 @@
         var tot = 0;
         var sa = 0;
         for (var i = 0; i < rowCount; i++) {
-            if (parseInt($('#total_price' + i).val())) {
+            if (parseFloat($('#total_price' + i).val())) {
                 var total_p = $('#total_price' + i).val().replaceAll(",", "");
                 var total_sa = $('#sa' + i).val().replaceAll(",", "")
                 sa += parseInt(total_sa);
-                tot += parseInt(total_p);
+                tot += parseFloat(total_p);
             };
         }
-        //AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
         //console.log(tot);
-        $('#grand_total').val(tot);
         $('#total_sa').val(sa);
-        new AutoNumeric('#grand_total', {
-            decimalPlaces: "0",
-        });
+        AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
     }
     $(function() {
         //Initialize Select2 Elements
@@ -837,8 +833,24 @@
             use24hours: true
         });
 
+        // inisialisasi AutoNumeric
+        const mixedOptions = {
+            ...AutoNumeric.getPredefinedOptions().all,
+            unformatOnSubmit: true,
+        };
 
-        AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
+        // tambahkan event listener untuk mengatur opsi decimalPlaces secara dinamis
+        const mixedInput = document.querySelector('.autonumeric-integer');
+        mixedInput.addEventListener('input', () => {
+            const value = mixedInput.value;
+            const decimalIndex = value.indexOf('.');
+
+            // set opsi decimalPlaces ke null jika tidak ada angka desimal atau set opsi decimalPlaces ke 2 jika ada angka desimal
+            mixedOptions.decimalPlaces = decimalIndex === -1 ? null : 2;
+        });
+
+        // terapkan AutoNumeric pada input field
+        AutoNumeric.multiple('.autonumeric-integer', mixedOptions);
     })
 
     function reset_form() {

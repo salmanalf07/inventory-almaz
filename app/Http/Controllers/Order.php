@@ -70,11 +70,17 @@ class Order extends Controller
             });
 
             for ($count = 0; $count < count($part_id); $count++) {
+                $angka = str_replace(",", "", $total_price[$count]);
+
+                if ($angka % 1 == 0) {
+                    $angka = rtrim($angka, '0');
+                    $angka = rtrim($angka, '.');
+                }
                 $data = array(
                     'order_id' => $post->id,
                     'part_id' => $part_id[$count],
                     'qty'  => str_replace(",", "", $qty[$count]),
-                    'price'  => str_replace(",", "", $total_price[$count]),
+                    'price'  => $angka,
                     'created_at' => date("Y-m-d H:i:s", strtotime('now'))
                 );
 
@@ -126,11 +132,17 @@ class Order extends Controller
                     return ($value !== null && $value !== false && $value !== '');
                 });
                 for ($count = 0; $count < count($detail_id); $count++) {
+                    $angka = str_replace(",", "", $total_price[$count]);
+
+                    if ($angka % 1 == 0) {
+                        $angka = rtrim($angka, '0');
+                        $angka = rtrim($angka, '.');
+                    }
                     DetailOrder::where(['id' => $detail_id[$count]])
                         ->update([
                             'part_id' => $part_id[$count],
                             'qty'  => str_replace(",", "", $qty[$count]),
-                            'price'  => str_replace(",", "", $total_price[$count]),
+                            'price'  => $angka,
                         ]);
                 }
             }

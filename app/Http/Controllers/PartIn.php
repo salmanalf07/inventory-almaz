@@ -101,12 +101,18 @@ class PartIn extends Controller
                 } else {
                     $typee = $type[$count];
                 }
+                $angka = str_replace(",", "", $total_price[$count]);
+
+                if ($angka % 1 == 0) {
+                    $angka = rtrim($angka, '0');
+                    $angka = rtrim($angka, '.');
+                }
                 $data = array(
                     'partin_id' => $post->id,
                     'part_id' => $part_id[$count],
                     'qty'  => str_replace(",", "", $qty[$count]),
                     'type'  => $typee,
-                    'total_price'  => str_replace(",", "", $total_price[$count]),
+                    'total_price'  => $angka,
                     'created_at' => date("Y-m-d H:i:s", strtotime('now'))
                 );
                 $insert[] = $data;
@@ -190,9 +196,15 @@ class PartIn extends Controller
                 $recentt = $recent->first();
                 $qty_up = str_replace(",", "", $qty[$count]) - $recentt->qty;
                 $price_up = str_replace(",", "", $total_price[$count]) - $recentt->total_price;
+                $angka = str_replace(",", "", $total_price[$count]);
+
+                if ($angka % 1 == 0) {
+                    $angka = rtrim($angka, '0');
+                    $angka = rtrim($angka, '.');
+                }
                 $recent->update([
                     'qty'  => str_replace(",", "", $qty[$count]),
-                    'total_price'  => str_replace(",", "", $total_price[$count]),
+                    'total_price'  => $angka,
                 ]);
 
                 $stock = StockWip::where(['part_id' => $part_id[$count], 'type' => $type[$count]]);

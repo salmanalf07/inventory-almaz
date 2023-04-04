@@ -166,10 +166,10 @@
                                                         <input class="form-control" type="text" name="qty_progress[]" id="qty_progress0" readonly class="span15">
                                                     </td>
                                                     <td id="col3">
-                                                        <input class="form-control" type="text" name="price[]" id="price0" readonly class="span15">
+                                                        <input class="form-control autonumeric-integer" type="text" name="price[]" id="price0" readonly class="span15">
                                                     </td>
                                                     <td id="col4">
-                                                        <input class="form-control" type="text" name="total_price[]" id="total_price0" readonly class="span15">
+                                                        <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price0" readonly class="span15">
                                                     </td>
                                                     <td id="col5">
                                                         <button id="upd_pr0" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
@@ -187,7 +187,7 @@
                                                         <p style="text-align: right;">Grand Total</p>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control" name="grand_total" id="grand_total" type="text" readonly>
+                                                        <input class="form-control autonumeric-integer" name="grand_total" id="grand_total" type="text" readonly>
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -232,6 +232,7 @@
                 reset_form();
                 $('#SJJ').hide();
                 //document.getElementById("addfoot").removeAttribute("hidden");
+                autonumeric(0);
                 $("#addrow,#deleterow").show();
                 $('#revisi-tab').hide();
                 $('#myModal').modal('show');
@@ -407,9 +408,9 @@
                         '</td><td>' +
                         '<input class="form-control" type="text" name="qty_progress[]" id="qty_progress' + i + '"  class="span15">' +
                         '</td><td>' +
-                        '<input class="form-control" type="text" name="price[]" id="price' + i + '" readonly class="span15">' +
+                        '<input class="form-control autonumeric-integer" type="text" name="price[]" id="price' + i + '" readonly class="span15">' +
                         '</td><td>' +
-                        '<input class="form-control" type="text" name="total_price[]" id="total_price' + i + '" readonly class="span15">' +
+                        '<input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price' + i + '" readonly class="span15">' +
                         '</td>' +
                         '<td><button id = "upd_pr' + i + '" class = "btn btn-warning" type = "button" onclick="update_price(this)">Update</button></td></tr> ';
                 }
@@ -578,11 +579,13 @@
             success: function(data) {
                 if (total_price === "") {
                     $('#price' + matches[0]).val(data);
-                    $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
-                    autonumeric(matches[0]);
+                    // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
+                    // autonumeric(matches[0]);
+                    AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
                 } else if (price.replaceAll(",", "") == data) {
-                    $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
-                    autonumeric(matches[0]);
+                    // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
+                    // autonumeric(matches[0]);
+                    AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
                 }
                 findTotal(matches[0] + 1);
             },
@@ -608,8 +611,7 @@
             success: function(data) {
                 // if (total_price === "") {
                 $('#price' + matches[0]).val(data);
-                $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
-                autonumeric(matches[0]);
+                AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
                 // } else if (price.replaceAll(",", "") == data) {
                 //     $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
                 //     autonumeric(matches[0]);
@@ -641,16 +643,13 @@
         var tow = $('#grand_total').val();
         var tot = 0;
         for (var i = 0; i < id; i++) {
-            if (parseInt($('#total_price' + i).val())) {
+            if (parseFloat($('#total_price' + i).val())) {
                 var total_p = $('#total_price' + i).val().replaceAll(",", "");
-                tot += parseInt(total_p);
+                tot += parseFloat(total_p);
             }
         }
         //AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
-        $('#grand_total').val(tot);
-        new AutoNumeric('#grand_total', {
-            decimalPlaces: "0",
-        });
+        AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
     }
 
     function addRows() {
@@ -738,12 +737,29 @@
         // new AutoNumeric('#qty' + i, {
         //     decimalPlaces: "0",
         // });
-        new AutoNumeric('#price' + i, {
-            decimalPlaces: "0",
+        // inisialisasi AutoNumeric
+        const mixedOptions = {
+            ...AutoNumeric.getPredefinedOptions().all,
+            unformatOnSubmit: true,
+        };
+
+        // tambahkan event listener untuk mengatur opsi decimalPlaces secara dinamis
+        const mixedInput = document.querySelector('.autonumeric-integer');
+        mixedInput.addEventListener('input', () => {
+            const value = mixedInput.value;
+            const decimalIndex = value.indexOf('.');
+
+            // set opsi decimalPlaces ke null jika tidak ada angka desimal atau set opsi decimalPlaces ke 2 jika ada angka desimal
+            mixedOptions.decimalPlaces = decimalIndex === -1 ? null : 2;
         });
-        new AutoNumeric('#total_price' + i, {
-            decimalPlaces: "0",
-        });
+
+        // terapkan AutoNumeric pada input field
+        // AutoNumeric.multiple('.autonumeric-integer', mixedOptions);
+        if (i == 0) {
+            new AutoNumeric('#grand_total', mixedOptions);
+        }
+        new AutoNumeric('#price' + i, mixedOptions);
+        new AutoNumeric('#total_price' + i, mixedOptions);
     }
 </script>
 

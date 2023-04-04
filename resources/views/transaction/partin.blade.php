@@ -941,7 +941,24 @@
 
         });
 
-        AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
+        // inisialisasi AutoNumeric
+        const mixedOptions = {
+            ...AutoNumeric.getPredefinedOptions().all,
+            unformatOnSubmit: true,
+        };
+
+        // tambahkan event listener untuk mengatur opsi decimalPlaces secara dinamis
+        const mixedInput = document.querySelector('.autonumeric-integer');
+        mixedInput.addEventListener('input', () => {
+            const value = mixedInput.value;
+            const decimalIndex = value.indexOf('.');
+
+            // set opsi decimalPlaces ke null jika tidak ada angka desimal atau set opsi decimalPlaces ke 2 jika ada angka desimal
+            mixedOptions.decimalPlaces = decimalIndex === -1 ? null : 2;
+        });
+
+        // terapkan AutoNumeric pada input field
+        AutoNumeric.multiple('.autonumeric-integer', mixedOptions);
     })
 
     function reset_form() {

@@ -91,6 +91,12 @@ class Transaction extends Controller
             });
 
             for ($count = 0; $count < count($part_id); $count++) {
+                $angka = str_replace(",", "", $price[$count]);
+
+                if ($angka % 1 == 0) {
+                    $angka = rtrim($angka, '0');
+                    $angka = rtrim($angka, '.');
+                }
                 $postt = new DetailTransaction();
                 $postt->transaction_id = $post->id;
                 $postt->cust_id = $cust_id[$count];
@@ -98,7 +104,7 @@ class Transaction extends Controller
                 $postt->type = $type[$count];
                 $postt->qty_in  = str_replace(",", "", $qty_in[$count]);
                 $postt->sa  = str_replace(",", "", $sa[$count]);
-                $postt->price  = str_replace(",", "", $price[$count]);
+                $postt->price  = $angka;
                 $postt->save();
 
                 // $posttt = new PackingTransaction();
@@ -166,12 +172,18 @@ class Transaction extends Controller
                     $qty_up = str_replace(",", "", $qty_in[$count]) - $recentt->qty_in;
                     $price_up = str_replace(",", "", $price[$count]) - $recentt->total_price;
                 }
+                $angka = str_replace(",", "", $price_up[$count]);
+
+                if ($angka % 1 == 0) {
+                    $angka = rtrim($angka, '0');
+                    $angka = rtrim($angka, '.');
+                }
                 $recent->update([
                     'cust_id' => $cust_id[$count],
                     'part_id' => $part_id[$count],
                     'qty_in'  => str_replace(",", "", $qty_up),
                     'sa'  => str_replace(",", "", $sa[$count]),
-                    'price'  => str_replace(",", "", $price_up),
+                    'price'  => $angka,
                     'updated_at' => date("Y-m-d H:i:s", strtotime('now'))
                 ]);
             }
