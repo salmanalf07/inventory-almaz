@@ -48,13 +48,11 @@ class Parts extends Controller
                 'part_name' => ['required', 'string', 'max:255'],
             ]);
 
-            $angka = $request->price;
+            $angka = str_replace(",", "", $request->price);
 
             if ($angka &&  $angka % 1 == 0) {
-                $angka = round($angka);
-                $angka = str_replace(",", "", $request->price);
-            } else {
-                $angka = 0;
+                $angka = rtrim($angka, '0');
+                $angka = rtrim($angka, '.');
             }
 
 
