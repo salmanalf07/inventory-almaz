@@ -346,18 +346,21 @@ class Invoice extends Controller
                 $datdetail[$key]["part_name"] = $attt->part_name;
                 $datdetail[$key]["part_no"] = $attt->part_no;
                 foreach ($dat[$key]->out as $kee => $datan) {
-                    if ($datan->DetailSJ['nosj'] . $request->id_print == $datan->DetailSJ['nosj'] . $datan->DetailSJ['invoice_id']) {
-                        if (!array_key_exists($datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price, $temp)) {
-                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price] = 0;
+                    if ($datan->DetailSJ['nosj'] .  $datan->part_id == $datan->DetailSJ['nosj'] . $attt->id) {
+                        if (!array_key_exists($datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*", $temp)) {
+                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["qty"] = 0;
+                            $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["price"] = 0;
                         }
-                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*" . $datan->total_price] += $datan->qty;
+                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["qty"] += $datan->qty;
+                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["price"] += $datan->total_price;
                     }
                 }
 
                 foreach ($temp as $ke => $value) {
                     $group[] = [
                         'nosj' => $ke,
-                        'qty' => $value
+                        'qty' => $value["qty"],
+                        'price' => $value["price"]
                     ];
                 }
 
@@ -370,7 +373,7 @@ class Invoice extends Controller
                         if (date('d', strtotime($split[0])) . $split[1] . $split[2] == date('d', strtotime($uniqe->date_sj)) . $uniqe->nosj . $attt->id) {
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["nosj"] = $split[1];
                             $datdetail[$key]["uniqe"][$id]["sj_real"][0]["qty"] = $group[$i]["qty"];
-                            $datdetail[$key]["price"] = $split[3] / $group[$i]["qty"];
+                            $datdetail[$key]["price"] = $group[$i]["price"] / $group[$i]["qty"];
                         }
                     }
                 }
