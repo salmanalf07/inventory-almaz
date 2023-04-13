@@ -236,13 +236,13 @@
                                                         </select>
                                                     </td>
                                                     <td id="col1">
-                                                        <input class="form-control" type="text" name="qty[]" id="qty0" onchange="search_price(this)" class="span15">
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty0" onchange="search_price(this)" class="span15">
                                                     </td>
                                                     <td id="col2">
-                                                        <input class="form-control" type="text" name="price[]" id="price0" readonly class="span15">
+                                                        <input class="form-control autonumeric-integer" type="text" name="price[]" id="price0" readonly class="span15">
                                                     </td>
                                                     <td id="col3">
-                                                        <input class="form-control" type="text" name="total_price[]" id="total_price0" readonly class="span15">
+                                                        <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price0" readonly class="span15">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -256,7 +256,7 @@
                                                         <p style="text-align: right;">Grand Total</p>
                                                     </td>
                                                     <td colspan="1">
-                                                        <input class="form-control" name="grand_total" id="grand_total" type="text" readonly>
+                                                        <input class="form-control autonumeric-integer" name="grand_total" id="grand_total" type="text" readonly>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -499,10 +499,6 @@
                     "className": "text-center",
                     "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // table ke 1
                 },
-                // {
-                //     "visible": false,
-                //     "targets": [9]
-                // },
                 {
                     targets: [2, 7],
                     render: function(oTable) {
@@ -511,8 +507,15 @@
                 },
                 {
                     targets: [6],
-                    render: $.fn.dataTable.render.number('.')
+                    render: $.fn.dataTable.render.number(',', '.', 2)
                 },
+                {
+                    orderable: false,
+                    targets: 0
+                }
+            ],
+            order: [
+                [5, 'desc']
             ],
             "buttons": ["add",
                 {
@@ -605,6 +608,7 @@
     //end add data
     //edit data
     $(document).on('click', '#edit', function(e) {
+        autonumeric("edit");
         e.preventDefault();
         var uid = $(this).data('id');
         var newDateOptions = {
@@ -630,11 +634,11 @@
                         '<select name="part_id[]" id="part_id' + i + '" class="form-control select2" style="width: 100%;">' +
                         '<option selected="selected">Choose...</option>' +
                         '</select></td><td>' +
-                        '<input class="form-control" type="text" name="qty[]" id="qty' + i + '" onchange="search_price(this)" class="span15">' +
+                        '<input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty' + i + '" onchange="search_price(this)" class="span15">' +
                         '</td><td>' +
-                        '<input class="form-control" type="text" name="price[]" id="price' + i + '" readonly class="span15">' +
+                        '<input class="form-control autonumeric-integer" type="text" name="price[]" id="price' + i + '" readonly class="span15">' +
                         '</td><td>' +
-                        '<input class="form-control" type="text" name="total_price[]" id="total_price' + i + '" readonly class="span15">' +
+                        '<input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price' + i + '" readonly class="span15">' +
                         '</td></tr>';
                 }
                 $('#roww').append(text);
@@ -892,28 +896,6 @@
             });
 
         });
-        // $('#order_id').change(function() {
-        //     var value = $(this).val();
-        //     //console.log(value);
-        //     $.ajax({
-        //         type: 'POST',
-        //         url: 'detail_order',
-        //         data: {
-        //             '_token': "{{ csrf_token() }}",
-        //             'order_id': $(this).val(),
-
-        //         },
-        //         success: function(data) {
-        //             $('[name="part_id[]"]').empty();
-        //             $('[name="part_id[]"]').append('<option value="">Choose...</option>');
-        //             $.each(data, function(i) {
-        //                 $('[name="part_id[]"]').append('<option value="' + data[i].part_id + '">' + data[i].parts.name_local + '</option>');
-        //             })
-
-        //         },
-        //     });
-
-        // });
     });
 
 
@@ -935,16 +917,15 @@
 
                 },
                 success: function(data) {
-                    //AutoNumeric.getAutoNumericElement('#qty' + matches[0]).set(data.qty);
-                    // $('#price' + matches[0]).val(data);
-                    // AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(data * qty.replaceAll(",", ""));
                     if (total_price === "") {
                         $('#price' + matches[0]).val(data);
-                        $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
-                        autonumeric(matches[0]);
+                        // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
+                        // autonumeric(matches[0]);
+                        AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
                     } else if (price.replaceAll(",", "") == data) {
-                        $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
-                        autonumeric(matches[0]);
+                        // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
+                        // autonumeric(matches[0]);
+                        AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
                     }
                     //findTotal(matches[0]);
                 },
@@ -1011,9 +992,11 @@
         var tow = $('#grand_total').val();
         var tot = 0;
         for (var i = 0; i < id; i++) {
-            if (parseInt($('#total_price' + i).val()))
+            if (parseFloat($('#total_price' + i).val())) {
                 var total_p = $('#total_price' + i).val().replaceAll(",", "");
-            tot += parseInt(total_p);
+                tot += parseFloat(total_p);
+            }
+
         }
         // console.log(ppn_st);
         // console.log(pph_st);
@@ -1029,65 +1012,11 @@
         } else {
             var pph_val = 0;
         }
-        $('#grand_total').val(tot);
-        new AutoNumeric('#grand_total', {
-            decimalPlaces: "0",
-        });
-        $('#ppn').val(ppn_val);
-        new AutoNumeric('#ppn', {
-            decimalPlaces: "0",
-        });
-        $('#pph').val(pph_val);
-        new AutoNumeric('#pph', {
-            decimalPlaces: "0",
-        });
-        $('#total_harga').val(tot + ppn_val - pph_val);
-        new AutoNumeric('#total_harga', {
-            decimalPlaces: "0",
-        });
-    }
 
-    function addRows() {
-        var table = document.getElementById('roww');
-        var rowCount = table.rows.length;
-        var cellCount = table.rows[0].cells.length;
-        var row = table.insertRow(rowCount);
-        for (var i = 0; i < cellCount; i++) {
-            var cell = 'cell' + i;
-            cell = row.insertCell(i);
-            var copycel = document.getElementById('col' + i).innerHTML;
-            cell.id = 'col' + i + rowCount;
-            cell.innerHTML = copycel;
-
-            if (i == 0) {
-                var partidinput = document.getElementById('col0' + rowCount).getElementsByTagName('select');
-                partidinput[0].id = 'part_id' + rowCount;
-                $('#part_id' + rowCount).select2({
-                    placeholder: "Choose..",
-                    theme: 'bootstrap4'
-                })
-            }
-            if (i == 1) {
-                var qtyinput = document.getElementById('col1' + rowCount).getElementsByTagName('input');
-                qtyinput[0].id = 'qty' + rowCount;
-                qtyinput[0].value = "";
-                new AutoNumeric('#qty' + rowCount, {
-                    decimalPlaces: "0",
-                });
-            }
-            if (i == 2) {
-                var priceinput = document.getElementById('col2' + rowCount).getElementsByTagName('input');
-                priceinput[0].id = 'price' + rowCount;
-                priceinput[0].value = "";
-
-            }
-            if (i == 3) {
-                var radioinput = document.getElementById('col3' + rowCount).getElementsByTagName('input');
-                radioinput[0].id = 'total_price' + rowCount;
-                radioinput[0].value = "";
-                autonumeric(rowCount);
-            }
-        }
+        AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
+        AutoNumeric.getAutoNumericElement('#ppn').set(ppn_val);
+        AutoNumeric.getAutoNumericElement('#pph').set(pph_val);
+        AutoNumeric.getAutoNumericElement('#total_harga').set(tot + ppn_val - pph_val);
     }
 
     function deleteRows() {
@@ -1116,15 +1045,33 @@
     };
 
     function autonumeric(i) {
-        // new AutoNumeric('#qty' + i, {
-        //     decimalPlaces: "0",
-        // });
-        new AutoNumeric('#price' + i, {
-            decimalPlaces: "0",
+        // inisialisasi AutoNumeric
+        const mixedOptions = {
+            ...AutoNumeric.getPredefinedOptions().all,
+            unformatOnSubmit: true,
+        };
+
+        // tambahkan event listener untuk mengatur opsi decimalPlaces secara dinamis
+        const mixedInput = document.querySelector('.autonumeric-integer');
+        mixedInput.addEventListener('input', () => {
+            const value = mixedInput.value;
+            const decimalIndex = value.indexOf('.');
+
+            // set opsi decimalPlaces ke null jika tidak ada angka desimal atau set opsi decimalPlaces ke 2 jika ada angka desimal
+            mixedOptions.decimalPlaces = decimalIndex === -1 ? null : 2;
         });
-        new AutoNumeric('#total_price' + i, {
-            decimalPlaces: "0",
-        });
+
+        // terapkan AutoNumeric pada input field
+        // AutoNumeric.multiple('.autonumeric-integer', mixedOptions);
+        if (i == "edit") {
+            new AutoNumeric('#grand_total', mixedOptions);
+            new AutoNumeric('#ppn', mixedOptions);
+            new AutoNumeric('#pph', mixedOptions);
+            new AutoNumeric('#total_harga', mixedOptions);
+        } else {
+            new AutoNumeric('#price' + i, mixedOptions);
+            new AutoNumeric('#total_price' + i, mixedOptions);
+        }
     }
 </script>
 

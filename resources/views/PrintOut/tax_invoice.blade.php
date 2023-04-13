@@ -70,6 +70,21 @@
 </head>
 
 <body>
+    <?php
+    if (!function_exists('formaterPrice')) {
+        function formaterPrice($price)
+        {
+            $price = round($price, 2);
+            $price_format = number_format($price, 2, '.', ',');
+            if (strpos($price_format, '.00') !== false) {
+                $price_format = number_format(floor($price), 0, '.', ',');
+            }
+
+            return $price_format;
+        }
+    }
+    ?>
+
     <table style="width: 100%;" align="center">
         <tr>
             <td class="no-border" style="width: 5%;"></td>
@@ -205,7 +220,7 @@
                 <td>
                     @if(isset($data->detailinvoice[$i]->parts->price))
                     @if($data->detailinvoice[$i]->total_price / $data->detailinvoice[$i]->qty == $data->detailinvoice[$i]->parts->price)
-                    {{number_format($data->detailinvoice[$i]->parts->price,0,',','.')}}
+                    <?php echo formaterPrice($data->detailinvoice[$i]->parts->price) ?>
                     @else
                     {{$data->detailinvoice[$i]->total_price / $data->detailinvoice[$i]->qty}}
                     @endif
@@ -213,7 +228,7 @@
                 </td>
                 <td class="right_padding">
                     @if(isset($data->detailinvoice[$i]->total_price))
-                    {{number_format($data->detailinvoice[$i]->total_price,0,',','.')}}
+                    <?php echo formaterPrice($data->detailinvoice[$i]->total_price) ?>
                     @endif
                 </td>
             </tr>
@@ -233,7 +248,7 @@
             <td class="right_padding">
                 <?php
                 $harga_jual = $data->harga_jual;
-                echo number_format($harga_jual, 0, ',', '.');
+                echo formaterPrice($harga_jual);
                 ?>
             </td>
         </tr>
@@ -243,7 +258,7 @@
             </td>
             <td class="center">PPN ({{$pajak->ppn}}%)</td>
             <td class="right_padding">
-                {{number_format($data->ppn, 0, ',', '.');}}
+                <?php echo formaterPrice($data->ppn) ?>
             </td>
         </tr>
         @endif
@@ -253,7 +268,7 @@
             </td>
             <td class="center">PPh 23 ({{$pajak->pph}}%)</td>
             <td class="right_padding">
-                {{number_format($data->pph, 0, ',', '.')}}
+                <?php echo formaterPrice($data->pph) ?>
             </td>
         </tr>
         @endif
@@ -264,7 +279,7 @@
             <td class="right_padding">
                 <?php
                 $total_harga = $harga_jual + $data->ppn - $data->pph;
-                echo number_format($total_harga, 0, ',', '.');
+                echo formaterPrice($total_harga);
                 ?>
             </td>
         </tr>

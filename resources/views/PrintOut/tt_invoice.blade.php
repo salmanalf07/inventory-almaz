@@ -60,6 +60,13 @@
 </head>
 
 <body>
+    <?php
+    $angka = round($data->total_harga, 2);
+    $angka_format = number_format($angka, 2, '.', ',');
+    if (strpos($angka_format, '.00') !== false) {
+        $angka_format = number_format(floor($angka), 0, '.', ',');
+    }
+    ?>
     <table style="width: 100%;" align="center">
         <tr>
             <td></td>
@@ -119,7 +126,7 @@
             </td>
             <td>:</td>
             <td colspan="2" class="bold">
-                Rp. {{number_format($data->total_harga,0,',','.')}}
+                Rp. {{$angka_format}}
             </td>
         </tr>
         <tr>
@@ -224,7 +231,7 @@
             </td>
             <td>:</td>
             <td colspan="2" class="bold">
-                Rp. {{number_format($data->total_harga,0,',','.')}}
+                Rp. {{$angka_format}}
             </td>
         </tr>
         <tr>

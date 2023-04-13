@@ -215,16 +215,25 @@
                     <?php }
                     } ?>
                     <td class="center" id="qtytotal"></td>
-                    <td class="right price">
+                    <td class="right">
                         <nav class="container">
                             <div>Rp</div>
-                            <div><?php echo number_format($datdetail[$c]['price'], 0, ',', '.'); ?></div>
+                            <div class="price">
+                                <?php
+                                $angka = round($datdetail[$c]['price'], 2);
+                                $angka_format = number_format($angka, 2, '.', ',');
+                                if (strpos($angka_format, '.00') !== false) {
+                                    $angka_format = number_format(floor($angka), 0, '.', ',');
+                                }
+                                echo $angka_format;
+                                ?></div>
+                            </div>
                         </nav>
                     </td>
-                    <td class="right amount">
+                    <td class="right">
                         <nav class="container">
                             <div>Rp</div>
-                            <div id="amount"></div>
+                            <div class="amount" id="amount"></div>
                         </nav>
                     </td>
                 </tr>
@@ -330,22 +339,21 @@
                     }
                 });
                 var price = $(this).find('.price').text();
-                $(this).find('#qtytotal').html(totmarks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-                $(this).find('#amount').html((price.replace(/\D/g, "") * totmarks).toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $(this).find('#qtytotal').html(totmarks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $(this).find('#amount').html((price.replace(",", "") * totmarks).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
             });
             //total
             var sum = 0;
             $(".amount").each(function() {
-                sum += parseFloat($(this).text().replace(/\D/g, ""));
+                sum += parseFloat($(this).text().replace(/,/g, ""));
             });
-            $('#total').html((sum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+            $('#total').html((sum).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
             //ppn
             var ppn = "{{ $dat[0]->customer['ppn'] }}";
             if (ppn === "Y") {
                 var ppn_val = Math.round(sum * ('{{$pajak->ppn}}' / 100));
-                $('#ppn').html((ppn_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $('#ppn').html((ppn_val).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
             } else {
                 var ppn_val = 0;
             }
@@ -353,12 +361,12 @@
             var pph = "{{ $dat[0]->customer['pph'] }}";
             if (pph === "Y") {
                 var pph_val = Math.round(sum * ('{{$pajak->pph}}' / 100));
-                $('#pph').html((pph_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $('#pph').html((pph_val).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
             } else {
                 var pph_val = 0;
             }
             //grand total
-            $('#grand_total').html((sum + ppn_val - pph_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+            $('#grand_total').html((sum + ppn_val - pph_val).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
         })
     </script>
