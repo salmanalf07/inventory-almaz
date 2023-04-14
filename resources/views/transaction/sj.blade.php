@@ -623,9 +623,6 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control autonumeric-integer" type="text" name="price[]" id="price7" readonly>
-                                                    </td>
-                                                    <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty7" placeholder="Qty">
                                                     </td>
                                                     <td>
@@ -643,6 +640,9 @@
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
                                                         </select>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="price[]" id="price7" readonly>
                                                     </td>
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price7" readonly>
