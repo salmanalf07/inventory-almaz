@@ -229,10 +229,10 @@
             <tr>
                 <td colspan="2" class="value-color">Qty (pcs)</td>
                 @foreach($data as $key => $qty_in)
-                <td style="background-color: #FFF2CC;" class="right qtysum">{{number_format($qty_in['qty_in'],0,".",".")}}</td>
+                <td style="background-color: #FFF2CC;" class="right qtypcs">{{number_format($qty_in['qty_in'],0,".",".")}}</td>
                 @endforeach
                 <td style="background-color: #FFF2CC;">
-                    <div class="right amount" id="qtytotal"></div>
+                    <div class="right amount" id="pcstotal"></div>
                 </td>
             </tr>
             <tr>
@@ -369,15 +369,25 @@
             $('tr').each(function() {
                 var totmarks = 0;
                 $(this).find('.qtysum').each(function() {
-                    var marks = $(this).text().replaceAll(".", "");
+                    var marks = $(this).text();
                     if (marks.length !== 0) {
                         totmarks += parseFloat(marks);
 
                     }
                 });
                 //var price = $(this).find('.price').text();
-                $(this).find('#qtytotal').html(totmarks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-                //console.log(totmarks);
+                $(this).find('#qtytotal').html((Math.round(totmarks * 100) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                //console.log(Math.round(totmarks * 100) / 100);
+                var totmarkss = 0;
+                $(this).find('.qtypcs').each(function() {
+                    var markss = $(this).text().replace('.', '');
+                    if (markss.length !== 0) {
+                        totmarkss += parseFloat(markss);
+
+                    }
+                });
+                //var price = $(this).find('.price').text();
+                $(this).find('#pcstotal').html(totmarkss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
             });
 
@@ -385,7 +395,9 @@
             var output_act = document.getElementsByClassName("output_act")[0].innerHTML;
             var normal_capacity = document.getElementsByClassName("normal_capacity")[0].innerHTML;
 
-            $('#produktifitas').html(((output_act.replaceAll(".", "") / normal_capacity.replaceAll(".", "")) * 100).toFixed(2) + "%");
+            $('#produktifitas').html(((output_act.replaceAll(",", "") / normal_capacity.replaceAll(",", "")) * 100).toFixed(2) + "%");
+
+            //console.log(normal_capacity);
             //end fungsi
 
             //total
