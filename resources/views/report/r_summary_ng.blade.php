@@ -402,7 +402,7 @@
                 //ngsum += parseFloat($(this).text());
                 var obj = {};
                 obj['type'] = $(this).data('ng');
-                obj['qty'] = parseFloat($(this).text());
+                obj['qty'] = parseFloat(($(this).text()).replace('.', ''));
                 ngsum.push(obj)
             });
             //sort array
@@ -417,7 +417,7 @@
             const qtys = ngsum.map(function(ng) {
                 return ng.qty;
             });
-            //console.log(type);
+            //console.log(ngsum);
 
 
 
@@ -441,7 +441,7 @@
                 const values = parseFloat((value / totalsum) * 100).toFixed(1);
                 return values;
             });
-            //   console.log(percentageQtys);
+            //console.log(percentageQtys);
 
             //cart pareto
             const data = {
