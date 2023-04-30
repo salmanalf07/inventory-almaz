@@ -27,6 +27,7 @@ use App\Models\DetailSJ;
 use App\Models\DetailTransaction;
 use App\Models\Driver as ModelsDriver;
 use App\Models\Invoice as ModelsInvoice;
+use App\Models\NgTransaction;
 use App\Models\Order;
 use App\Models\PartIn as ModelsPartIn;
 use App\Models\Parts as ModelsParts;
@@ -334,7 +335,7 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_sumpo'])->get('/r_sumpo
 Route::middleware(['auth:sanctum', 'verified'])->post('/report_sumpo', [SJ::class, 'report_sumpo']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_sumng'])->get('/r_sumng', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
-    return view('/report/r_sumng', ['judul' => "Grafik Summary NG", 'customer' => $cust,]);
+    return view('/report/r_sumng', ['judul' => "Grafik Summary NG", 'customer' => $cust, 'customers' => $cust]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/grafik_packing', [Transaction::class, 'grafik_packing']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_order'])->get('/r_order', function () {
@@ -367,6 +368,7 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_sumng'])->get('/r_sumpr
     return view('/report/r_sumprod', ['judul' => "Grafik Summary Production", 'customer' => $cust,]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/grafik_production', [Production::class, 'grafik_production']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/r_ng', [PackingTransaction::class, 'r_ng']);
 // Route::middleware(['auth:sanctum', 'verified'])->get('/rekap_sj', function () {
 //     return view('/rekap/rekap_sj', ['judul' => "Customer", 'days_count' => 30]);
 // });

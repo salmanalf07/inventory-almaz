@@ -9,6 +9,7 @@ use App\Models\Stock;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -217,5 +218,68 @@ class PackingTransaction extends Controller
         return DataTables::of($data)
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
+    }
+
+    public function r_ng(Request $request)
+    {
+
+        if ($request->typeNg != "#") {
+            $data = ModelsPackingTransaction::with('ng', 'Part');
+
+            if ($request->date != null) {
+                $date = explode(" - ", $request->date);
+                $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
+                $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
+                $data->whereDate('date_packing', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $datein))))
+                    ->whereDate('date_packing', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $dateen))));
+            };
+            if ($request->cust_id != '#') {
+                $data->where('cust_id', '=', $request->cust_id);
+            }
+            if ($request->shift != '#') {
+                $data->where('shift', '=', $request->shift);
+            }
+            $data->whereHas('ng', function ($query) use ($request) {
+                $query->where($request->typeNg, '!=', null);
+            });
+
+            $dataa = $data->get();
+
+            $datdetail = array();
+
+            $temp = [];
+
+            foreach ($dataa as $key => $attt) {
+                $datdetail[$key]["part_id"] = $attt['part']['id'];
+                $datdetail[$key]["part_name"] = $attt['part']['part_name'];
+                $datdetail[$key]["name_local"] = $attt['part']['name_local'];
+                $datdetail[$key]["jenis_ng"] = $request->typeNg;
+                $datdetail[$key]["qty_ng"] = $attt['ng'][$request->typeNg];
+            }
+
+            foreach ($datdetail as  $value) {
+                if (!array_key_exists($value['part_id'], $temp)) {
+                    $temp[$value['part_id']]["name_local"] = $value['name_local'];
+                    $temp[$value['part_id']]["part_name"] = $value['part_name'];
+                    $temp[$value['part_id']]["qty"] = 0;
+                }
+                $temp[$value['part_id']]["name_local"] = $value['name_local'];
+                $temp[$value['part_id']]["part_name"] = $value['part_name'];
+                $temp[$value['part_id']]["qty"] += $value['qty_ng'];
+            }
+
+            foreach (collect($temp)->sortByDesc('qty') as $ke => $valuee) {
+                $group[] = [
+                    'part_id' => $ke,
+                    'name_local' => $valuee["name_local"],
+                    'part_name' => $valuee["part_name"],
+                    'qty_ng' => $valuee["qty"]
+                ];
+            }
+
+            return view('/report/r_pareto_ng_bypart', ['record' => count($data->get()), "data" => $group, "typeNg" => $request->typeNg]);
+        } else {
+            return view('/report/r_pareto_ng_bypart', ['record' => 0]);
+        }
     }
 }

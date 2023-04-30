@@ -51,4 +51,9 @@ class Parts extends Model
     {
         return $this->hasMany(DetailSJ::class, 'part_id', 'id');
     }
+
+    public function packing()
+    {
+        return $this->hasMany(PackingTransaction::class, 'part_id', 'id');
+    }
 }
