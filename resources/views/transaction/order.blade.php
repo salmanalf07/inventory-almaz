@@ -248,7 +248,7 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6], // table ke 1
                 },
                 // {
                 //     "visible": false,
@@ -260,6 +260,13 @@
                         return moment(oTable).format('DD-MM-YYYY');
                     }
                 },
+                {
+                    orderable: false,
+                    targets: 0
+                }
+            ],
+            order: [
+                [2, "desc"]
             ],
             "buttons": ["add",
                 {
@@ -267,9 +274,6 @@
                     text: '<i class="fas fa-border-all"></i>'
                 }
 
-            ],
-            "order": [
-                [2, "desc"]
             ],
             ajax: {
                 url: '{{ url("json_order") }}'
@@ -294,10 +298,8 @@
                     name: 'customer.code'
                 },
                 {
-                    "data": null,
-                    "render": function(data, type, row) {
-                        return (((data['count'] / data["total_price"]) * 100) + "%")
-                    }
+                    data: 'count',
+                    name: 'count',
                 },
                 {
                     data: 'status',

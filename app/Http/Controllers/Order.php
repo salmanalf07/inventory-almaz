@@ -15,7 +15,7 @@ class Order extends Controller
 {
     public function json()
     {
-        $data = ModelsOrder::with('customer', 'DetailOrder.Parts')->orderBy('created_at', 'DESC');
+        $data = ModelsOrder::with('customer');
 
         return DataTables::of($data)
             ->addColumn('count', function ($data) {
@@ -24,7 +24,8 @@ class Order extends Controller
                 ])->get();
 
                 $count = SJ::select('grand_total')->whereIn("id", $order->toArray())->sum('grand_total');
-                return $count;
+                $countt = round((($count / $data->total_price) * 100), 2);
+                return $countt . " %";
             })
             ->addColumn('aksi', function ($data) {
                 return
