@@ -94,7 +94,7 @@
                 <td class="right qtysum sum{{$key}}">{{number_format($total['total_fg'] + $total['total_ng'],0,".",".")}}</td>
                 @endforeach
                 <td>
-                    <div class="right amount" id="qtytotal"></div>
+                    <div class="right amount total_fg" id="qtytotal"></div>
                 </td>
             </tr>
             <tr>
@@ -121,7 +121,7 @@
                 <td class="right ngcolect qtysum sum{{$key}}" id="ng">{{$ng['total_ng']}}</td>
                 @endforeach
                 <td>
-                    <div class="right amount" id="qtytotal"></div>
+                    <div class="right amount total_ng" id="qtytotal"></div>
                 </td>
             </tr>
             <tr>
@@ -134,16 +134,16 @@
                 </td>
             </tr>
             <tr>
-                <td>%NG</td>
+                <td>persenNG</td>
                 @foreach($data as $key => $ng)
                 @if($ng['total_fg'] != 0)
-                <td class="right nggcolect amountt">{{round(($ng['total_ng'] / ($ng['total_fg'] + $ng['total_ng'])),2)."%"}}</td>
+                <td class="right nggcolect amountt">{{round(($ng['total_ng'] / ($ng['total_fg'] + $ng['total_ng']))*100,2)."%"}}</td>
                 @else
                 <td class="right nggcolect amountt">0%</td>
                 @endif
                 @endforeach
                 <td class="right">
-                    <div id="total"></div>
+                    <div id="persenNg"></div>
                 </td>
             </tr>
             <tr>
@@ -383,6 +383,13 @@
                 //console.log(totmarks);
 
             });
+            //hitung persenNg
+            var total_fg = document.getElementsByClassName("total_fg")[0].innerHTML;
+            var total_ng = document.getElementsByClassName("total_ng")[0].innerHTML;
+
+            $('#persenNg').html(((total_ng.replaceAll(".", "") / total_fg.replaceAll(".", "")) * 100).toFixed(2) + "%")
+            console.log();
+            //end
             //total
             var sum = 0;
             $(".amountt").each(function() {
@@ -543,7 +550,7 @@
                 labels: date,
 
                 datasets: [{
-                        label: "%NG",
+                        label: "persenNG",
                         data: ngg,
                         backgroundColor: "rgba(255, 26, 104, 0.2)",
                         borderColor: "rgba(255, 26, 104, 1)",
