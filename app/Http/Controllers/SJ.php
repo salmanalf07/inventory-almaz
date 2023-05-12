@@ -218,6 +218,24 @@ class SJ extends Controller
                 $track->tracking = "Closed";
                 $track->save();
             }
+            if ($request->status == "BAYAR_RETUR") {
+                $post->status = $request->status;
+                //edit type detail_sjs
+                $detail_idd = DetailSJ::select('id')->where(['sj_id' => $id])->get();
+
+                foreach ($detail_idd as $data) {
+                    DetailSJ::where(['id' => $data->id])
+                        ->update([
+                            'type'  => $request->status,
+                        ]);
+                }
+                //tracking
+                $track = new TrackSj();
+                $track->sj_id = $id;
+                $track->user_id = Auth::user()->id;
+                $track->tracking = "BAYAR_RETUR";
+                $track->save();
+            }
             $post->save();
 
             if (count(collect($request->part_id)->filter()->all()) != 0) {
