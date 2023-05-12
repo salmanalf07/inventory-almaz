@@ -127,10 +127,10 @@
             <tr>
                 <td>TARGET</td>
                 @foreach($data as $key => $ng)
-                <td class="right qtysum sum{{$key}}">1%</td>
+                <td class="right qtysum sum{{$key}}">2%</td>
                 @endforeach
                 <td>
-                    <div class="right">1%</div>
+                    <div class="right">2%</div>
                 </td>
             </tr>
             <tr>
@@ -542,7 +542,7 @@
             $(".nggcolect").each(function() {
                 ngg.push(parseFloat($(this).text()));
                 // ngg.push(1.4);
-                target.push(1);
+                target.push(2);
             });
             //console.log(ng)
             //cart ng

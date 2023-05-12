@@ -210,7 +210,7 @@
                     <?php }
                     } ?>
                     <td class="center" id="qtytotal"></td>
-                    <td class="right">
+                    <td class="right" style="white-space: nowrap;">
                         <nav class="container">
                             <div>Rp</div>
                             <div class="price"><?php
@@ -223,7 +223,7 @@
                                                 ?></div>
                         </nav>
                     </td>
-                    <td class="right">
+                    <td class="right" style="white-space: nowrap;">
                         <nav class="container">
                             <div>Rp</div>
                             <div class="amount" id="amount"></div>
