@@ -70,6 +70,20 @@
     <div class="chart-container">
         <canvas id="myChart"></canvas>
     </div>
+    <div>
+        <table>
+            <tr>
+                <td width="20%" class="center bold">PART NAME</td>
+                <td width="20%" class="center bold">QTY NG</td>
+            </tr>
+            @foreach($data as $item)
+            <tr>
+                <td>{{$item['name_local']}}</td>
+                <td>{{$item['qty_ng']}}</td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

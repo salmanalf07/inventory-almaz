@@ -89,7 +89,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>Total</td>
+                <td>TOTAL</td>
                 @foreach($data as $key => $total)
                 <td class="right qtysum sum{{$key}}">{{number_format($total['total_fg'] + $total['total_ng'],0,".",".")}}</td>
                 @endforeach
