@@ -731,11 +731,10 @@ class SJ extends Controller
         $datdetail = array();
         if (count($datau) > 0) {
             foreach ($datau as $kee => $datan) {
+                $datdetail[$kee]["code"] = $datan->code;
+                $datdetail[$kee]['PO']["no_po"] = $datan->no_po;
+                $datdetail[$kee]["PO"]["total"] = $datan->total;
                 foreach ($datauu as $ke => $data) {
-
-                    $datdetail[$kee]["code"] = $datan->code;
-                    $datdetail[$kee]['PO']["no_po"] = $datan->no_po;
-                    $datdetail[$kee]["PO"]["total"] = $datan->total;
                     if ($datan->code . $datan->order_id  == $data->code . $data->order_id) {
                         $datdetail[$kee]["codee"] = $data->code;
                         $datdetail[$kee]['INV']["no_po"] = $data->no_po;
@@ -746,7 +745,7 @@ class SJ extends Controller
         }
 
         return view('/report/r_tracking_invoice', ['judul' => "User", "datdetail" => $datdetail, "date" => $request->date]);
-        //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
+        //return ['dat' => $datau, 'data' => $datauu, 'datdetail' => $datdetail];
         //return $datdetaill;
         //return $dataa;
     }
