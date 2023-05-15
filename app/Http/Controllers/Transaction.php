@@ -56,7 +56,7 @@ class Transaction extends Controller
             if ($record === null) {
                 $no_transaction = 1;
             } else {
-                if (date("Y-m-d", strtotime($record->date_transaction)) != date("Y-m-d")) {
+                if (date("Y-m-d", strtotime($record->date_transaction)) != date("Y-m-d", strtotime(str_replace('/', '-', $request->date_transaction)))) {
                     $no_transaction = 1;
                 } else {
                     $no_transaction = $record->no_transaction + 1;
