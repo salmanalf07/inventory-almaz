@@ -231,6 +231,9 @@ class Invoice extends Controller
                 if ($post->no_faktur != $request->no_faktur) {
                     $post->no_faktur = $request->no_faktur;
                 }
+                if ($request->book_year) {
+                    $post->book_year = $request->book_year;
+                }
                 if ($request->date_inv) {
                     $post->date_inv = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_inv)));
                 }
