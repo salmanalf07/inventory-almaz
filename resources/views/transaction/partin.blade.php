@@ -158,7 +158,7 @@
                                                         <select name="type[]" id="type0" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -185,7 +185,7 @@
                                                         <select name="type[]" id="type1" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -212,7 +212,7 @@
                                                         <select name="type[]" id="type2" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -239,7 +239,7 @@
                                                         <select name="type[]" id="type3" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -266,7 +266,7 @@
                                                         <select name="type[]" id="type4" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -293,7 +293,7 @@
                                                         <select name="type[]" id="type5" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -320,7 +320,7 @@
                                                         <select name="type[]" id="type6" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -347,7 +347,7 @@
                                                         <select name="type[]" id="type7" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -374,7 +374,7 @@
                                                         <select name="type[]" id="type8" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
@@ -401,7 +401,7 @@
                                                         <select name="type[]" id="type9" class="form-control select2" style="width: 100%;">
                                                             <option selected="selected">Choose...</option>
                                                             <option value="WIP">WIP</option>
-                                                            <option value="REPAINTING">REPAINTING</option>
+                                                            <option value="REMOVER">REMOVER</option>
                                                             <option value="RETURN">RETURN</option>
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
