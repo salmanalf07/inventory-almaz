@@ -347,6 +347,12 @@
                                 </li>
                             </ul>
                         </li>
+                        <?php
+                        $module = Auth::user()->module;
+                        $data = explode(",", $module);
+                        ?>
+                        @if($module)
+                        @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
                         <li class="nav-item {{ request()->is('orders', 'invoices') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="fas fa-cart-arrow-down nav-icon"></i>
@@ -356,13 +362,16 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                                @foreach($data as $dataa)
+                                @if($dataa == "ORDER" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="orders" class="nav-link {{ request()->is('orders') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Order</p>
                                     </a>
                                 </li>
-                                @if(Auth::user()->role != "ADMIN")
+                                @endif
+                                @if($dataa == "INVOICE" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="invoices" class="nav-link {{ request()->is('invoices') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -370,8 +379,11 @@
                                     </a>
                                 </li>
                                 @endif
+                                @endforeach
                             </ul>
                         </li>
+                        @endif
+                        @if(!empty(array_intersect($data, ['PARTIN','PRODUCTION','PAROUT','ALL'])))
                         <li class="nav-item {{ request()->is('partin', 'sj', 'production','process','packing','stockfg') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-cubes"></i>
@@ -381,12 +393,16 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                                @foreach($data as $dataa)
+                                @if($dataa == "PARTIN" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="partin" class="nav-link {{ request()->is('partin') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Part In</p>
                                     </a>
                                 </li>
+                                @endif
+                                @if($dataa == "PRODUCTION" || $dataa == "ALL")
                                 <li class="nav-item {{ request()->is('production','process','packing','stockfg') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -422,14 +438,20 @@
                                         </li>
                                     </ul>
                                 </li>
+                                @endif
+                                @if($dataa == "PARTOUT" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="sj" class="nav-link {{ request()->is('sj') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Part Out</p>
                                     </a>
                                 </li>
+                                @endif
+                                @endforeach
                             </ul>
                         </li>
+                        @endif
+                        @if(!empty(array_intersect($data, ['CUSTOMER','PART','ALL'])))
                         <li class="nav-item {{ request()->is('customer', 'parts','hisparts') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-database"></i>
@@ -439,12 +461,16 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                                @foreach($data as $dataa)
+                                @if($dataa == "CUSTOMER" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="customer" class="nav-link {{ request()->is('customer') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Customer</p>
                                     </a>
                                 </li>
+                                @endif
+                                @if($dataa == "PART" || $dataa == "ALL")
                                 <li class="nav-item {{ request()->is('parts','hisparts') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -460,19 +486,20 @@
                                                 <p>Master</p>
                                             </a>
                                         </li>
-                                        @if(Auth::user()->role != "ADMIN")
                                         <li class="nav-item">
                                             <a href="hisparts" class="nav-link {{ request()->is('hisparts') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>History</p>
                                             </a>
                                         </li>
-                                        @endif
                                     </ul>
                                 </li>
+                                @endif
+                                @endforeach
                             </ul>
                         </li>
-                        @if(Auth::user()->role != "ADMIN")
+                        @endif
+                        @if(!empty(array_intersect($data, ['USER','CAR','DRIVER','application','productStd','ALL'])))
                         <li class="nav-item {{ request()->is('user', 'car', 'driver','application','productStd') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
@@ -482,38 +509,51 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                                @foreach($data as $dataa)
+                                @if($dataa == "USER" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="user" class="nav-link {{ request()->is('user') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>User</p>
                                     </a>
                                 </li>
+                                @endif
+                                @if($dataa == "CAR" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="car" class="nav-link {{ request()->is('car') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Car</p>
                                     </a>
                                 </li>
+                                @endif
+                                @if($dataa == "driver" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="driver" class="nav-link {{ request()->is('driver') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Driver</p>
                                     </a>
                                 </li>
+                                @endif
+                                @if($dataa == "application" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="application" class="nav-link {{ request()->is('application') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Application</p>
                                     </a>
                                 </li>
+                                @endif
+                                @if($dataa == "productStd" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="productStd" class="nav-link {{ request()->is('productStd') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Production Standard</p>
                                     </a>
                                 </li>
+                                @endif
+                                @endforeach
                             </ul>
                         </li>
+                        @endif
                         @endif
                     </ul>
                 </nav>

@@ -14,6 +14,11 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
+                <?php
+                $module = Auth::user()->module;
+                $data = explode(",", $module);
+                ?>
+                @if(!empty(array_intersect($data, ['PARTIN','ALL'])))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <h4 class="font-weight-bold mb-0" style="text-align: center;">PART IN</h4>
@@ -34,6 +39,8 @@
                         <a href="partin" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                @endif
+                @if(!empty(array_intersect($data, ['PARTOUT','ALL'])))
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -55,6 +62,8 @@
                         <a href="sj" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                @endif
+                @if(!empty(array_intersect($data, ['PRODUCTION','ALL'])))
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -74,6 +83,8 @@
                         <a href="process" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                @endif
+                @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -96,6 +107,7 @@
                     </div>
                 </div>
                 <!-- ./col -->
+                @endif
             </div>
             <!-- /.row -->
             <!-- Main row -->
