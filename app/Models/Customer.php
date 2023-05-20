@@ -47,4 +47,9 @@ class Customer extends Model
     {
         return $this->hasMany(Parts::class, 'cust_id', 'id');
     }
+
+    public function invoice()
+    {
+        return $this->hasMany(invoice::class, 'cust_id', 'id');
+    }
 }

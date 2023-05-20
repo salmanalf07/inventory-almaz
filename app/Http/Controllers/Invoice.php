@@ -431,7 +431,7 @@ class Invoice extends Controller
         $dataa->whereHas('out.DetailSJ', function ($query) use ($request) {
             if ($request->date != null) {
                 $date = explode(" - ", $request->date);
-                $datein = date("Y-m-d", strtotime(str_replace('/', '-', "$date[0]")));
+                $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
                 $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
 
                 $query->wherebetween('date_sj', [$datein, $dateen]);
@@ -558,5 +558,88 @@ class Invoice extends Controller
         return DataTables::of($data)
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
+    }
+
+    public function topInvoice(Request $request)
+    {
+
+        $data = ModelsInvoice::with('customer');
+
+        if ($request->cust_id != '#') {
+            $data->where('cust_id', $request->cust_id);
+        }
+
+        if ($request->date != null) {
+            $date = explode(" - ", $request->date);
+            $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
+            $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
+            $data->wherebetween('jatuh_tempo', [$datein, $dateen]);
+        }
+
+        if ($request->status != "#") {
+            $data->where('status', $request->status);
+        }
+
+        $dataa = $data->get();
+
+        $ar = array();
+        $arr = array();
+        foreach ($dataa as $key => $attt) {
+            $ar[] = $attt->jatuh_tempo;
+            $arr[] = $attt['customer']->code;
+            $unique_data = array_unique($ar);
+            $unique_dataa = array_unique($arr);
+        }
+
+        $filteredData = [];
+
+
+        foreach ($unique_data as $ke => $value) {
+            if ($value !== null && strtotime($value) >= strtotime($datein) && strtotime($value) <= strtotime($dateen)) {
+                $filteredData[$ke] = $value;
+            }
+        }
+        usort($filteredData, function ($a, $b) {
+            return strtotime($a) - strtotime($b);
+        });
+
+        $datdetail = array();
+        $temp = [];
+        $group = [];
+
+        foreach ($unique_dataa as $key => $at) {
+            $datdetail[$key]["customer"] = $at;
+            foreach ($filteredData as $keyy => $date) {
+                foreach ($dataa as $keyyy => $data) {
+                    $datdetail[$key]['uniqe'][$keyy]["date"] = $date;
+                    if ($date . $at == $data->jatuh_tempo . $data['customer']->code) {
+                        if (!array_key_exists($data->jatuh_tempo, $temp)) {
+                            $temp[$data->jatuh_tempo]["total"] = 0;
+                            $temp[$data->jatuh_tempo]["code"] = 0;
+                            $temp[$data->jatuh_tempo]["status"] = 0;
+                        }
+                        $temp[$data->jatuh_tempo]["total"] += $data->total_harga;
+                        $temp[$data->jatuh_tempo]["code"] = $data['customer']->code;
+                        $temp[$data->jatuh_tempo]["status"] = $data->status;
+                    }
+                    foreach ($temp as $ke => $value) {
+                        $group[] = [
+                            'jatuh_tempo' => $ke,
+                            'total_harga' => $value["total"],
+                            'code' => $value["code"],
+                            'status' => $value["status"],
+                        ];
+                    }
+                    for ($i = 0; $i < count($group); $i++) {
+                        if ($date . $at == $group[$i]["jatuh_tempo"] . $group[$i]["code"]) {
+                            $datdetail[$key]['uniqe'][$keyy]['inv_real'][0]['total'] = $group[$i]["total_harga"];
+                            $datdetail[$key]['uniqe'][$keyy]['inv_real'][0]['status'] = $group[$i]["status"];
+                        }
+                    }
+                }
+            }
+        }
+        return view('/rekap/top_invoice', ['judul' => "User", 'datdetail' => $datdetail, 'date' => $request->date]);
+        //return $temp;
     }
 }

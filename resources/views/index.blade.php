@@ -172,7 +172,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item {{ request()->is('dashboard', 'r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice','tracking_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo','r_sumng','r_sumprod') ? 'menu-open' : '' }}">
+                        <li class="nav-item {{ request()->is('dashboard', 'r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice','tracking_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo','r_sumng','r_sumprod','r_topinv') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
@@ -193,7 +193,7 @@
                                 $data = explode(",", $str);
                                 ?>
                                 @if($str)
-                                <li class="nav-item {{ request()->is('r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice','tracking_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo','r_sumng','r_sumprod') ? 'menu-open' : '' }}">
+                                <li class="nav-item {{ request()->is('r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice','tracking_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo','r_sumng','r_sumprod','r_topinv') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>
@@ -338,6 +338,16 @@
                                             <a href="tracking_invoice" class="nav-link {{ request()->is('tracking_invoice') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Tracking Invoice</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    @endif
+                                    @if($dataa == "r_topinv" || $dataa == "ALL")
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="r_topinv" class="nav-link {{ request()->is('r_topinv') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>TOP Invoice</p>
                                             </a>
                                         </li>
                                     </ul>
@@ -558,7 +568,7 @@
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
-            </div>
+    </div>
             <!-- /.sidebar -->
         </aside>
 

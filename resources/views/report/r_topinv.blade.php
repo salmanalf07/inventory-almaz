@@ -27,7 +27,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form id="form-add" method="post" role="form" enctype="multipart/form-data">
+                            <form id="form-add" method="post" role="form" id="form-print" action="top_invoice" enctype="multipart/form-data" target="_blank">
+                                @csrf
                                 <span id="peringatan"></span>
                                 <div class="row">
                                     <div class="col-md-4">
@@ -72,7 +73,7 @@
                                     <div class="col-md-12">
                                         <div class="control-group">
                                             <div class="controls pt-2">
-                                                <button id="in" type="button" class="form-control btn btn-secondary">Search</button>
+                                                <input onclick="reset_form()" id="subpr" class="btn btn-secondary btn-block" type="button" value="Rekap Surat Jalan">
                                             </div>
                                         </div>
                                     </div>
@@ -81,33 +82,6 @@
                             </form>
                         </div>
                     </div>
-                    <div class="card">
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Date</th>
-                                        <th>No Rak</th>
-                                        <th>Customer</th>
-                                        <th>Name Part</th>
-                                        <th>Qty In</th>
-                                        <th>Time Start</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="7" style="text-align:right">Total:</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
                 </div>
                 <!-- /.col -->
             </div>
@@ -121,155 +95,59 @@
 <script src="assets/css/jquery/jquery.min.js"></script>
 <!-- <script src="/js/jquery-3.5.1.js"></script> -->
 <script>
+    //end update
     $(document).ready(function() {
-        $('#reservation').val("")
-        var dateinn, dateenn
-        var oTable = $('#example1').DataTable({
-            processing: true,
-            paging: false,
-            serverSide: true,
-            order: [
-                [1, "asc"]
-            ],
-            dom: 'Bfrtip',
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "columnDefs": [{
-                    "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7], // table ke 1
-                },
-                {
-                    targets: [1],
-                    render: function(oTable) {
-                        return moment(oTable).format('DD/MM/YYYY');
-                    },
-                },
-                {
-                    targets: [6],
-                    render: function(oTable) {
-                        return moment(oTable).format('H:mm:s');
-                    },
-                },
-                {
-                    targets: [7],
-                    render: $.fn.dataTable.render.number('.')
-                },
-            ],
-            buttons: [{
-                    extend: 'excel',
-                    footer: true,
+        // $('#in2,#in3,#in4').hide();
+        // Set option selected onchange
+        $('#cust_id').change(function() {
+            var value = $(this).val();
+            //console.log(value);
+            $.ajax({
+                type: 'POST',
+                url: 'search_order',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'cust_id': $(this).val(),
 
                 },
-                {
-                    extend: 'csv',
-                    footer: true
-                },
-                {
-                    extend: 'pdf',
-                    footer: true
-                },
-                {
-                    extend: 'print',
-                    footer: true
-                }
-            ],
-            footerCallback: function(row, data, start, end, display) {
-                var api = this.api();
-                // Remove the formatting to get integer data for summation
-                var intVal = function(i) {
+                success: function(data) {
+                    $('[name="order_id"]').empty();
+                    $('[name="order_id"]').append('<option value="#">Choose...</option>');
+                    $('[name="order_id"]').append('<option value="blank">BLANK (NO PO)</option>');
+                    $.each(data, function(i) {
+                        $('[name="order_id"]').append('<option value="' + data[i]
+                            .id + '">' + data[i].no_po + '</option>');
+                    })
 
-                    return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
-                        typeof i === 'number' ?
-                        i : 0;
-
-                };
-
-                // Total over all pages
-
-                if (api.column(7).data().length) {
-                    var total = api
-                        .column(7)
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        })
-                } else {
-                    total = 0
-                };
-
-                // Update footer
-                $(api.column(7).footer()).html(
-                    new Intl.NumberFormat().format(total)
-                );
-            },
-            ajax: {
-                url: '{{ url("rekap_production") }}',
-                data: function(d) {
-                    // Retrieve dynamic parameters
-                    var dt_params = $('#example1').data('dt_params');
-                    // Add dynamic parameters to the data object sent to the server
-                    if (dt_params) {
-                        $.extend(d, dt_params);
-                    }
-                }
-            },
-            "fnCreatedRow": function(row, data, index) {
-                $('td', row).eq(0).html(index + 1);
-            },
-            columns: [{
-                    data: 'id',
-                    name: 'id'
                 },
-                {
-                    data: 'transaction.date_transaction',
-                    name: 'transaction.date_transaction'
-                },
-                {
-                    data: 'transaction.no_transaction',
-                    name: 'transaction.no_transaction'
-                },
-                {
-                    data: 'customer.code',
-                    name: 'customer.code'
-                },
-                {
-                    data: 'part.name_local',
-                    name: 'part.name_local'
-                },
-                {
-                    data: 'qty_in',
-                    name: 'qty_in'
-                },
-                {
-                    data: 'transaction.time_start',
-                    name: 'transaction.time_start'
-                },
-                {
-                    data: 'price',
-                    name: 'price'
-                }
-            ],
-        });
-        $('.pt-2').on('click', '#in', function() {
-            var date = $('#reservation').val().split(" - ");
-            // console.log($('#cust_id').val());
-            $('#example1').data('dt_params', {
-                'cust_id': $('#cust_id').val(),
-                'dateinn': date[0],
-                'dateenn': date[1],
-                'status': $('#status').val(),
             });
-            $('#example1').DataTable().draw();
-            reset_form();
+            $.ajax({
+                type: 'POST',
+                url: 'search_invoice',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'cust_id': $(this).val(),
+
+                },
+                success: function(data) {
+                    $('[name="invoice_id"]').empty();
+                    $('[name="invoice_id"]').append('<option value="#">Choose...</option>');
+                    $('[name="invoice_id"]').append('<option value="blank">BLANK (NO INV)</option>');
+                    $.each(data, function(i) {
+                        $('[name="invoice_id"]').append('<option value="' + data[i]
+                            .id + '">' + data[i].no_invoice + '</option>');
+                    })
+
+                },
+            });
+
         });
     });
 </script>
 <script>
     $(function() {
         //Initialize Select2 Elements
-        $('[name="part_id"],#status,#cust_id,#order_id').select2({
+        $('#invoice_id,#status,#cust_id,#order_id').select2({
             placeholder: "Choose..",
             theme: 'bootstrap4'
         })
@@ -305,6 +183,7 @@
     function reset_form() {
         // $('#form-add input').val(null);
         var frm = document.getElementById("form-add");
+        frm.submit();
         frm.reset();
         $('#form-add select').val("#").trigger('change.select2');
         return false;
