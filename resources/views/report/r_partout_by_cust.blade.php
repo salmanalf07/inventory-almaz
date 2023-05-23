@@ -130,22 +130,23 @@
                 <td colspan="2">
                     <img src="./img/tt_invoice.jpg" width="300" alt="">
                 </td>
-                <td class="center bold" style="font-size:20pt" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}">
+                <td class="center bold" style="font-size:20pt" colspan="{{ count($datdetail[0]['uniqe']) + 4 }}">
                     SUMMARY PLAN INVOICE BY SURAT JALAN
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">PERIODE</td>
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="bold">: {{$date}}</td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 4 }}" class="bold">: {{$date}}</td>
             </tr>
             <tr>
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}"></td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 6 }}"></td>
             </tr>
             <tr class="bold">
                 <td class="center" rowspan="2">NO</td>
                 <td class="center" rowspan="2">CUSTOMER</td>
                 <td class="center" colspan="{{ count($datdetail[0]['uniqe']) }}">TANGGAL</td>
                 <td class="center" rowspan="2">TOTA SA</td>
+                <td class="center" rowspan="2">TOTA QTY</td>
                 <td class="center" rowspan="2">GRAND TOTAL</td>
                 <td class="center" rowspan="2">KETERANGAN</td>
             </tr>
@@ -172,15 +173,20 @@
                     <?php foreach (collect($datdetaill['uniqe'])->sortBy('date') as $key => $sj) {
                         $ur[$key] = date('d', strtotime($sj['date']));
                         if (isset($sj['real'])) { ?>
-                            <td style="display: none;" class="right qtysum sum{{$key}}">{{ number_format($sj['real'][0]['total'],0,".",".") }}</td>
-                            <td class="right sasum sadm{{$key}}">{{number_format((float)$sj['real'][0]['sadm'], 2, '.', '') }}</td>
+                            <td class="right qtysum sum{{$key}}">{{ number_format($sj['real'][0]['total'],0,",",",") }}</td>
+                            <td style="display: none;" class="right sasum sadm{{$key}}">{{number_format((float)$sj['real'][0]['sadm'], 2, '.', '') }}</td>
+                            <td style="display: none;" class="right sumqty qtydm{{$key}}">{{$sj['real'][0]['qty']}}</td>
                         <?php } else { ?>
-                            <td style="display: none;" class="right qtysum sum{{$key}}"></td>
-                            <td class="right sasum sadm{{$key}}"></td>
+                            <td class="right qtysum sum{{$key}}"></td>
+                            <td style="display: none;" class="right sasum sadm{{$key}}"></td>
+                            <td style="display: none;" class="right sumqty qtydm{{$key}}"></td>
                     <?php }
                     } ?>
                     <td class="right">
                         <div class="amountsa" id="satotal"></div>
+                    </td>
+                    <td class="right">
+                        <div class="amountqty" id="totalqty"></div>
                     </td>
                     <td class="right">
                         <div class="amount" id="qtytotal"></div>
@@ -200,7 +206,10 @@
                 <?php }
                 ?>
                 <td class="right bold">
-                    <div id="saatotal"></div>
+                    <div id="grandsa"></div>
+                </td>
+                <td class="right bold">
+                    <div id="grandqty"></div>
                 </td>
                 <td class="right bold">
                     <div id="total"></div>
@@ -222,13 +231,13 @@
             $('tr').each(function() {
                 var totmarks = 0;
                 $(this).find('.qtysum').each(function() {
-                    var marks = $(this).text().replaceAll(".", "");
+                    var marks = $(this).text().replaceAll(",", "");
                     if (marks.length !== 0) {
                         totmarks += parseFloat(marks);
 
                     }
                 });
-                $(this).find('#qtytotal').html(totmarks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $(this).find('#qtytotal').html(totmarks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 var totmarkss = 0;
                 $(this).find('.sasum').each(function() {
                     var markss = $(this).text();
@@ -238,6 +247,15 @@
                     }
                 });
                 $(this).find('#satotal').html(totmarkss.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                var totmarksss = 0;
+                $(this).find('.sumqty').each(function() {
+                    var marksss = $(this).text();
+                    if (marksss.length !== 0) {
+                        totmarksss += parseFloat(marksss);
+
+                    }
+                });
+                $(this).find('#totalqty').html(totmarksss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 //console.log(totmarks);
 
             });
@@ -247,12 +265,6 @@
                 sum += parseFloat($(this).text().replace(/\D/g, ""));
             });
 
-            //total SA
-            var sumsa = 0;
-            $(".amount").each(function() {
-                sumsa += $(this).text();
-            });
-
             var tamount = 0;
             $('.qtysum').each(function() {
                 tamount += parseFloat($(this).text().replace(/\D/g, ""));
@@ -260,17 +272,33 @@
             //console.log(tamount);
             $('#total').html((sum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
 
+            //total SA
+            var sumSA = 0;
+            $(".amountsa").each(function() {
+                sumSA += parseFloat($(this).text().replaceAll(",", ""));
+            });
+            $('#grandsa').html((sumSA).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+            //total qty
+            var sumqty = 0;
+            $(".amountqty").each(function() {
+                sumqty += parseFloat($(this).text().replace(/\D/g, ""));
+            });
+            //console.log(tamount);
+            $('#grandqty').html((sumqty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+
+
             var users = <?php echo json_encode($ur); ?>;
             Object.keys(users).forEach(function(k) {
                 //console.log(k + ' - ' + users[k]);
                 var totday = 0;
                 $('.sum' + k).each(function() {
-                    var markss = $(this).text().replaceAll(".", "");
+                    var markss = $(this).text().replaceAll(",", "");
                     if (markss.length !== 0) {
                         totday += parseFloat(markss);
                     }
                 });
-                $('#totall' + k).html((totday).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $('#totall' + k).html((totday).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             });
 
             // Creating a timestamp

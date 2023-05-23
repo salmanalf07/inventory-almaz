@@ -94,6 +94,7 @@ class SJ extends Controller
             $post->user_id = $get_user->id;
             $post->booking_month = $request->booking_month;
             $post->booking_year = $request->booking_year;
+            $post->sadm = 0;
             $post->grand_total = str_replace(",", "", $request->grand_total);
             $post->date_sj = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_sj)));
             if ($request->kembali_sj != "") {
@@ -432,12 +433,14 @@ class SJ extends Controller
         $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
         $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
 
-        $dauu = ModelsSJ::with('customer')->select(
-            "cust_id",
-            DB::raw("(sum(grand_total)) as total"),
-            DB::raw("(sum(sadm)) as sadm"),
-            DB::raw("(DATE_FORMAT(date_sj, '%d-%m-%Y')) as my_date")
-        );
+        $dauu = ModelsSJ::join('detail_sjs', 'sjs.id', '=', 'detail_sjs.sj_id')
+            ->with('customer')->select(
+                "cust_id",
+                DB::raw("(sum(detail_sjs.qty)) as qtytotal"),
+                DB::raw("(sum(grand_total)) as total"),
+                DB::raw("(sum(sjs.sadm)) as sadm"),
+                DB::raw("(DATE_FORMAT(date_sj, '%d-%m-%Y')) as my_date")
+            );
         $dauu->where('status', '!=', 'BAYAR_RETUR');
         if ($request->date != null) {
             $dauu->whereDate('date_sj', '>=', $datein)
@@ -474,6 +477,7 @@ class SJ extends Controller
                         if ($uniqe . $attt == $dauu->my_date . $dauu->customer['code']) {
                             $datdetaill[$key]["uniqe"][$ke]["real"][0]["total"] = $dauu->total;
                             $datdetaill[$key]["uniqe"][$ke]["real"][0]["sadm"] = $dauu->sadm;
+                            $datdetaill[$key]["uniqe"][$ke]["real"][0]["qty"] = $dauu->qtytotal;
                         }
                     }
                 }
