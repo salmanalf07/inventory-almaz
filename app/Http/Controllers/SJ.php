@@ -130,6 +130,7 @@ class SJ extends Controller
                     $angka = rtrim($angka, '0');
                     $angka = rtrim($angka, '.');
                 }
+                $part = Parts::find($part_id[$count]);
                 $data = array(
                     'sj_id' => $post->id,
                     'part_id' => $part_id[$count],
@@ -137,6 +138,7 @@ class SJ extends Controller
                     'qty'  => str_replace(",", "", $qty[$count]),
                     'qty_pack'  => $qty_pack[$count],
                     'type_pack'  => $type_pack[$count],
+                    'sadm' => str_replace(",", "", $qty[$count]) * $part->sa_dm,
                     'total_price'  => $angka,
                     'keterangan'  => $keterangann,
                     'created_at' => date("Y-m-d H:i:s", strtotime('now'))
@@ -266,12 +268,14 @@ class SJ extends Controller
                         $angka = rtrim($angka, '0');
                         $angka = rtrim($angka, '.');
                     }
+                    $part = Parts::find($part_id[$count]);
                     DetailSJ::where(['id' => $detail_id[$count]])
                         ->update([
                             'part_id' => $part_id[$count],
                             'qty'  => str_replace(",", "", $qty[$count]),
                             'qty_pack'  => str_replace(",", "", $qty_pack[$count]),
                             'type_pack'  => str_replace(",", "", $type_pack[$count]),
+                            'sadm' => str_replace(",", "", $qty[$count]) * $part->sa_dm,
                             'total_price'  => $angka,
                             'keterangan'  => $keterangann,
                         ]);

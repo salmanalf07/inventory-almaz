@@ -16,6 +16,7 @@ class DetailSJ extends Model
         'qty',
         'qty_pack',
         'type_pack',
+        'sadm',
         'total_price'
     ];
 
