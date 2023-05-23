@@ -146,6 +146,12 @@ class SJ extends Controller
 
                 $insert[] = $data;
             }
+            $sadm = DetailSJ::where('sj_id', $post->id)->sum('sadm');
+
+            ModelsSJ::where(['id' => $post->id])
+                ->update([
+                    'sadm' => number_format((float)$sadm, 2, '.', ''),
+                ]);
 
             DetailSJ::insert($insert);
             $track = new TrackSj();
@@ -280,6 +286,13 @@ class SJ extends Controller
                             'keterangan'  => $keterangann,
                         ]);
                 }
+
+                $sadm = DetailSJ::where('sj_id', $id)->sum('sadm');
+
+                ModelsSJ::where(['id' => $id])
+                    ->update([
+                        'sadm' => number_format((float)$sadm, 2, '.', ''),
+                    ]);
 
                 $track = new TrackSj();
                 $track->sj_id = $id;
@@ -422,6 +435,7 @@ class SJ extends Controller
         $dauu = ModelsSJ::with('customer')->select(
             "cust_id",
             DB::raw("(sum(grand_total)) as total"),
+            DB::raw("(sum(sadm)) as sadm"),
             DB::raw("(DATE_FORMAT(date_sj, '%d-%m-%Y')) as my_date")
         );
         $dauu->where('status', '!=', 'BAYAR_RETUR');
@@ -459,6 +473,7 @@ class SJ extends Controller
                         $datdetaill[$key]["uniqe"][$ke]["date"] = $uniqe;
                         if ($uniqe . $attt == $dauu->my_date . $dauu->customer['code']) {
                             $datdetaill[$key]["uniqe"][$ke]["real"][0]["total"] = $dauu->total;
+                            $datdetaill[$key]["uniqe"][$ke]["real"][0]["sadm"] = $dauu->sadm;
                         }
                     }
                 }

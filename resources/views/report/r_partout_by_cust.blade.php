@@ -130,21 +130,22 @@
                 <td colspan="2">
                     <img src="./img/tt_invoice.jpg" width="300" alt="">
                 </td>
-                <td class="center bold" style="font-size:20pt" colspan="{{ count($datdetail[0]['uniqe']) + 2 }}">
+                <td class="center bold" style="font-size:20pt" colspan="{{ count($datdetail[0]['uniqe']) + 3 }}">
                     SUMMARY PLAN INVOICE BY SURAT JALAN
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">PERIODE</td>
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 2 }}" class="bold">: {{$date}}</td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 3 }}" class="bold">: {{$date}}</td>
             </tr>
             <tr>
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 4 }}"></td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 5 }}"></td>
             </tr>
             <tr class="bold">
                 <td class="center" rowspan="2">NO</td>
                 <td class="center" rowspan="2">CUSTOMER</td>
                 <td class="center" colspan="{{ count($datdetail[0]['uniqe']) }}">TANGGAL</td>
+                <td class="center" rowspan="2">TOTA SA</td>
                 <td class="center" rowspan="2">GRAND TOTAL</td>
                 <td class="center" rowspan="2">KETERANGAN</td>
             </tr>
@@ -171,11 +172,16 @@
                     <?php foreach (collect($datdetaill['uniqe'])->sortBy('date') as $key => $sj) {
                         $ur[$key] = date('d', strtotime($sj['date']));
                         if (isset($sj['real'])) { ?>
-                            <td class="right qtysum sum{{$key}}">{{ number_format($sj['real'][0]['total'],0,".",".") }}</td>
+                            <td style="display: none;" class="right qtysum sum{{$key}}">{{ number_format($sj['real'][0]['total'],0,".",".") }}</td>
+                            <td class="right sasum sadm{{$key}}">{{number_format((float)$sj['real'][0]['sadm'], 2, '.', '') }}</td>
                         <?php } else { ?>
-                            <td class="right qtysum sum{{$key}}"></td>
+                            <td style="display: none;" class="right qtysum sum{{$key}}"></td>
+                            <td class="right sasum sadm{{$key}}"></td>
                     <?php }
                     } ?>
+                    <td class="right">
+                        <div class="amountsa" id="satotal"></div>
+                    </td>
                     <td class="right">
                         <div class="amount" id="qtytotal"></div>
                     </td>
@@ -193,6 +199,9 @@
                     </td>
                 <?php }
                 ?>
+                <td class="right bold">
+                    <div id="saatotal"></div>
+                </td>
                 <td class="right bold">
                     <div id="total"></div>
                 </td>
@@ -219,8 +228,16 @@
 
                     }
                 });
-                //var price = $(this).find('.price').text();
                 $(this).find('#qtytotal').html(totmarks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                var totmarkss = 0;
+                $(this).find('.sasum').each(function() {
+                    var markss = $(this).text();
+                    if (markss.length !== 0) {
+                        totmarkss += parseFloat(markss);
+
+                    }
+                });
+                $(this).find('#satotal').html(totmarkss.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                 //console.log(totmarks);
 
             });
@@ -230,11 +247,17 @@
                 sum += parseFloat($(this).text().replace(/\D/g, ""));
             });
 
+            //total SA
+            var sumsa = 0;
+            $(".amount").each(function() {
+                sumsa += $(this).text();
+            });
+
             var tamount = 0;
             $('.qtysum').each(function() {
                 tamount += parseFloat($(this).text().replace(/\D/g, ""));
             });
-            console.log(tamount);
+            //console.log(tamount);
             $('#total').html((sum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
 
             var users = <?php echo json_encode($ur); ?>;

@@ -17,6 +17,8 @@ class SJ extends Model
         'cust_id',
         'car_id',
         'driver_id',
+        'sadm',
+        'grand_total',
         'user_id',
         'date_sj',
         'kembali_sj',
