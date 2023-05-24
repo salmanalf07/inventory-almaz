@@ -433,12 +433,12 @@ class SJ extends Controller
         $datein = date("Y-m-d", strtotime(str_replace('/', '-', $date[0])));
         $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
 
-        $dauu = ModelsSJ::join('detail_sjs', 'sjs.id', '=', 'detail_sjs.sj_id')
+        $dauu = ModelsSJ::leftJoin('detail_sjs', 'sjs.id', '=', 'detail_sjs.sj_id')
             ->with('customer')->select(
                 "cust_id",
                 DB::raw("(sum(detail_sjs.qty)) as qtytotal"),
-                DB::raw("(sum(grand_total)) as total"),
-                DB::raw("(sum(sjs.sadm)) as sadm"),
+                DB::raw("(sum(DISTINCT grand_total)) as total"),
+                DB::raw("(sum(DISTINCT sjs.sadm)) as sadm"),
                 DB::raw("(DATE_FORMAT(date_sj, '%d-%m-%Y')) as my_date")
             );
         $dauu->where('status', '!=', 'BAYAR_RETUR');
