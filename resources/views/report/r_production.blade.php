@@ -30,7 +30,7 @@
                             <form id="form-add" method="post" role="form" enctype="multipart/form-data">
                                 <span id="peringatan"></span>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="control-group">
                                             <label class="control-label">Customer</label>
                                             <div class="controls">
@@ -46,6 +46,16 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="control-group">
+                                            <label class="control-label">Part Name</label>
+                                            <div class="controls">
+                                                <select name="part_id" id="part_id" class="form-control">
+                                                    <option value="#" selected="selected">Choose...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="control-group">
                                             <label>Date Range</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -57,7 +67,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="control-group">
                                             <label class="control-label">Status</label>
                                             <div class="controls">
@@ -257,12 +267,36 @@
             // console.log($('#cust_id').val());
             $('#example1').data('dt_params', {
                 'cust_id': $('#cust_id').val(),
+                'part_id': $('#part_id').val(),
                 'dateinn': date[0],
                 'dateenn': date[1],
                 'status': $('#status').val(),
             });
             $('#example1').DataTable().draw();
             reset_form();
+        });
+
+        $('#cust_id').change(function() {
+            var value = $(this).val();
+            console.log(value);
+            $.ajax({
+                type: 'POST',
+                url: 'search_part',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'cust_id': $(this).val(),
+
+                },
+                success: function(data) {
+                    $('[name="part_id"]').empty();
+                    $('[name="part_id"]').append('<option value="#">Choose...</option>');
+                    $.each(data, function(i) {
+                        $('[name="part_id"]').append('<option value="' + data[i].id + '">' + data[i].name_local + '</option>');
+                    })
+
+                },
+            });
+
         });
     });
 </script>

@@ -221,6 +221,9 @@ class Transaction extends Controller
                 $query->where('cust_id', $request->cust_id);
             });
         }
+        if ($request->part_id != "#") {
+            $dataa->where('part_id', $request->part_id);
+        }
         if ($request->dateinn && $request->dateenn) {
             $dataa->whereHas('Transaction', function ($query) use ($request) {
                 $query->whereDate('date_transaction', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->dateinn))))
