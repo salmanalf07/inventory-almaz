@@ -39,7 +39,7 @@
                                         <th>Part Name</th>
                                         <th>Price</th>
                                         <th>Sa Dm</th>
-                                        <th>Qty Pack</th>
+                                        <th>Qty Hanger</th>
                                         <th>Type Pack</th>
                                         <th>Information</th>
                                         <th>Aksi</th>
@@ -54,7 +54,7 @@
                                         <th>Part Name</th>
                                         <th>Price</th>
                                         <th>Sa Dm</th>
-                                        <th>Qty Pack</th>
+                                        <th>Qty Hanger</th>
                                         <th>Type Pack</th>
                                         <th>Information</th>
                                         <th>Aksi</th>
@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="control-group">
                                     <label class="control-label">Sa Dm</label>
                                     <div class="controls">
@@ -140,7 +140,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="control-group">
+                                    <label class="control-label">Qty Hanger</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="qty_hanger" id="qty_hanger" placeholder="Type something here..." class="span15">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="control-group">
                                     <label class="control-label">Qty Pack</label>
                                     <div class="controls">
@@ -343,8 +351,8 @@
                     name: 'sa_dm'
                 },
                 {
-                    data: 'qty_pack',
-                    name: 'qty_pack'
+                    data: 'qty_hanger',
+                    name: 'qty_hanger'
                 },
                 {
                     data: 'type_pack',
@@ -438,6 +446,7 @@
                 $('#part_name').val(data[0].part_name);
                 AutoNumeric.getAutoNumericElement('#price').set(data[0].price);
                 $('#sa_dm').val(data[0].sa_dm);
+                $('#qty_hanger').val(data[0].qty_hanger);
                 $('#qty_pack').val(data[0].qty_pack);
                 $('#type_pack').val(data[0].type_pack);
                 $('#information').val(data[0].information);

@@ -65,6 +65,7 @@ class Parts extends Controller
             $post->part_name = $request->part_name;
             $post->price = $angka;
             $post->sa_dm = $request->sa_dm;
+            $post->qty_hanger = $request->qty_hanger;
             $post->qty_pack = $request->qty_pack;
             $post->type_pack = $request->type_pack;
             $post->information = $request->information;
@@ -124,6 +125,7 @@ class Parts extends Controller
             $post->part_no = $request->part_no;
             $post->part_name = $request->part_name;
             $post->sa_dm = $request->sa_dm;
+            $post->qty_hanger = $request->qty_hanger;
             $post->qty_pack = $request->qty_pack;
             $post->type_pack = $request->type_pack;
             $post->information = $request->information;

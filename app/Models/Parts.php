@@ -18,6 +18,7 @@ class Parts extends Model
         'part_name',
         'price',
         'sa_dm',
+        'qty_hanger',
         'qty_pack',
         'type_pack',
         'information',
