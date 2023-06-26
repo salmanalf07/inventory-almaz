@@ -74,7 +74,7 @@
     </section>
     <!-- /.content -->
     <!-- Modal user -->
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none ;">
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none ;" data-focus="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -183,7 +183,7 @@
             </div>
         </div>
     </div>
-    <div id="mass" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="massLabel" aria-hidden="true" style="display: none ;">
+    <div id="mass" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="massLabel" aria-hidden="true" style="display: none ;" data-focus="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -669,7 +669,7 @@
         //Initialize Select2 Elements
         $('.select2').select2({
             theme: 'bootstrap4',
-            dropdownParent: $('#mass')
+
         })
         $('#reservation').daterangepicker({
                 locale: {

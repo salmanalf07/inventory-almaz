@@ -172,6 +172,113 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+                        <?php
+                        $module = Auth::user()->module;
+                        $data = explode(",", $module);
+                        ?>
+                        @if($module)
+                        @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
+                        <li class="nav-item {{ request()->is('bensinTol','r_bensinTol','pettyCash','r_pettyCash','uMakan','r_uMakan','akuns', 'jenisPengeluaran','r_akunBiaya') ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-money" aria-hidden="true"></i>
+                                <p>
+                                    KAS
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @foreach($data as $dataa)
+                                @if($dataa == "REPORT_KAS" || $dataa == "ALL")
+                                <li class="nav-item {{ request()->is('r_bensinTol','r_pettyCash','r_uMakan','r_akunBiaya') ? 'menu-open' : '' }}">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Report
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="r_bensinTol" class="nav-link  {{ request()->is('r_bensinTol') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Bensin & Tol</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="r_pettyCash" class="nav-link {{ request()->is('r_pettyCash') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Petty Cash</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="r_uMakan" class="nav-link {{ request()->is('r_uMakan') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Uang Makan</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="r_akunBiaya" class="nav-link {{ request()->is('r_akunBiaya') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Akun Biaya</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @endif
+                                @if($dataa == "BENSINTOL" || $dataa == "ALL")
+                                <li class="nav-item">
+                                    <a href="bensinTol" class="nav-link {{ request()->is('bensinTol') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Bensin & TOL</p>
+                                    </a>
+                                </li>
+                                @endif
+                                @if($dataa == "PETTYCASH" || $dataa == "ALL")
+                                <li class="nav-item">
+                                    <a href="pettyCash" class="nav-link {{ request()->is('pettyCash') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Petty Cash</p>
+                                    </a>
+                                </li>
+                                @endif
+                                @if($dataa == "uMakan" || $dataa == "ALL")
+                                <li class="nav-item">
+                                    <a href="uMakan" class="nav-link {{ request()->is('uMakan') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Uang Makan</p>
+                                    </a>
+                                </li>
+                                @endif
+                                @if($dataa == "settingKas" || $dataa == "ALL")
+                                <li class="nav-item {{ request()->is('akuns','jenisPengeluaran') ? 'menu-open' : '' }}">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Setting
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="akuns" class="nav-link  {{ request()->is('akuns') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Akun</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="jenisPengeluaran" class="nav-link {{ request()->is('jenisPengeluaran') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Jenis Pengeluaran</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @endif
+                                @endforeach
+                            </ul>
+                        </li>
+                        @endif
+                        @endif
                         <li class="nav-item {{ request()->is('dashboard', 'r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice','tracking_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo','r_sumng','r_sumprod','r_topinv') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -568,7 +675,7 @@
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
-    </div>
+            </div>
             <!-- /.sidebar -->
         </aside>
 
@@ -640,6 +747,8 @@
     <!-- Clock -->
     <script src="assets/js/clock.js"></script>
     <script src="assets/js/autoNumeric.min.js"></script>
+    <script src="assets/js/ribuan.js"></script>
+    <script src="/assets/js/formatNumber.js"></script>
 
     <script>
         $(function() {

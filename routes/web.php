@@ -1,23 +1,29 @@
 <?php
 
+use App\Http\Controllers\Akun;
 use App\Http\Controllers\Application as ControllersApplication;
+use App\Http\Controllers\BensinTol;
 use App\Http\Controllers\Car;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\Driver;
 use App\Http\Controllers\EarlyStock;
 use App\Http\Controllers\HistoryPart;
 use App\Http\Controllers\Invoice;
+use App\Http\Controllers\JenisPengeluaran;
 use App\Http\Controllers\Order as ControllersOrder;
 use App\Http\Controllers\PackingTransaction;
 use App\Http\Controllers\PartIn;
 use App\Http\Controllers\Parts;
+use App\Http\Controllers\PettyCash;
 use App\Http\Controllers\Production;
 use App\Http\Controllers\ProductionStd;
 use App\Http\Controllers\SJ;
 use App\Http\Controllers\Stock as ControllersStock;
 use App\Http\Controllers\Transaction;
+use App\Http\Controllers\Umakan;
 use App\Http\Controllers\User;
 use App\Imports\CustomersImport;
+use App\Models\Akun as ModelsAkun;
 use App\Models\Application;
 use App\Models\Car as ModelsCar;
 use App\Models\Customer as ModelsCustomer;
@@ -27,6 +33,7 @@ use App\Models\DetailSJ;
 use App\Models\DetailTransaction;
 use App\Models\Driver as ModelsDriver;
 use App\Models\Invoice as ModelsInvoice;
+use App\Models\JenisPengeluaran as ModelsJenisPengeluaran;
 use App\Models\NgTransaction;
 use App\Models\Order;
 use App\Models\PartIn as ModelsPartIn;
@@ -426,3 +433,105 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/store_production', [Prod
 Route::middleware(['auth:sanctum', 'verified'])->post('/edit_production', [Production::class, 'edit']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_production/{id}', [Production::class, 'update']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_production/{id}', [Production::class, 'destroy']);
+
+
+
+
+//KAS
+
+//Akun
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/akuns', function () {
+    return view('/kas/setting/kasAkun', ['judul' => "KAS Akun"]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_akun', [Akun::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_akun', [Akun::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_akun', [Akun::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_akun/{id}', [Akun::class, 'update']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_akun/{id}', [Akun::class, 'destroy']);
+//End Akun
+//Jenis Pengeluaran
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/jenisPengeluaran', function () {
+    return view('/kas/setting/jenisPengeluaran', ['judul' => "JenisPengeluaran"]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_jenisPengeluaran', [JenisPengeluaran::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_jenisPengeluaran', [JenisPengeluaran::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_jenisPengeluaran', [JenisPengeluaran::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_jenisPengeluaran/{id}', [JenisPengeluaran::class, 'update']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_jenisPengeluaran/{id}', [JenisPengeluaran::class, 'destroy']);
+//End Jenis Pengeluaran
+//Bensin Tol
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/bensinTol', function () {
+    $jenisPengeluaran = ModelsJenisPengeluaran::where('status', 'ACTIV')->get();
+    $akun = ModelsAkun::where('status', 'ACTIV')->get();
+    return view('/kas/bensinTol', ['judul' => "Bensin & Tol", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_bensinTol', [BensinTol::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_bensinTol', [BensinTol::class, 'storeBensinTol']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_bensinTol', [BensinTol::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_bensinTol/{id}', [BensinTol::class, 'storeBensinTol']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_bensinTol/{id}', [BensinTol::class, 'destroy']);
+Route::middleware(['auth:sanctum', 'verified', 'report:r_bensinTol'])->get('/r_bensinTol', function () {
+    return view('/kas/report/r_bensinTol', ['judul' => "Rekap Kas Bensin & Tol", 'customer' => $cust,]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/bensinTolReport', [BensinTol::class, 'bensinTolReport']);
+//End Bensin Tol
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/pettyCash', function () {
+    $jenisPengeluaran = ModelsJenisPengeluaran::where('status', 'ACTIV')->get();
+    $akun = ModelsAkun::where('status', 'ACTIV')->get();
+    return view('/kas/pettyCash', ['judul' => "Petty Cash", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_pettyCash', [PettyCash::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_pettyCash', [PettyCash::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_pettyCash', [PettyCash::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_pettyCash/{id}', [PettyCash::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_pettyCash/{id}', [PettyCash::class, 'destroy']);
+Route::middleware(['auth:sanctum', 'verified', 'report:r_pettyCash'])->get('/r_pettyCash', function () {
+    return view('/kas/report/r_pettyCash', ['judul' => "Rekap Petty Cash"]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/pettyCashReport', [PettyCash::class, 'pettyCashReport']);
+//End Petty Cash
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/uMakan', function () {
+    $jenisPengeluaran = ModelsJenisPengeluaran::where('status', 'ACTIV')->get();
+    $akun = ModelsAkun::where('status', 'ACTIV')->get();
+    return view('/kas/uMakan', ['judul' => "Uang Makan", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_uMakan', [Umakan::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_uMakan', [Umakan::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_uMakan', [Umakan::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_uMakan/{id}', [Umakan::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_uMakan/{id}', [Umakan::class, 'destroy']);
+Route::middleware(['auth:sanctum', 'verified', 'report:r_uMakan'])->get('/r_uMakan', function () {
+    return view('/kas/report/r_uMakan', ['judul' => "Rekap Uang Makan"]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/uMakanReport', [Umakan::class, 'uMakanReport']);
+//End Uang Makan
+
+
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/sadm', function () {
+    $detsj =  DetailSJ::get();
+    foreach ($detsj as $data) {
+        $parts = ModelsParts::find($data->part_id);
+        if ($parts->sa_dm != null) {
+            $sadm = $parts->sa_dm;
+        } else {
+            $sadm = 0;
+        }
+
+        DetailSJ::where(['id' => $data->id])
+            ->update([
+                'sadm' => $data->qty * $sadm,
+            ]);
+    }
+
+    $sj = ModelsSJ::get();
+
+    foreach ($sj as $data) {
+        $sadm = DetailSJ::where('sj_id', $data->id)->sum('sadm');
+
+        ModelsSJ::where(['id' => $data->id])
+            ->update([
+                'sadm' => number_format((float)$sadm, 2, '.', ''),
+            ]);
+    }
+    return $sj;
+});
