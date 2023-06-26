@@ -38,6 +38,7 @@ use App\Models\NgTransaction;
 use App\Models\Order;
 use App\Models\PartIn as ModelsPartIn;
 use App\Models\Parts as ModelsParts;
+use App\Models\Pengeluaran;
 use App\Models\ProductionStd as ModelsProductionStd;
 use App\Models\SJ as ModelsSJ;
 use App\Models\Stock;
@@ -507,6 +508,26 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_uMakan'])->get('/r_uMak
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/uMakanReport', [Umakan::class, 'uMakanReport']);
 //End Uang Makan
+Route::middleware(['auth:sanctum', 'verified', 'report:r_saldoAkhir'])->get('/r_saldoAkhir', function () {
+    //bensinTol
+    $dataaBensinTol = Pengeluaran::where('month', date("m"))
+        ->whereYear('date', date("Y"));
+    $bensinTol = $dataaBensinTol->where('typeInput', 'BensinTol')->get();
+    $sisaBensinTol = $bensinTol->sum('debit') - $bensinTol->sum('kredit');
+    //pettyCash
+    $dataaPettyCash = Pengeluaran::where('month', date("m"))
+        ->whereYear('date', date("Y"));
+    $pettyCash = $dataaPettyCash->where('typeInput', 'PettyCash')->get();
+    $sisaPettyCash = $pettyCash->sum('debit') - $pettyCash->sum('kredit');
+    //UMakan
+    $dataaUMakan = Pengeluaran::where('month', date("m"))
+        ->whereYear('date', date("Y"));
+    $uMakan = $dataaUMakan->where('typeInput', 'UMakan')->get();
+    $sisaUMakan = $uMakan->sum('debit') - $uMakan->sum('kredit');
+
+    $totalSeluruh = $sisaBensinTol + $sisaPettyCash + $sisaUMakan;
+    return view('/kas/report/r_saldoAkhir', ['judul' => "Rekap Saldo Akhir", 'sisaBensinTol' => $sisaBensinTol, 'sisaPettyCash' => $sisaPettyCash, 'sisaUMakan' => $sisaUMakan, 'totalSeluruh' => $totalSeluruh]);
+});
 
 
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/sadm', function () {

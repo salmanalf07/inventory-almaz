@@ -178,7 +178,7 @@
                         ?>
                         @if($module)
                         @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
-                        <li class="nav-item {{ request()->is('bensinTol','r_bensinTol','pettyCash','r_pettyCash','uMakan','r_uMakan','akuns', 'jenisPengeluaran','r_akunBiaya') ? 'menu-open' : '' }}">
+                        <li class="nav-item {{ request()->is('r_saldoAkhir','bensinTol','r_bensinTol','pettyCash','r_pettyCash','uMakan','r_uMakan','akuns', 'jenisPengeluaran','r_akunBiaya') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-money" aria-hidden="true"></i>
                                 <p>
@@ -189,7 +189,7 @@
                             <ul class="nav nav-treeview">
                                 @foreach($data as $dataa)
                                 @if($dataa == "REPORT_KAS" || $dataa == "ALL")
-                                <li class="nav-item {{ request()->is('r_bensinTol','r_pettyCash','r_uMakan','r_akunBiaya') ? 'menu-open' : '' }}">
+                                <li class="nav-item {{ request()->is('r_saldoAkhir','r_bensinTol','r_pettyCash','r_uMakan','r_akunBiaya') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>
@@ -198,6 +198,12 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="r_saldoAkhir" class="nav-link  {{ request()->is('r_saldoAkhir') ? 'active' : '' }}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Saldo Akhir</p>
+                                            </a>
+                                        </li>
                                         <li class="nav-item">
                                             <a href="r_bensinTol" class="nav-link  {{ request()->is('r_bensinTol') ? 'active' : '' }}">
                                                 <i class="far fa-dot-circle nav-icon"></i>

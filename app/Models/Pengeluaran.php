@@ -15,6 +15,7 @@ class Pengeluaran extends Model
         'driver_id',
         'cust_id',
         'month',
+        'typeInput',
         'date',
         'uraian',
         'debit',
