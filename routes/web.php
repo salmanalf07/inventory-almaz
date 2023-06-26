@@ -471,7 +471,7 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/edit_bensinTol', [Bensin
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_bensinTol/{id}', [BensinTol::class, 'storeBensinTol']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_bensinTol/{id}', [BensinTol::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_bensinTol'])->get('/r_bensinTol', function () {
-    return view('/kas/report/r_bensinTol', ['judul' => "Rekap Kas Bensin & Tol", 'customer' => $cust,]);
+    return view('/kas/report/r_bensinTol', ['judul' => "Rekap Kas Bensin & Tol"]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/bensinTolReport', [BensinTol::class, 'bensinTolReport']);
 //End Bensin Tol
