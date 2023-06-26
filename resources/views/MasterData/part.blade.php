@@ -668,7 +668,8 @@
     $(function() {
         //Initialize Select2 Elements
         $('.select2').select2({
-            theme: 'bootstrap4'
+            theme: 'bootstrap4',
+            dropdownParent: $('#mass')
         })
         $('#reservation').daterangepicker({
                 locale: {
