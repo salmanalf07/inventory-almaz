@@ -203,7 +203,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="control-group">
-                                    <label class="control-label">Jenis Pengeluaran</label>
+                                    <label class="control-label">Akun</label>
                                     <div class="controls">
                                         <select name="pengeluaran_id" id="pengeluaran_id" class="form-control select2" style="width: 100%;">
                                             <option selected="selected" value="#">--SELECT--</option>
@@ -214,11 +214,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-7">
                                 <div class="control-group">
                                     <label class="control-label">Uraian</label>
                                     <div class="controls">
                                         <input class="form-control" type="Text" name="uraian" id="uraian" placeholder="Type something here..." class="span15">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="control-group">
+                                    <label class="control-label">Driver</label>
+                                    <div class="controls">
+                                        <select name="driver_id" id="driver_id" class="form-control select2">
+                                            <option value="" selected="selected">Choose...</option>
+                                            @foreach($driver as $driver)
+                                            <option value="{{$driver->id}}">{{$driver->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -442,6 +455,7 @@
                 $('#pengeluaran_id').val(data.pengeluaran_id).trigger('change');
                 $('#month').val(data.month).trigger('change');
                 $('#uraian').val(data.uraian);
+                $('#driver_id').val(data.driver_id).trigger('change');
                 $('#customer').val(data.customer);
                 $('#debit').val(formatNumberr(data.debit));
                 $('#kredit').val(formatNumberr(data.kredit));

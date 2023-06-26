@@ -62,6 +62,7 @@ class PettyCash extends Controller
             $post->pengeluaran_id = $request->pengeluaran_id;
             $post->month = $request->month;
             $post->uraian = $request->uraian;
+            $post->driver_id = $request->driver_id;
             $post->debit = str_replace(".", "", $request->debit);
             $post->kredit = str_replace(".", "", $request->kredit);
             $post->keterangan = $request->keterangan;

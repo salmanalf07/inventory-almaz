@@ -451,7 +451,7 @@ Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_akun/{id}', [Ak
 //End Akun
 //Jenis Pengeluaran
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/jenisPengeluaran', function () {
-    return view('/kas/setting/jenisPengeluaran', ['judul' => "JenisPengeluaran"]);
+    return view('/kas/setting/JenisPengeluaran', ['judul' => "JenisPengeluaran"]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/json_jenisPengeluaran', [JenisPengeluaran::class, 'json']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/store_jenisPengeluaran', [JenisPengeluaran::class, 'store']);
@@ -463,7 +463,8 @@ Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_jenisPengeluara
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/bensinTol', function () {
     $jenisPengeluaran = ModelsJenisPengeluaran::where('status', 'ACTIV')->get();
     $akun = ModelsAkun::where('status', 'ACTIV')->get();
-    return view('/kas/bensinTol', ['judul' => "Bensin & Tol", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun]);
+    $driver = ModelsDriver::select(['name', 'id'])->get();
+    return view('/kas/bensinTol', ['judul' => "Bensin & Tol", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun, 'driver' => $driver]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/json_bensinTol', [BensinTol::class, 'json']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/store_bensinTol', [BensinTol::class, 'storeBensinTol']);

@@ -203,7 +203,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="control-group">
-                                    <label class="control-label">Jenis Pengeluaran</label>
+                                    <label class="control-label">Akun</label>
                                     <div class="controls">
                                         <select name="pengeluaran_id" id="pengeluaran_id" class="form-control select2" style="width: 100%;">
                                             <option selected="selected" value="#">--SELECT--</option>

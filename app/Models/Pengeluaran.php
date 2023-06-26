@@ -12,6 +12,7 @@ class Pengeluaran extends Model
 
     protected $fillable = [
         'pengeluaran_id',
+        'driver_id',
         'month',
         'date',
         'uraian',
