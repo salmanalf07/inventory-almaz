@@ -54,23 +54,26 @@ class BensinTol extends Controller
             $request->validate([
                 'date' => ['required', 'string', 'max:255'],
                 'pengeluaran_id' => ['required', 'string', 'max:255'],
-                'akun_id' => ['required', 'string', 'max:255'],
                 'uraian' => ['required', 'string', 'max:255'],
+                'status' => ['required', 'string', 'max:255'],
             ]);
 
             $post = Pengeluaran::findOrNew($request->id);
             $post->typeInput = $request->typeInput;
-            $post->date = date("Y-m-d", strtotime(str_replace('/', '-', $request->date)));
+            $post->date = date("Y-m-d H:i", strtotime(str_replace('/', '-',  $request->date)));
             $post->pengeluaran_id = $request->pengeluaran_id;
+            $post->cust_id = $request->cust_id;
+            $post->driver_id = $request->driver_id;
             $post->month = $request->month;
             $post->uraian = $request->uraian;
-            $post->customer = $request->customer;
             $post->debit = str_replace(".", "", $request->debit);
             $post->kredit = str_replace(".", "", $request->kredit);
-            if ($request->akun_id != "#") {
-                $post->akun_id = $request->akun_id;
-            }
             $post->keterangan = $request->keterangan;
+            if ($request->status != "#") {
+                $post->status = $request->status;
+            } else {
+                $post->status = "OPEN";
+            }
             $post->save();
 
             $data = [$post];

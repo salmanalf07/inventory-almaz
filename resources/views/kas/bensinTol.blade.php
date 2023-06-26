@@ -239,7 +239,12 @@
                                 <div class="control-group">
                                     <label class="control-label">Customer</label>
                                     <div class="controls">
-                                        <input class="form-control" type="Text" name="customer" id="customer" placeholder="Type something here..." class="span15">
+                                        <select name="cust_id" id="cust_id" class="form-control select2">
+                                            <option value="" selected="selected">Choose...</option>
+                                            @foreach($cust as $cust)
+                                            <option value="{{$cust->id}}">{{$cust->code}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -259,11 +264,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <div class="control-group">
                                     <label class="control-label">Jenis Kendaraan</label>
                                     <div class="controls">
                                         <input class="form-control" type="Text" name="keterangan" id="keterangan" placeholder="Type something here..." class="span15">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="control-group">
+                                    <label class="control-label">Status</label>
+                                    <div class="controls">
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="#" selected="selected">Choose...</option>
+                                            <option value="OPEN">OPEN</option>
+                                            <option value="CLOSE">CLOSE</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -287,7 +304,12 @@
             theme: 'bootstrap4'
         })
         $('.date').datetimepicker({
-            format: 'DD/MM/YYYY'
+            pickDate: false,
+            minuteStepping: 30,
+            format: 'DD/MM/YYYY HH:mm',
+            pickTime: true,
+            locale: 'id',
+            use24hours: true
 
         });
         $(".number-input").on("input", function() {
@@ -437,7 +459,9 @@
         var newDateOptions = {
             year: "numeric",
             month: "2-digit",
-            day: "2-digit"
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
         }
         $.ajax({
             type: 'POST',
@@ -451,16 +475,16 @@
 
                 //isi form
                 $('#id').val(data.id);
-                $('#date').val(new Date(data.date).toLocaleString("id-ID", newDateOptions).split(' ')[0]);
+                $('#date').val(new Date(data.date).toLocaleString("id-ID", newDateOptions));
                 $('#pengeluaran_id').val(data.pengeluaran_id).trigger('change');
+                $('#cust_id').val(data.cust_id).trigger('change');
                 $('#month').val(data.month).trigger('change');
                 $('#uraian').val(data.uraian);
                 $('#driver_id').val(data.driver_id).trigger('change');
-                $('#customer').val(data.customer);
                 $('#debit').val(formatNumberr(data.debit));
                 $('#kredit').val(formatNumberr(data.kredit));
-                $('#akun_id').val(data.akun_id).trigger('change');
                 $('#keterangan').val(data.keterangan);
+                $('#status').val(data.status).trigger('change');
 
                 id = $('#id').val();
                 $('.modal-title').text('Edit Data');

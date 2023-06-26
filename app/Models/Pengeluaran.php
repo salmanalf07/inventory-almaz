@@ -13,14 +13,15 @@ class Pengeluaran extends Model
     protected $fillable = [
         'pengeluaran_id',
         'driver_id',
+        'cust_id',
         'month',
         'date',
         'uraian',
-        'customer',
         'debit',
         'kredit',
         'saldo',
         'keterangan',
+        'status'
     ];
 
     public function jenisPengeluaran()

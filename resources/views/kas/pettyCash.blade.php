@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="control-group">
                                     <label class="control-label">Debit</label>
                                     <div class="controls">
@@ -230,7 +230,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="control-group">
                                     <label class="control-label">Kredit</label>
                                     <div class="controls">
@@ -238,11 +238,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="control-group">
                                     <label class="control-label">Keterangan</label>
                                     <div class="controls">
                                         <input class="form-control" type="Text" name="keterangan" id="keterangan" placeholder="Type something here..." class="span15">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="control-group">
+                                    <label class="control-label">Status</label>
+                                    <div class="controls">
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="#" selected="selected">Choose...</option>
+                                            <option value="OPEN">OPEN</option>
+                                            <option value="CLOSE">CLOSE</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -434,6 +446,7 @@
                 $('#kredit').val(formatNumberr(data.kredit));
                 $('#month').val(data.month).trigger('change');
                 $('#keterangan').val(data.keterangan);
+                $('#status').val(data.status).trigger('change');
 
                 id = $('#id').val();
                 $('.modal-title').text('Edit Data');

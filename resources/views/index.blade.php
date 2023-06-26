@@ -748,7 +748,7 @@
     <script src="assets/js/clock.js"></script>
     <script src="assets/js/autoNumeric.min.js"></script>
     <script src="assets/js/ribuan.js"></script>
-    <script src="/assets/js/formatNumber.js"></script>
+    <script src="assets/js/formatNumber.js"></script>
 
     <script>
         $(function() {

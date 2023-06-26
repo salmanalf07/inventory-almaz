@@ -54,6 +54,7 @@ class Umakan extends Controller
                 'pengeluaran_id' => ['required', 'string', 'max:255'],
                 'month' => ['required', 'string', 'max:255'],
                 'uraian' => ['required', 'string', 'max:255'],
+                'status' => ['required', 'string', 'max:255'],
             ]);
 
             $post = Pengeluaran::findOrNew($request->id);
@@ -64,6 +65,11 @@ class Umakan extends Controller
             $post->debit = str_replace(".", "", $request->debit);
             $post->kredit = str_replace(".", "", $request->kredit);
             $post->month = $request->month;
+            if ($request->status != "#") {
+                $post->status = $request->status;
+            } else {
+                $post->status = "OPEN";
+            }
             $post->save();
 
             $data = [$post];
