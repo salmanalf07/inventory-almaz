@@ -264,9 +264,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-3">
                                 <div class="control-group">
-                                    <label class="control-label">Jenis Kendaraan</label>
+                                    <label class="control-label">Car</label>
+                                    <div class="controls">
+                                        <select name="car_id" id="car_id" class="form-control select2">
+                                            <option value="" selected="selected">Choose...</option>
+                                            @foreach($car as $car)
+                                            <option value="{{$car->id}}">{{$car->nopol}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="control-group">
+                                    <label class="control-label">Keterangan</label>
                                     <div class="controls">
                                         <input class="form-control" type="Text" name="keterangan" id="keterangan" placeholder="Type something here..." class="span15">
                                     </div>
@@ -478,6 +491,7 @@
                 $('#date').val(new Date(data.date).toLocaleString("id-ID", newDateOptions));
                 $('#pengeluaran_id').val(data.pengeluaran_id).trigger('change');
                 $('#cust_id').val(data.cust_id).trigger('change');
+                $('#car_id').val(data.car_id).trigger('change');
                 $('#month').val(data.month).trigger('change');
                 $('#uraian').val(data.uraian);
                 $('#driver_id').val(data.driver_id).trigger('change');

@@ -63,6 +63,7 @@ class BensinTol extends Controller
             $post->date = date("Y-m-d H:i", strtotime(str_replace('/', '-',  $request->date)));
             $post->pengeluaran_id = $request->pengeluaran_id;
             $post->cust_id = $request->cust_id;
+            $post->car_id = $request->car_id;
             $post->driver_id = $request->driver_id;
             $post->month = $request->month;
             $post->uraian = $request->uraian;

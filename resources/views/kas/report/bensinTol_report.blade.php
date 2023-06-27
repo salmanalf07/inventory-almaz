@@ -46,11 +46,32 @@
         .kuning {
             background-color: #FFFF00
         }
+
+        .button {
+            margin-bottom: 1rem;
+            color: #fff;
+            background-color: #6c757d;
+            cursor: pointer;
+            box-shadow: none;
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
     </style>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
-    <table>
+    <button class="button" id="exportButton">Export to Excel</button>
+    <table id="tableId">
         <thead>
             <tr class="ungu">
                 <th colspan="8">Laporan Uang Bensin & Tol</th>
@@ -72,9 +93,9 @@
                 <td class="right">{{ date("d-M-Y", strtotime($entry->date)) }}</td>
                 <td>{{ $entry->uraian }}</td>
                 <td>{{ $entry->customer }}</td>
-                <td class="right sumDeb{{$key}}">{{ number_format($entry->debit,0,',','.') }}</td>
-                <td class="right sumKred{{$key}}">{{ number_format($entry->kredit,0,',','.') }}</td>
-                <td class="right">{{ number_format($saldoPerRecord[$entry->id],0,',','.') }}</td>
+                <td class="right sumDeb{{$key}}">{{ number_format($entry->debit,0,',',',') }}</td>
+                <td class="right sumKred{{$key}}">{{ number_format($entry->kredit,0,',',',') }}</td>
+                <td class="right">{{ number_format($saldoPerRecord[$entry->id],0,',',',') }}</td>
                 <td>{{ $entry->jenisPengeluaran->keterangan }}</td>
                 <td>{{ $entry->keterangan }}</td>
             </tr>
@@ -91,6 +112,7 @@
         </tfoot>
     </table>
     <script src="assets/css/jquery/jquery.min.js"></script>
+    <script src="assets/js/exportExcel.js"></script>
     <script>
         $(document).ready(function() {
             var totDeb = 0;
@@ -98,20 +120,20 @@
 
             for (let i = 0; i < "{{count($pettyCashEntries)}}"; i++) {
                 $(".sumDeb" + i).each(function() {
-                    totDeb += parseInt($(this).text().replace(/\./g, ''));
+                    totDeb += parseInt($(this).text().replace(/,/g, ''));
                 });
                 // console.log(totDeb);
-                $('#totDeb').html((totDeb).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $('#totDeb').html((totDeb).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 //total Kredit
                 $(".sumKred" + i).each(function() {
-                    totKred += parseInt($(this).text().replace(/\./g, ''));
+                    totKred += parseInt($(this).text().replace(/,/g, ''));
                 });
                 // console.log(totKred);
-                $('#totKred').html((totKred).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $('#totKred').html((totKred).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             }
             //total Saldo
-            var totSaldo = parseInt($('#totDeb').text().replace(/\./g, '')) - parseInt($('#totKred').text().replace(/\./g, ''));
-            $('#totSaldo').html((totSaldo).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))
+            var totSaldo = parseInt($('#totDeb').text().replace(/,/g, '')) - parseInt($('#totKred').text().replace(/,/g, ''));
+            $('#totSaldo').html((totSaldo).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
         })
     </script>
 

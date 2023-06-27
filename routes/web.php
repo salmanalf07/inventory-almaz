@@ -466,7 +466,8 @@ Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/bensinTol'
     $akun = ModelsAkun::where('status', 'ACTIV')->get();
     $driver = ModelsDriver::select(['name', 'id'])->get();
     $cust = ModelsCustomer::select(['code', 'id'])->get();
-    return view('/kas/bensinTol', ['judul' => "Bensin & Tol", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun, 'driver' => $driver, 'cust' => $cust]);
+    $car = ModelsCar::select(['nopol', 'id'])->get();
+    return view('/kas/bensinTol', ['judul' => "Bensin & Tol", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun, 'driver' => $driver, 'cust' => $cust, 'car' => $car]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/json_bensinTol', [BensinTol::class, 'json']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/store_bensinTol', [BensinTol::class, 'storeBensinTol']);

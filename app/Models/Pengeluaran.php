@@ -14,6 +14,7 @@ class Pengeluaran extends Model
         'pengeluaran_id',
         'driver_id',
         'cust_id',
+        'car_id',
         'month',
         'typeInput',
         'date',
