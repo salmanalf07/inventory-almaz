@@ -115,14 +115,14 @@ class Invoice extends Controller
                 $SJ = SJ::where("invoice_id", "=", $id)->get();
 
                 if (count($invoice)) {
-                    foreach ($invoice as $dataa) {
-                        $del_detail = DetailInvoice::find($dataa->id);
-                        $del_detail->forceDelete();
-                    }
-                    foreach ($SJ as $dataa) {
-                        $del_sj = SJ::find($dataa->id);
-                        $del_sj->invoice_id = null;
-                        $del_sj->save();
+                    // foreach ($invoice as $dataa) {
+                    $del_detail = DetailInvoice::where('invoice_id', $id);
+                    $del_detail->forceDelete();
+                    // }
+                    $del_sj = SJ::where('invoice_id', $id)->get();
+                    foreach ($del_sj as $sj) {
+                        $sj->invoice_id = null;
+                        $sj->save();
                     }
                     for ($count = 0; $count < count($updsj); $count++) {
                         SJ::where('id', '=', $updsj[$count])
