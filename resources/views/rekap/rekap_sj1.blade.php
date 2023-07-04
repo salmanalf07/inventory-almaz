@@ -207,7 +207,7 @@
                     <td class="center">
                         <?php echo $datdetail[$c]['part_no']; ?>
                     </td>
-                    <?php foreach (collect($datdetail[$c]['uniqe'])->sortBy('nosj_link') as $sj) {
+                    <?php foreach (collect($datdetail[$c]['uniqe'])->sortBy('date_sj') as $sj) {
                         if (isset($sj['sj_real'])) { ?>
                             <td class="center qtysum">{{ $sj['sj_real'][0]['qty'] }}</td>
                         <?php } else { ?>
