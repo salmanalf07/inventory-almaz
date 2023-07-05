@@ -14,6 +14,7 @@ use App\Http\Controllers\Order as ControllersOrder;
 use App\Http\Controllers\PackingTransaction;
 use App\Http\Controllers\PartIn;
 use App\Http\Controllers\Parts;
+use App\Http\Controllers\Pengeluaran as ControllersPengeluaran;
 use App\Http\Controllers\PettyCash;
 use App\Http\Controllers\Production;
 use App\Http\Controllers\ProductionStd;
@@ -241,6 +242,12 @@ Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_order/{id}', [C
 Route::middleware(['auth:sanctum', 'verified'])->get('/print_order/{id}', [ControllersOrder::class, 'print_partin']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/count/{id}', [ControllersOrder::class, 'count']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/search_progress_po', [ControllersOrder::class, 'progress_po']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/reportProgress',  function (Request $request) {
+    $get = Order::find($request->id);
+    $cust = ModelsCustomer::select(['code', 'id'])->find($get->cust_id);
+    return view('/report/r_progressPO', ['judul' => "Report Progress PO", 'id' => $request->id, 'cust' => $cust]);
+    //return $request->id;
+});
 //SJ
 Route::middleware(['auth:sanctum', 'verified'])->get('/sj', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
@@ -529,6 +536,11 @@ Route::middleware(['auth:sanctum', 'verified', 'report:r_saldoAkhir'])->get('/r_
     $totalSeluruh = $sisaBensinTol + $sisaPettyCash + $sisaUMakan;
     return view('/kas/report/r_saldoAkhir', ['judul' => "Rekap Saldo Akhir", 'sisaBensinTol' => $sisaBensinTol, 'sisaPettyCash' => $sisaPettyCash, 'sisaUMakan' => $sisaUMakan, 'totalSeluruh' => $totalSeluruh]);
 });
+//r_akunbiaya
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/r_akunBiaya', function () {
+    return view('/kas/report/r_akunBiaya', ['judul' => "Rekap Akun Biaya"]);
+});
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->post('/akunBiayaReport', [ControllersPengeluaran::class, 'r_akunBiaya']);
 
 
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/sadm', function () {

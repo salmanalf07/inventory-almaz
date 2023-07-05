@@ -8,6 +8,7 @@ use App\Models\Order as ModelsOrder;
 use App\Models\Parts;
 use App\Models\SJ;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -36,6 +37,11 @@ class Order extends Controller
                 <div class="dropdown-menu">
                 <button id="edit" data-id="' . $data->id . '" class="dropdown-item">Edit</button>
                 <button id="delete" data-id="' . $data->id . '" class="dropdown-item">Delete</button>
+                <form method="post" role="form" action="reportProgress" enctype="multipart/form-data" formtarget="_blank" target="_blank">
+                <input type="hidden" name="_token" id="csrf-token" value="' . Session::token() . '" />
+                <input class="form-control" type="text" name="id" id="id" value="' . $data->id . '" hidden>
+                <button type="submit" id="reportProgress" data-id="' . $data->id . '" class="dropdown-item">Report Progress</button>
+                </form>
                 </div>
                 </div>';
             })
