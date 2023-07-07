@@ -355,7 +355,7 @@ class Invoice extends Controller
                             $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["price"] = 0;
                         }
                         $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["qty"] += $datan->qty;
-                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["price"] += $datan->total_price;
+                        $temp[$datan->DetailSJ['date_sj'] . "*" . $datan->DetailSJ['nosj'] . "*" . $datan->part_id . "*"]["price"] += floatval($datan->total_price);
                     }
                 }
 
