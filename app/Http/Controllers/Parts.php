@@ -203,7 +203,7 @@ class Parts extends Controller
         if (count($detail_sj) != 0) {
             for ($countt = 0; $countt < count($detail_sj); $countt++) {
                 $post = DetailSJ::where('id', '=', $detail_sj[$countt]->id);
-                if ($request->order_id != "#") {
+                if ($request->order_id != "#" && $request->order_id != "blank") {
                     $partId = $post->first();
                     $order = DetailOrder::where([
                         ['order_id', '=', $request->order_id],
