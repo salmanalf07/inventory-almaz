@@ -802,7 +802,7 @@ class SJ extends Controller
             $detailsj = DetailSJ::where('sj_id', $sjj->id)->sum('total_price');
 
             $update = ModelsSJ::find($sjj->id);
-            $update->grand_total = (int)$detailsj;
+            $update->grand_total = $detailsj;
             $update->save();
         }
 
