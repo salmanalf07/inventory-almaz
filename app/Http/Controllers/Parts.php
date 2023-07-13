@@ -203,9 +203,22 @@ class Parts extends Controller
         if (count($detail_sj) != 0) {
             for ($countt = 0; $countt < count($detail_sj); $countt++) {
                 $post = DetailSJ::where('id', '=', $detail_sj[$countt]->id);
-                $post->update([
-                    'total_price' => $part->price * $detail_sj[$countt]->qty,
-                ]);
+                if ($request->order_id != "#") {
+                    $partId = $post->first();
+                    $order = DetailOrder::where([
+                        ['order_id', '=', $request->order_id],
+                        ['part_id', '=', $partId->part_id],
+                    ])->first();
+
+                    $priceByOrder = $order->price / $order->qty;
+                    $post->update([
+                        'total_price' => $priceByOrder * $detail_sj[$countt]->qty,
+                    ]);
+                } else {
+                    $post->update([
+                        'total_price' => $part->price * $detail_sj[$countt]->qty,
+                    ]);
+                }
                 $ur[] = $detail_sj[$countt]->sj_id;
             };
             $unique_dataa = array_unique($ur);
