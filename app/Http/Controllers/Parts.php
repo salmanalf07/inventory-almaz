@@ -210,10 +210,16 @@ class Parts extends Controller
                         ['part_id', '=', $partId->part_id],
                     ])->first();
 
-                    $priceByOrder = $order->price / $order->qty;
-                    $post->update([
-                        'total_price' => $priceByOrder * $detail_sj[$countt]->qty,
-                    ]);
+                    if ($order) {
+                        $priceByOrder = $order->price / $order->qty;
+                        $post->update([
+                            'total_price' => $priceByOrder * $detail_sj[$countt]->qty,
+                        ]);
+                    } else {
+                        $post->update([
+                            'total_price' => $part->price * $detail_sj[$countt]->qty,
+                        ]);
+                    }
                 } else {
                     $post->update([
                         'total_price' => $part->price * $detail_sj[$countt]->qty,
