@@ -287,6 +287,7 @@
             $('#example1').data('dt_params', {
                 'cust_id': $('#cust_id').val(),
                 'part_id': $('#part_id').val(),
+                'type': $('#type').val(),
                 'dateinn': date[0],
                 'dateenn': date[1],
                 'status': $('#status').val(),
@@ -322,7 +323,7 @@
 <script>
     $(function() {
         //Initialize Select2 Elements
-        $('[name="part_id"],#status,#cust_id,#order_id').select2({
+        $('[name="part_id"],#status,#cust_id,#order_id,#type').select2({
             placeholder: "Choose..",
             theme: 'bootstrap4'
         })
