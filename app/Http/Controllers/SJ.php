@@ -372,7 +372,7 @@ class SJ extends Controller
 
     public function report_partoutt(Request $request)
     {
-        $dataa = DetailSJ::with('DetailSJ', 'part.customer');
+        $dataa = DetailSJ::with('DetailSJ.order', 'part.customer');
         if ($request->cust_id != "#" && $request->type != "#") {
             $dataa->whereRelation('part', 'cust_id', '=', $request->cust_id);
             $dataa->where('type', '=', $request->type);

@@ -101,6 +101,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Date</th>
+                                        <th>No PO</th>
                                         <th>No SJ</th>
                                         <th>Customer</th>
                                         <th>Part Name</th>
@@ -112,7 +113,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="8" style="text-align:right">Total:</th>
+                                        <th colspan="9" style="text-align:right">Total:</th>
                                         <th></th>
                                     </tr>
                                 </tfoot>
@@ -149,7 +150,7 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // table ke 1
                 },
                 {
                     targets: [1],
@@ -190,9 +191,9 @@
 
                 // Total over all pages
 
-                if (api.column(8).data().length) {
+                if (api.column(9).data().length) {
                     var total = api
-                        .column(8)
+                        .column(9)
                         .data()
                         .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
@@ -202,7 +203,7 @@
                 };
 
                 // Update footer
-                $(api.column(8).footer()).html(
+                $(api.column(9).footer()).html(
                     new Intl.NumberFormat().format(total)
                 );
             },
@@ -228,6 +229,17 @@
                     data: 'detail_s_j.date_sj',
                     name: 'detail_s_j.date_sj'
                 },
+                {
+                    data: function(row) {
+                        if (row.detail_s_j.order && row.detail_s_j.order.no_po) {
+                            return row.detail_s_j.order.no_po; // Mengembalikan nilai properti name jika ada
+                        } else {
+                            return ""; // Mengembalikan string kosong jika tidak ada nilai yang valid
+                        }
+                    },
+                    name: 'detail_s_j.order.no_po'
+                },
+
                 {
                     data: 'detail_s_j.nosj',
                     name: 'detail_s_j.nosj'
