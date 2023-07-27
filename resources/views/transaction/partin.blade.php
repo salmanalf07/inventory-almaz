@@ -138,9 +138,9 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 5%">#</th>
-                                                    <th style="width: 40%">Part Name</th>
+                                                    <th style="width: 35%">Part Name</th>
                                                     <th style="width: 15%;">Type</th>
-                                                    <th style="width: 10%">Price</th>
+                                                    <th style="width: 15%">Price</th>
                                                     <th style="width: 10%">Qty</th>
                                                     <th style="width: 20%">Total Price</th>
                                                 </tr>
@@ -172,6 +172,9 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price0" readonly class="span15">
                                                     </td>
+                                                    <td>
+                                                        <button id="upd_pr0" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
+                                                    </td>
                                                 </tr>
                                                 <tr id="tr2">
                                                     <td>2.</td>
@@ -198,6 +201,9 @@
                                                     </td>
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price1" readonly class="span15">
+                                                    </td>
+                                                    <td>
+                                                        <button id="upd_pr1" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
                                                     </td>
                                                 </tr>
                                                 <tr id="tr3">
@@ -226,6 +232,9 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price2" readonly class="span15">
                                                     </td>
+                                                    <td>
+                                                        <button id="upd_pr2" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
+                                                    </td>
                                                 </tr>
                                                 <tr id="tr4">
                                                     <td>4.</td>
@@ -252,6 +261,9 @@
                                                     </td>
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price3" readonly class="span15">
+                                                    </td>
+                                                    <td>
+                                                        <button id="upd_pr3" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
                                                     </td>
                                                 </tr>
                                                 <tr id="tr5">
@@ -280,6 +292,9 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price4" readonly class="span15">
                                                     </td>
+                                                    <td>
+                                                        <button id="upd_pr4" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
+                                                    </td>
                                                 </tr>
                                                 <tr id="tr6">
                                                     <td>6.</td>
@@ -306,6 +321,9 @@
                                                     </td>
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price5" readonly class="span15">
+                                                    </td>
+                                                    <td>
+                                                        <button id="upd_pr5" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
                                                     </td>
                                                 </tr>
                                                 <tr id="tr7">
@@ -334,6 +352,9 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price6" readonly class="span15">
                                                     </td>
+                                                    <td>
+                                                        <button id="upd_pr6" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
+                                                    </td>
                                                 </tr>
                                                 <tr id="tr8">
                                                     <td>8.</td>
@@ -360,6 +381,9 @@
                                                     </td>
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price7" readonly class="span15">
+                                                    </td>
+                                                    <td>
+                                                        <button id="upd_pr7" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
                                                     </td>
                                                 </tr>
                                                 <tr id="tr9">
@@ -388,6 +412,9 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price8" readonly class="span15">
                                                     </td>
+                                                    <td>
+                                                        <button id="upd_pr8" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
+                                                    </td>
                                                 </tr>
                                                 <tr id="tr10">
                                                     <td>10.</td>
@@ -414,6 +441,9 @@
                                                     </td>
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price9" readonly class="span15">
+                                                    </td>
+                                                    <td>
+                                                        <button id="upd_pr9" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -926,7 +956,31 @@
                 },
             });
         });
+
     });
+
+    function update_price(i) {
+        //console.log(i.id);
+        var matches = i.id.match(/\d+/);
+        var total_price = $('#total_price' + matches[0]).val();
+        var price = $("#price" + matches[0]).val();
+        var qty = $('#qty' + matches[0]).val();
+        // console.log(total_price);
+        // console.log(qty);
+        $.ajax({
+            type: 'POST',
+            url: 'search_price',
+            data: {
+                '_token': "{{ csrf_token() }}",
+                'id': $('#part_id' + matches[0]).val(),
+
+            },
+            success: function(data) {
+                AutoNumeric.getAutoNumericElement('#price' + matches[0]).set(data);
+                AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
+            },
+        });
+    };
 </script>
 <script>
     $(function() {
