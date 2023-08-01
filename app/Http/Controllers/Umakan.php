@@ -11,7 +11,7 @@ class Umakan extends Controller
 {
     public function json(Request $request)
     {
-        $dataa = Pengeluaran::with('jenisPengeluaran')->orderBy('created_at', 'DESC');
+        $dataa = Pengeluaran::with('jenisPengeluaran');
         if ($request->month != "" && $request->month) {
             $dataa->where('month', $request->month);
             $dataa->where('typeInput', $request->query('query'));
