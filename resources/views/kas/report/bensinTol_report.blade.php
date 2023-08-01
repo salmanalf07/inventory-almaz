@@ -74,40 +74,42 @@
     <table id="tableId">
         <thead>
             <tr class="ungu">
-                <th colspan="8">Laporan Uang Bensin & Tol</th>
+                <th colspan="9">Laporan Uang Bensin & Tol</th>
             </tr>
             <tr class="emas">
                 <th>Tanggal</th>
                 <th>Uraian</th>
                 <th>Customer</th>
+                <th>Driver</th>
+                <th>No. POL</th>
                 <th>Debit</th>
                 <th>Kredit</th>
                 <th>Saldo</th>
                 <th>Akun</th>
-                <th>Jenis Kendaraan</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($pettyCashEntries as $key => $entry)
             <tr class="putih">
-                <td class="right">{{ date("d-M-Y", strtotime($entry->date)) }}</td>
+                <td class="right">{{ date("d-M-Y H:i", strtotime($entry->date)) }}</td>
                 <td>{{ $entry->uraian }}</td>
-                <td>{{ $entry->customer }}</td>
+                <td>{{ $entry->customers != null?$entry->customers->code:"" }}</td>
+                <td>{{ $entry->drivers != null?$entry->drivers->name:"" }}</td>
+                <td>{{ $entry->cars != null?$entry->cars->nopol:"" }}</td>
                 <td class="right sumDeb{{$key}}">{{ number_format($entry->debit,0,',',',') }}</td>
                 <td class="right sumKred{{$key}}">{{ number_format($entry->kredit,0,',',',') }}</td>
                 <td class="right">{{ number_format($saldoPerRecord[$entry->id],0,',',',') }}</td>
                 <td>{{ $entry->jenisPengeluaran->keterangan }}</td>
-                <td>{{ $entry->keterangan }}</td>
             </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr class="kuning">
-                <th class="right" colspan="3">Total</th>
+                <th class="right" colspan="5">Total</th>
                 <th class="right" id="totDeb"></th>
                 <th class="right" id="totKred"></th>
                 <th class="right" id="totSaldo"></th>
-                <th colspan="2"></th>
+                <th></th>
             </tr>
         </tfoot>
     </table>

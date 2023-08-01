@@ -30,4 +30,16 @@ class Pengeluaran extends Model
     {
         return $this->belongsTo(JenisPengeluaran::class, 'pengeluaran_id', 'id');
     }
+    public function drivers()
+    {
+        return $this->belongsTo(Driver::class, 'driver_id', 'id');
+    }
+    public function customers()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'id');
+    }
+    public function cars()
+    {
+        return $this->belongsTo(Car::class, 'car_id', 'id');
+    }
 }

@@ -103,7 +103,7 @@ class BensinTol extends Controller
     public function bensinTolReport(Request $request)
     {
         // Mendapatkan semua entri petty cash
-        $data = Pengeluaran::with('jenisPengeluaran')->where('typeInput', 'BensinTol');
+        $data = Pengeluaran::with('jenisPengeluaran', 'cars', 'drivers', 'customers')->where('typeInput', 'BensinTol');
         if ($request->month_search != "#") {
             $data->where('month', $request->month_search);
         }
@@ -132,7 +132,7 @@ class BensinTol extends Controller
         }
 
         return view('/kas/report/bensinTol_report', compact('pettyCashEntries', 'saldoPerRecord'));
-
+        //return $pettyCashEntries;
         //return view('petty_cash_report', compact('saldoPerTanggal'));
     }
 }
