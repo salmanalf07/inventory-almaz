@@ -419,6 +419,9 @@
                     name: 'aksi'
                 }
             ],
+            order: [
+                [0, 'desc'],
+            ],
             drawCallback: function(settings) {
                 var json = settings.json;
                 if (json.hasOwnProperty('saldoAkhir')) {
