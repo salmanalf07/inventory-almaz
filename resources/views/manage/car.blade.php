@@ -105,7 +105,10 @@
                                 <div class="control-group">
                                     <label class="control-label">Status</label>
                                     <div class="controls">
-                                        <input class="form-control" type="text" name="status" id="status" placeholder="Type something here..." class="span15">
+                                        <select name="status" id="status" class="form-control">
+                                            <option selected="selected" value="ACTIVE">ACTIVE</option>
+                                            <option value="NONACTIV">NONACTIV</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +259,7 @@
                 $('#nopol').val(data.nopol);
                 $('#brand').val(data.brand);
                 $('#type').val(data.type);
-                $('#status').val(data.status);
+                $('#status').val(data.status).trigger('change');
 
                 id = $('#id').val();
 

@@ -649,7 +649,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "driver" || $dataa == "ALL")
+                                @if($dataa == "DRIVER" || $dataa == "ALL")
                                 <li class="nav-item">
                                     <a href="driver" class="nav-link {{ request()->is('driver') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>

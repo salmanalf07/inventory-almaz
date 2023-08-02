@@ -14,6 +14,7 @@ class Driver extends Model
         'name',
         'phone',
         'sim',
+        'status',
     ];
 
     public function driver()

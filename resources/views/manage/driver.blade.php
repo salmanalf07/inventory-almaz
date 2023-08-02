@@ -36,6 +36,7 @@
                                         <th>Name</th>
                                         <th>Phone</th>
                                         <th>SIM</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -45,6 +46,7 @@
                                         <th>Name</th>
                                         <th>Phone</th>
                                         <th>SIM</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
@@ -96,6 +98,17 @@
                                     <label class="control-label">SIM</label>
                                     <div class="controls">
                                         <input class="form-control" type="text" name="sim" id="sim" placeholder="Type something here..." class="span15">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="control-group">
+                                    <label class="control-label">Status</label>
+                                    <div class="controls">
+                                        <select name="status" id="status" class="form-control">
+                                            <option selected="selected" value="ACTIVE">ACTIVE</option>
+                                            <option value="NONACTIV">NONACTIV</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -183,6 +196,10 @@
                     name: 'sim'
                 },
                 {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
                     data: 'aksi',
                     name: 'aksi'
                 }
@@ -242,6 +259,7 @@
                 $('#name').val(data.name);
                 $('#phone').val(data.phone);
                 $('#sim').val(data.sim);
+                $('#status').val(data.status).trigger('change');
 
                 id = $('#id').val();
 

@@ -36,6 +36,7 @@ class Driver extends Controller
             $post->name = $request->name;
             $post->phone = $request->phone;
             $post->sim = $request->sim;
+            $post->status = $request->status;
             $post->save();
 
             $data = [$post];
@@ -66,6 +67,7 @@ class Driver extends Controller
             $post->name = $request->name;
             $post->phone = $request->phone;
             $post->sim = $request->sim;
+            $post->status = $request->status;
             $post->save();
 
             $data = [$post];
