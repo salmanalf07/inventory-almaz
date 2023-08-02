@@ -420,8 +420,15 @@
                     name: 'drivers.name'
                 },
                 {
-                    data: 'uraian',
-                    name: 'uraian'
+                    "data": "uraian",
+                    "render": function(data, type, row) {
+                        // Example: Change text color to red if status is "OPEN"
+                        if (row.status === "OPEN") {
+                            return '<span style="color: red;">' + data + '</span>';
+                        } else {
+                            return data;
+                        }
+                    }
                 },
                 {
                     data: 'debit',
