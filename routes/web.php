@@ -251,8 +251,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/reportProgress',  functi
 //SJ
 Route::middleware(['auth:sanctum', 'verified'])->get('/sj', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
-    $car = ModelsCar::select(['nopol', 'id'])->get();
-    $driver = ModelsDriver::select(['name', 'id'])->get();
+    $car = ModelsCar::select(['nopol', 'id'])->where('status', 'ACTIVE')->get();
+    $driver = ModelsDriver::select(['name', 'id'])->where('status', 'ACTIVE')->get();
     $sj = ModelsSJ::latest()->first();
     return view('/transaction/sj', ['judul' => "Part Out", 'customer' => $cust, 'car' => $car, 'driver' => $driver, 'sj' => $sj]);
 });
