@@ -120,6 +120,8 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
+                                        <th>Customer</th>
+                                        <th>Driver</th>
                                         <th>Uraian</th>
                                         <th>Debit</th>
                                         <th>Kredit</th>
@@ -131,6 +133,8 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
+                                        <th>Customer</th>
+                                        <th>Driver</th>
                                         <th>Uraian</th>
                                         <th>Debit</th>
                                         <th>Kredit</th>
@@ -360,7 +364,7 @@
             ],
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7], // table ke 1
                 },
                 {
                     targets: [1],
@@ -394,6 +398,26 @@
                 {
                     data: 'date',
                     name: 'date'
+                },
+                {
+                    data: function(row) {
+                        if (row.customers && row.customers.code) {
+                            return row.customers.code; // Mengembalikan nilai properti name jika ada
+                        } else {
+                            return ""; // Mengembalikan string kosong jika tidak ada nilai yang valid
+                        }
+                    },
+                    name: 'customers.code'
+                },
+                {
+                    data: function(row) {
+                        if (row.drivers && row.drivers.name) {
+                            return row.drivers.name; // Mengembalikan nilai properti name jika ada
+                        } else {
+                            return ""; // Mengembalikan string kosong jika tidak ada nilai yang valid
+                        }
+                    },
+                    name: 'drivers.name'
                 },
                 {
                     data: 'uraian',
