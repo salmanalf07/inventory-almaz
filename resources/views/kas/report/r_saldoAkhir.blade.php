@@ -50,7 +50,15 @@
                                 <tr>
                                     <td style="font-weight: bold;">Total</td>
                                     <td>:</td>
-                                    <td>{{number_format($totalSeluruh,0,'.','.')}}</td>
+                                    <td style="text-align:right">{{number_format($totalSeluruh,0,'.','.')}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><br></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Timestamp</td>
+                                    <td style="font-weight: bold;">:</td>
+                                    <td style="font-weight: bold;">{{date('d-m-Y H:i')}}</td>
                                 </tr>
 
                             </table>

@@ -373,7 +373,7 @@
                     }
                 },
                 {
-                    targets: [3, 4],
+                    targets: [5, 6],
                     render: $.fn.dataTable.render.number('.', '.', 0)
                 },
             ],
