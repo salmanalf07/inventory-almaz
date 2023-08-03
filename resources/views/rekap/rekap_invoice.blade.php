@@ -149,7 +149,7 @@
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">PERIODE</td>
-                <td colspan="{{ count($datdetail[0]['uniqe']) + 4 }}" class="bold">: <?php echo strtoupper(tanggal_indonesia($datdetail[0]['uniqe'][0]['date_sj'], 'periode')); ?></td>
+                <td colspan="{{ count($datdetail[0]['uniqe']) + 4 }}" class="bold">: <?php echo strtoupper(tanggal_indonesia($datdetail[0]['uniqe'][max(array_keys($datdetail[0]['uniqe']))]['date_sj'], 'periode')); ?></td>
             </tr>
             <tr>
                 <td colspan="2" class="bold border-right">NO PO</td>
