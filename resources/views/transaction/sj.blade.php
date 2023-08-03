@@ -303,6 +303,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -351,6 +352,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -399,6 +401,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -447,6 +450,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -495,6 +499,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -543,6 +548,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -591,6 +597,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -639,6 +646,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -687,6 +695,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -735,6 +744,7 @@
                                                             <option value="KANTONG">KANTONG</option>
                                                             <option value="BOX-PALLET">BOX-PALLET</option>
                                                             <option value="KRETA-PALLET">KRETA-PALLET</option>
+                                                            <option value="PARTISI-PUTIH">PARTISI-PUTIH</option>
                                                         </select>
                                                     </td>
                                                     <td>
