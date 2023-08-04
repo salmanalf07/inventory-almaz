@@ -62,8 +62,8 @@ class Umakan extends Controller
             $post->date = date("Y-m-d", strtotime(str_replace('/', '-', $request->date)));
             $post->pengeluaran_id = $request->pengeluaran_id;
             $post->uraian = $request->uraian;
-            $post->debit = str_replace(".", "", $request->debit);
-            $post->kredit = str_replace(".", "", $request->kredit);
+            $post->debit = $request->debit == null ? 0 : str_replace(".", "", $request->debit);
+            $post->kredit = $request->kredit == null ? 0 : str_replace(".", "", $request->kredit);
             $post->month = $request->month;
             if ($request->status != "#") {
                 $post->status = $request->status;

@@ -64,8 +64,8 @@ class PettyCash extends Controller
             $post->month = $request->month;
             $post->uraian = $request->uraian;
             $post->driver_id = $request->driver_id;
-            $post->debit = str_replace(".", "", $request->debit);
-            $post->kredit = str_replace(".", "", $request->kredit);
+            $post->debit = $request->debit == null ? 0 : str_replace(".", "", $request->debit);
+            $post->kredit = $request->kredit == null ? 0 : str_replace(".", "", $request->kredit);
             $post->keterangan = $request->keterangan;
             if ($request->status != "#") {
                 $post->status = $request->status;
