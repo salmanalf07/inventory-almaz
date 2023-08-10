@@ -225,6 +225,9 @@ class Invoice extends Controller
                 if ($request->status == "CLOSE") {
                     $post->status = $request->status;
                 }
+                if ($request->status == "OPEN") {
+                    $post->status = $request->status;
+                }
                 if ($post->no_invoice != $request->no_invoice) {
                     $post->no_invoice = $request->no_invoice;
                 }
@@ -455,6 +458,7 @@ class Invoice extends Controller
             if ($request->status != "#") {
                 $query->where('status', $request->status);
             }
+            $query->where('status', '!=', 'BAYAR_RETUR');
         });
 
         $ar = array();
@@ -530,7 +534,7 @@ class Invoice extends Controller
         }
         return view('/rekap/rekap_invoice', ['judul' => "User", 'dat' => $dat, "datdetail" => $datdetail, "po" => $po, 'pajak' => $pajak]);
         //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
-        //return $group;
+        // return $datdetail;
     }
 
     public function report_invoice(Request $request)
