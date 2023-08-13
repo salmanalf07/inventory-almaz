@@ -53,23 +53,43 @@ class Pengeluaran extends Controller
             $unique_dataaa = array_unique($arrr);
         }
         $datdetail = array();
+        sort($unique_dataa);
         foreach ($unique_dataaa as $keyyy => $attt) {
             $datdetail[$keyyy]["pengeluaran"] = $attt;
+
             foreach ($unique_data as $key => $at) {
                 foreach ($unique_dataa as $keyy => $att) {
+                    $found = false; // Menandakan apakah data ditemukan untuk bulan yang sesuai
                     foreach ($data as $ke => $a) {
                         if ($at == $a->year && $att == $a->month && $attt == $a->jenisPengeluaran->id) {
-                            $datdetail[$keyyy]["data"][$ke]["tahun"] = $at;
-                            $datdetail[$keyyy]["data"][$ke]['bulan'] = $a->month;
-                            $datdetail[$keyyy]["data"][$ke]['total'] = $a->total;
-                            //                 $datdetail[$key]["pengeluaran"][$keyy]['jenis pengeluaran'] = $at->jenisPengeluaran->keterangan;
+                            $datdetail[$keyyy]["data"][$ke + 1]["tahun"] = $at;
+                            $datdetail[$keyyy]["data"][$ke + 1]['bulan'] = $a->month;
+                            $datdetail[$keyyy]["data"][$ke + 1]['total'] = $a->total;
+                            $found = true;
                         }
+                    }
+
+                    // Jika data tidak ditemukan untuk bulan yang sesuai, tambahkan entri dengan total 0
+                    if (!$found) {
+                        $datdetail[$keyyy]["data"][] = [
+                            "tahun" => $at,
+                            "bulan" => $att,
+                            "total" => "0"
+                        ];
                     }
                 }
             }
         }
-        $jenisPengeluaran = JenisPengeluaran::get();
+
+        $biayaUmum = JenisPengeluaran::where([
+            ['noUrut', '!=', null],
+            ['group', '=', 'biayaUmum']
+        ])->get();
+        $biayaOpr = JenisPengeluaran::where([
+            ['noUrut', '!=', null],
+            ['group', '=', 'biayaOpr']
+        ])->get();
         //return $datdetail;
-        return view('/kas/report/akunBiayaReport', ['judul' => "User", "datdetail" => $datdetail, 'jenisPengeluaran' => $jenisPengeluaran]);
+        return view('/kas/report/akunBiayaReport', ['judul' => "User", "datdetail" => $datdetail, 'biayaUmum' => $biayaUmum, 'biayaOpr' => $biayaOpr]);
     }
 }
