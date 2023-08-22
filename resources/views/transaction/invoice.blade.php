@@ -82,7 +82,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="reset_form()">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="reset_form('reload')">&times;</button>
                     <h4 class="modal-title" id="myModalLabel">Tambah Data</h4>
                 </div>
                 <div class="modal-body">
@@ -348,7 +348,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="reset_form()">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="reset_form('reload');">Close</button>
                     <button id="in" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
@@ -748,7 +748,8 @@
                 } else {
                     $('#myModal').modal('hide');
                     reset_form();
-                    $('#example1').DataTable().ajax.reload();
+                    // $('#example1').DataTable().ajax.reload();
+                    location.reload();
                 }
             }
         });
@@ -1037,7 +1038,7 @@
         // }
     }
 
-    function reset_form() {
+    function reset_form(reload) {
         $('#form-add select').val(null).trigger('change.select2').attr("disabled", false);
         $('#form-add input').removeAttr('value').attr("disabled", false);
         document.getElementById("form-add").reset();
@@ -1046,6 +1047,9 @@
         var rowCount = table.rows.length;
         for (o = 0; o <= rowCount; o++) {
             deleteRows();
+        }
+        if (reload) {
+            location.reload();
         }
         //$('#user_id').val('{{ Auth::user()->name }}');
     };
