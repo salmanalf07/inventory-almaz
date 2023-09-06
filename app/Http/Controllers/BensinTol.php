@@ -62,7 +62,11 @@ class BensinTol extends Controller
             $post->typeInput = $request->typeInput;
             $post->date = date("Y-m-d H:i", strtotime(str_replace('/', '-',  $request->date)));
             $post->pengeluaran_id = $request->pengeluaran_id;
-            $post->cust_id = $request->cust_id;
+            if ($request->cust_id == "#") {
+                $post->cust_id = null;
+            } else {
+                $post->cust_id = $request->cust_id;
+            }
             $post->car_id = $request->car_id;
             $post->driver_id = $request->driver_id;
             $post->month = $request->month;
@@ -109,6 +113,9 @@ class BensinTol extends Controller
         }
         if ($request->year_search != "#") {
             $data->whereYear('date', $request->year_search);
+        }
+        if ($request->akun != "#") {
+            $data->where('pengeluaran_id', $request->akun);
         }
         $pettyCashEntries = $data->get();
 

@@ -482,7 +482,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/edit_bensinTol', [Bensin
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_bensinTol/{id}', [BensinTol::class, 'storeBensinTol']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_bensinTol/{id}', [BensinTol::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_bensinTol'])->get('/r_bensinTol', function () {
-    return view('/kas/report/r_bensinTol', ['judul' => "Rekap Kas Bensin & Tol"]);
+    $akun = ModelsJenisPengeluaran::all();
+    return view('/kas/report/r_bensinTol', ['judul' => "Rekap Kas Bensin & Tol", 'akun' => $akun]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/bensinTolReport', [BensinTol::class, 'bensinTolReport']);
 //End Bensin Tol
@@ -497,7 +498,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/edit_pettyCash', [PettyC
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_pettyCash/{id}', [PettyCash::class, 'store']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_pettyCash/{id}', [PettyCash::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_pettyCash'])->get('/r_pettyCash', function () {
-    return view('/kas/report/r_pettyCash', ['judul' => "Rekap Petty Cash"]);
+    $akun = ModelsJenisPengeluaran::all();
+    return view('/kas/report/r_pettyCash', ['judul' => "Rekap Petty Cash", 'akun' => $akun]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/pettyCashReport', [PettyCash::class, 'pettyCashReport']);
 //End Petty Cash
@@ -512,10 +514,26 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/edit_uMakan', [Umakan::c
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_uMakan/{id}', [Umakan::class, 'store']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_uMakan/{id}', [Umakan::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'verified', 'report:r_uMakan'])->get('/r_uMakan', function () {
-    return view('/kas/report/r_uMakan', ['judul' => "Rekap Uang Makan"]);
+    $akun = ModelsJenisPengeluaran::all();
+    return view('/kas/report/r_uMakan', ['judul' => "Rekap Uang Makan", 'akun' => $akun]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/uMakanReport', [Umakan::class, 'uMakanReport']);
 //End Uang Makan
+Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/employeeSalary', function () {
+    $jenisPengeluaran = ModelsJenisPengeluaran::where('status', 'ACTIV')->get();
+    $akun = ModelsAkun::where('status', 'ACTIV')->get();
+    return view('/kas/gajiKaryawan', ['judul' => "Employee Salary", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_pettyCash', [PettyCash::class, 'json']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_pettyCash', [PettyCash::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_pettyCash', [PettyCash::class, 'edit']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_pettyCash/{id}', [PettyCash::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_pettyCash/{id}', [PettyCash::class, 'destroy']);
+Route::middleware(['auth:sanctum', 'verified', 'report:r_pettyCash'])->get('/r_pettyCash', function () {
+    return view('/kas/report/r_pettyCash', ['judul' => "Rekap Petty Cash"]);
+});
+Route::middleware(['auth:sanctum', 'verified'])->post('/pettyCashReport', [PettyCash::class, 'pettyCashReport']);
+//End Gaji Karyawan
 Route::middleware(['auth:sanctum', 'verified', 'report:r_saldoAkhir'])->get('/r_saldoAkhir', function () {
     //bensinTol
     $dataaBensinTol = Pengeluaran::where('month', date("m"))

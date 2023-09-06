@@ -32,7 +32,20 @@
                                 @csrf
                                 <span id="peringatan"></span>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <div class="control-group">
+                                            <label class="control-label">Akun</label>
+                                            <div class="controls">
+                                                <select name="akun" id="akun" class="form-control select2" style="width: 100%;">
+                                                    <option value="#" selected="selected">Choose...</option>
+                                                    @foreach ($akun as $akuns)
+                                                    <option value="{{$akuns->id}}">{{$akuns->keterangan}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="control-group">
                                             <label class="control-label">Month</label>
                                             <div class="controls">
@@ -54,7 +67,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="control-group">
                                             <label class="control-label">Year</label>
                                             <div class="controls">

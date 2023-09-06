@@ -105,6 +105,9 @@ class Umakan extends Controller
         if ($request->year_search != "#") {
             $data->whereYear('date', $request->year_search);
         }
+        if ($request->akun != "#") {
+            $data->where('pengeluaran_id', $request->akun);
+        }
         $pettyCashEntries = $data->get();
 
         // Menginisialisasi saldo awal
