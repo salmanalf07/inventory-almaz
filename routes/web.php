@@ -524,15 +524,11 @@ Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/employeeSa
     $akun = ModelsAkun::where('status', 'ACTIV')->get();
     return view('/kas/gajiKaryawan', ['judul' => "Employee Salary", 'jenisPengeluaran' => $jenisPengeluaran, 'akun' => $akun]);
 });
-// Route::middleware(['auth:sanctum', 'verified'])->get('/json_pettyCash', [PettyCash::class, 'json']);
-// Route::middleware(['auth:sanctum', 'verified'])->post('/store_pettyCash', [PettyCash::class, 'store']);
-// Route::middleware(['auth:sanctum', 'verified'])->post('/edit_pettyCash', [PettyCash::class, 'edit']);
-// Route::middleware(['auth:sanctum', 'verified'])->post('/update_pettyCash/{id}', [PettyCash::class, 'store']);
-// Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_pettyCash/{id}', [PettyCash::class, 'destroy']);
-// Route::middleware(['auth:sanctum', 'verified', 'report:r_pettyCash'])->get('/r_pettyCash', function () {
-//     return view('/kas/report/r_pettyCash', ['judul' => "Rekap Petty Cash"]);
-// });
-Route::middleware(['auth:sanctum', 'verified'])->post('/pettyCashReport', [PettyCash::class, 'pettyCashReport']);
+Route::middleware(['auth:sanctum', 'verified'])->get('/json_salary', [ControllersPengeluaran::class, 'jsonSalEmployee']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/store_salary', [ControllersPengeluaran::class, 'storeSalEmployee']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/edit_salary', [ControllersPengeluaran::class, 'editSalEmployee']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/update_salary/{id}', [ControllersPengeluaran::class, 'storeSalEmployee']);
+Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_salary/{id}', [ControllersPengeluaran::class, 'destroySalEmployee']);
 //End Gaji Karyawan
 Route::middleware(['auth:sanctum', 'verified', 'report:r_saldoAkhir'])->get('/r_saldoAkhir', function () {
     //bensinTol

@@ -208,7 +208,9 @@
                                         <select name="pengeluaran_id" id="pengeluaran_id" class="form-control select2" style="width: 100%;">
                                             <option selected="selected" value="#">--SELECT--</option>
                                             @foreach($jenisPengeluaran as $pengeluaran)
+                                            @if ($pengeluaran->id != 1)
                                             <option value="{{$pengeluaran->id}}">{{$pengeluaran->keterangan}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     </div>

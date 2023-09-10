@@ -120,7 +120,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
-                                        <th>Keterangan</th>
+                                        <th>Uraian</th>
                                         <th>Debit</th>
                                         <th>Kredit</th>
                                         <th>Akun</th>
@@ -131,7 +131,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
-                                        <th>Keterangan</th>
+                                        <th>Uraian</th>
                                         <th>Debit</th>
                                         <th>Kredit</th>
                                         <th>Akun</th>
@@ -152,7 +152,7 @@
     </section>
     <!-- /.content -->
     <!-- Modal user -->
-    <div id="myModal" class="modal fade bd-example-modal-xl" tabindex="-1" data-focus="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none ;">
+    <div id="myModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none ;" data-focus="false">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -164,7 +164,7 @@
                         @csrf
                         <span id="peringatan"></span>
                         <input class="form-control" type="text" name="id" id="id" hidden>
-                        <input class="form-control" type="text" name="typeInput" id="typeInput" value="UMakan" hidden>
+                        <input class="form-control" type="text" name="typeInput" id="typeInput" value="Salary" hidden>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="control-group">
@@ -208,11 +208,19 @@
                                         <select name="pengeluaran_id" id="pengeluaran_id" class="form-control select2" style="width: 100%;">
                                             <option selected="selected" value="#">--SELECT--</option>
                                             @foreach($jenisPengeluaran as $pengeluaran)
-                                            @if ($pengeluaran->id != 1)
+                                            @if ($pengeluaran->id == 1)
                                             <option value="{{$pengeluaran->id}}">{{$pengeluaran->keterangan}}</option>
                                             @endif
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="control-group">
+                                    <label class="control-label">Uraian</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="Text" name="uraian" id="uraian" placeholder="Type something here..." class="span15">
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +234,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="control-group">
-                                    <label class="control-label">Credit</label>
+                                    <label class="control-label">Kredit</label>
                                     <div class="controls">
                                         <input class="form-control number-input" name="kredit" id="kredit" value="0" placeholder="Type something here..." type="text">
                                     </div>
@@ -236,7 +244,7 @@
                                 <div class="control-group">
                                     <label class="control-label">Keterangan</label>
                                     <div class="controls">
-                                        <input class="form-control" type="Text" name="uraian" id="uraian" placeholder="Type something here..." class="span15">
+                                        <input class="form-control" type="Text" name="keterangan" id="keterangan" placeholder="Type something here..." class="span15">
                                     </div>
                                 </div>
                             </div>
@@ -324,7 +332,7 @@
                 },
             ],
             ajax: {
-                url: '{{ url("json_uMakan") }}',
+                url: '{{ url("json_salary") }}',
                 data: function(d) {
                     // Retrieve dynamic parameters
                     var dt_params = $('#example1').data('dt_params');
@@ -390,7 +398,7 @@
             $('#example1').data('dt_params', {
                 'month': $('#month_search').val(),
                 'year': $('#year_search').val(),
-                'query': 'UMakan',
+                'query': 'PettyCash',
             });
             $('#example1').DataTable().draw();
         });
@@ -401,7 +409,7 @@
         var fd = new FormData(form);
         $.ajax({
             type: 'POST',
-            url: '{{ url("store_uMakan") }}',
+            url: '{{ url("store_salary") }}',
             data: fd,
             processData: false,
             contentType: false,
@@ -433,7 +441,7 @@
         }
         $.ajax({
             type: 'POST',
-            url: 'edit_uMakan',
+            url: 'edit_salary',
             data: {
                 '_token': "{{ csrf_token() }}",
                 'id': uid,
@@ -449,6 +457,7 @@
                 $('#debit').val(formatNumberr(data.debit));
                 $('#kredit').val(formatNumberr(data.kredit));
                 $('#month').val(data.month).trigger('change');
+                $('#keterangan').val(data.keterangan);
                 $('#status').val(data.status).trigger('change');
 
                 id = $('#id').val();
@@ -469,7 +478,7 @@
         var fd = new FormData(form);
         $.ajax({
             type: 'POST',
-            url: 'update_uMakan/' + id,
+            url: 'update_salary/' + id,
             data: fd,
             processData: false,
             contentType: false,
@@ -497,7 +506,7 @@
             // alert("Thank you for subscribing!" + $(this).data('id') );
             $.ajax({
                 type: 'DELETE',
-                url: 'delete_uMakan/' + $(this).data('id'),
+                url: 'delete_salary/' + $(this).data('id'),
                 data: {
                     '_token': "{{ csrf_token() }}",
                 },

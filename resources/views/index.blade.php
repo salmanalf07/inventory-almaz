@@ -178,7 +178,7 @@
                         ?>
                         @if($module)
                         @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
-                        <li class="nav-item {{ request()->is('r_saldoAkhir','bensinTol','r_bensinTol','pettyCash','r_pettyCash','uMakan','r_uMakan','akuns', 'jenisPengeluaran','r_akunBiaya') ? 'menu-open' : '' }}">
+                        <li class="nav-item {{ request()->is('r_saldoAkhir','bensinTol','r_bensinTol','pettyCash','r_pettyCash','uMakan','r_uMakan','akuns', 'jenisPengeluaran','r_akunBiaya','employeeSalary') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-money" aria-hidden="true"></i>
                                 <p>
@@ -229,6 +229,14 @@
                                             </a>
                                         </li>
                                     </ul>
+                                </li>
+                                @endif
+                                @if($dataa == "EMPLSALARY" || $dataa == "ALL")
+                                <li class="nav-item">
+                                    <a href="employeeSalary" class="nav-link {{ request()->is('employeeSalary') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Employee Salary</p>
+                                    </a>
                                 </li>
                                 @endif
                                 @if($dataa == "BENSINTOL" || $dataa == "ALL")
