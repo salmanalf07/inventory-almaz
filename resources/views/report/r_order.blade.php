@@ -101,19 +101,14 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Date</th>
+                                        <th>No Po</th>
                                         <th>Customer</th>
                                         <th>Part Name</th>
-                                        <th>Price</th>
                                         <th>Qty</th>
-                                        <th>Total Price</th>
+                                        <th>Qty Progress</th>
+                                        <th>Out Standing</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="6" style="text-align:right">Total:</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -148,7 +143,7 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7], // table ke 1
                 },
                 {
                     targets: [1],
@@ -179,36 +174,6 @@
                     footer: true
                 }
             ],
-            footerCallback: function(row, data, start, end, display) {
-                var api = this.api();
-                // Remove the formatting to get integer data for summation
-                var intVal = function(i) {
-
-                    return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
-                        typeof i === 'number' ?
-                        i : 0;
-
-                };
-
-                // Total over all pages
-
-                if (api.column(6).data().length) {
-                    var total = api
-                        .column(6)
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        })
-                } else {
-                    total = 0
-                };
-
-                // Update footer
-                $(api.column(6).footer()).html(
-                    new Intl.NumberFormat().format(total)
-                );
-            },
             ajax: {
                 url: '{{ url("report_order") }}',
                 data: function(d) {
@@ -232,6 +197,10 @@
                     name: 'order.date'
                 },
                 {
+                    data: 'order.no_po',
+                    name: 'order.no_po'
+                },
+                {
                     data: 'parts.customer.code',
                     name: 'parts.customer.code'
                 },
@@ -240,17 +209,31 @@
                     name: 'parts.name_local'
                 },
                 {
-                    data: 'parts.price',
-                    name: 'parts.price'
-                },
-                {
                     data: 'qty',
                     name: 'qty'
                 },
                 {
-                    data: 'price',
-                    name: 'price'
-                }
+                    data: 'qty_progress',
+                    name: 'qty_progress'
+                },
+                {
+                    "data": function(row) {
+                        var qtyProgress = row.qty_progress - row.qty;
+
+                        function formatAngkaRibuan(angka) {
+                            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        }
+
+                        var formattedQtyProgress = formatAngkaRibuan(qtyProgress);
+
+                        if (qtyProgress < 0) {
+                            return '<span style="color: red;">' + formattedQtyProgress + '</span>';
+                        } else {
+                            return formattedQtyProgress;
+                        }
+                    },
+                    name: 'qty_progress'
+                },
             ],
         });
         $('.pt-2').on('click', '#in', function() {

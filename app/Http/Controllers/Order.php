@@ -197,32 +197,36 @@ class Order extends Controller
             $dataa->where([
                 ['part_id', '=', $request->part_id],
             ]);
-            $dataa->whereHas('Order', function ($query) use ($request) {
-                $query->whereDate('date', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
-                    ->whereDate('date', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
-            });
-        } elseif ($request->cust_id != "#") {
+        }
+        if ($request->cust_id != "#") {
             $dataa->whereRelation('Parts', 'cust_id', '=', $request->cust_id);
-            $dataa->whereHas('Order', function ($query) use ($request) {
-                $query->whereDate('date', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
-                    ->whereDate('date', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
-            });
-        } elseif ($request->date_st) {
+        }
+        if ($request->date_st) {
             $dataa->whereHas('Order', function ($query) use ($request) {
                 $query->whereDate('date', '>=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_st))))
                     ->whereDate('date', '<=', date('Y-m-d', strtotime(str_replace('/', '-', $request->date_ot))));
             });
         }
 
-
-
         $data = $dataa->get();
+
+        foreach ($data as $order) {
+            $sj = DetailSJ::with('DetailSJ')->where('part_id', $order->part_id)
+                ->whereRelation('DetailSJ', 'order_id', '=', $order->order_id)
+                ->sum('qty');
+            if ($sj == null) {
+                $order->qty_progress = 0;
+            } else {
+                $order->qty_progress = $sj;
+            }
+        }
 
 
         return DataTables::of($data)
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
     }
+
     public function count($id)
     {
         $data = DetailOrder::find($id)->get();

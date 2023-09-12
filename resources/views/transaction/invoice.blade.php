@@ -40,12 +40,21 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Customer</th>
+                                        <th>Customer Name</th>
                                         <th>Date Invoice</th>
                                         <th>Month</th>
                                         <th>Year</th>
+                                        <th>No PO</th>
                                         <th>No Invoice</th>
+                                        <th>Faktur Pajak</th>
+                                        <th>Date Faktur</th>
+                                        <th>Harga Jual</th>
+                                        <th>PPN</th>
+                                        <th>PPH 23</th>
+                                        <th>TOP</th>
                                         <th>Total Price</th>
                                         <th>Due Date</th>
+                                        <th>Payment Date</th>
                                         <th>status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -54,12 +63,21 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Customer</th>
+                                        <th>Customer Name</th>
                                         <th>Date Invoice</th>
                                         <th>Month</th>
                                         <th>Year</th>
+                                        <th>No PO</th>
                                         <th>No Invoice</th>
+                                        <th>Faktur Pajak</th>
+                                        <th>Date Faktur</th>
+                                        <th>Harga Jual</th>
+                                        <th>PPN</th>
+                                        <th>PPH 23</th>
+                                        <th>TOP</th>
                                         <th>Total Price</th>
                                         <th>Due Date</th>
+                                        <th>Payment Date</th>
                                         <th>status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -492,36 +510,43 @@
             processing: true,
             serverSide: true,
             dom: 'Bfrtip',
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 rows', '25 rows', '50 rows', 'Show all']
+            ],
             "responsive": true,
-            "lengthChange": false,
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], // table ke 1
                 },
                 {
-                    targets: [2, 7],
+                    targets: [3, 9, 15, 16],
                     render: function(oTable) {
                         return moment(oTable).format('DD-MM-YYYY');
                     }
                 },
                 {
-                    targets: [6],
+                    targets: [10, 11, 12, 14],
                     render: $.fn.dataTable.render.number(',', '.', 2)
                 },
                 {
                     orderable: false,
                     targets: 0
-                }
+                },
+                {
+                    "visible": false,
+                    "targets": [2, 6, 8, 9, 10, 11, 12, 13, 16]
+                },
             ],
             order: [
-                [5, 'desc']
+                [7, 'desc']
             ],
-            "buttons": ["add",
+            "buttons": ["add", "pageLength",
                 {
                     extend: 'excel',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
                     }
                 },
                 {
@@ -545,6 +570,10 @@
                     name: 'customer.code'
                 },
                 {
+                    data: 'customer.name',
+                    name: 'customer.name'
+                },
+                {
                     data: 'date_inv',
                     name: 'date_inv'
                 },
@@ -557,8 +586,42 @@
                     name: 'book_year'
                 },
                 {
+                    data: function(row) {
+                        if (row.order && row.order.no_po) {
+                            return row.order.no_po; // Mengembalikan nilai properti name jika ada
+                        } else {
+                            return ""; // Mengembalikan string kosong jika tidak ada nilai yang valid
+                        }
+                    },
+                    name: 'order.no_po'
+                },
+                {
                     data: 'no_invoice',
                     name: 'no_invoice'
+                },
+                {
+                    data: 'no_faktur',
+                    name: 'no_faktur'
+                },
+                {
+                    data: 'tukar_faktur',
+                    name: 'tukar_faktur'
+                },
+                {
+                    data: 'harga_jual',
+                    name: 'harga_jual'
+                },
+                {
+                    data: 'ppn',
+                    name: 'ppn'
+                },
+                {
+                    data: 'pph',
+                    name: 'pph'
+                },
+                {
+                    data: 'top',
+                    name: 'top'
                 },
                 {
                     data: 'total_harga',
@@ -567,6 +630,10 @@
                 {
                     data: 'jatuh_tempo',
                     name: 'jatuh_tempo'
+                },
+                {
+                    data: 'tanggal_bayar',
+                    name: 'tanggal_bayar'
                 },
                 {
                     data: 'status',

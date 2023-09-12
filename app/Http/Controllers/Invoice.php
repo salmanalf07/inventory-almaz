@@ -19,7 +19,7 @@ class Invoice extends Controller
 {
     public function json()
     {
-        $data = ModelsInvoice::with('customer');
+        $data = ModelsInvoice::with('customer', 'order');
 
         return DataTables::of($data)
             ->addColumn('aksi', function ($data) {
