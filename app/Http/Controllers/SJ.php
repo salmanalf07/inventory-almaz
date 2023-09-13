@@ -434,12 +434,14 @@ class SJ extends Controller
         $dateen = date("Y-m-d", strtotime(str_replace('/', '-', $date[1])));
 
         $dauu = ModelsSJ::leftJoin('detail_sjs', 'sjs.id', '=', 'detail_sjs.sj_id')
-            ->with('customer')->select(
-                "cust_id",
-                DB::raw("(sum(detail_sjs.qty)) as qtytotal"),
-                DB::raw("(sum(DISTINCT grand_total)) as total"),
-                DB::raw("(sum(DISTINCT sjs.sadm)) as sadm"),
-                DB::raw("(DATE_FORMAT(date_sj, '%d-%m-%Y')) as my_date")
+            ->with('customer')
+            ->select(
+                'cust_id',
+                'sjs.nosj',
+                DB::raw('SUM(detail_sjs.qty) as qtytotal'),
+                DB::raw('SUM(DISTINCT sjs.grand_total) as total'),
+                DB::raw('SUM(detail_sjs.sadm) as sadm'),
+                DB::raw('DATE_FORMAT(date_sj, "%d-%m-%Y") as my_date')
             );
         $dauu->where('status', '!=', 'BAYAR_RETUR');
         if ($request->date != null) {
@@ -453,43 +455,95 @@ class SJ extends Controller
             $dauu->where('user_id', $request->user_id);
         }
 
-        $dauu->groupBy("cust_id")
-            ->groupBy(DB::raw("DATE_FORMAT(date_sj, '%d-%m-%Y')"));
+        $dauu->groupBy('cust_id', 'sjs.nosj', 'my_date');
         $dau = $dauu->get();
 
-        $ur = array();
-        $urr = array();
+        $datdetaill = [];
+
+        // Mengumpulkan semua tanggal yang ada dalam data
+        $allDates = [];
+
         foreach ($dau as $att) {
-            $ur[] = $att->my_date;
-            $urr[] = $att->customer['code'];
-            $unique_dataa = array_unique($ur);
-            $unique_dataaa = array_unique($urr);
+            $key = $att->customer['code'];
+            $date = $att->my_date;
+
+            if (!isset($datdetaill[$key][$date])) {
+                $datdetaill[$key][$date] = [
+                    "total" => 0,
+                    "sadm" => 0,
+                    "qtytotal" => 0,
+                ];
+            }
+
+            $datdetaill[$key][$date]["total"] += $att->total;
+            $datdetaill[$key][$date]["sadm"] += $att->sadm;
+            $datdetaill[$key][$date]["qtytotal"] += $att->qtytotal;
+
+            $allDates[$date] = true;
         }
 
-        $datdetaill = array();
-        if (count($dau) > 0) {
-            foreach ($unique_dataaa as $key => $attt) {
-                foreach ($unique_dataa as $ke => $uniqe) {
-                    foreach ($dau as $kee => $dauu) {
-                        //$datdetail[$key][$attt->part_name][$uniqe->nosj][$datan->DetailSJ['nosj']] = [$datan->qty];
-                        $datdetaill[$key]["cust_id"] = $attt;
-                        $datdetaill[$key]["uniqe"][$ke]["date"] = $uniqe;
-                        if ($uniqe . $attt == $dauu->my_date . $dauu->customer['code']) {
-                            $datdetaill[$key]["uniqe"][$ke]["real"][0]["total"] = $dauu->total;
-                            $datdetaill[$key]["uniqe"][$ke]["real"][0]["sadm"] = $dauu->sadm;
-                            $datdetaill[$key]["uniqe"][$ke]["real"][0]["qty"] = $dauu->qtytotal;
-                        }
-                    }
+        // Mengisi data dengan tanggal yang tidak memiliki data dengan nilai 0
+        foreach ($datdetaill as $custId => $dates) {
+            foreach (array_keys($allDates) as $date) {
+                if (!isset($datdetaill[$custId][$date])) {
+                    $datdetaill[$custId][$date] = [];
                 }
             }
         }
 
+        // Konversi kembali hasil ke dalam format yang sesuai jika diperlukan
+        $finalResult = [];
 
-        return view('/report/r_partout_by_cust', ['judul' => "User", "datdetail" => $datdetaill, "date" => $request->date]);
+        foreach ($datdetaill as $custId => $dates) {
+            $dateArray = [];
+
+            foreach ($dates as $date => $values) {
+                if (isset($values["qtytotal"])) {
+                    $dateArray[] = [
+                        "date" => $date,
+                        "real" => [
+                            [
+                                "total" => $values["total"],
+                                "sadm" => $values["sadm"],
+                                "qty" => $values["qtytotal"],
+                            ],
+                        ],
+                    ];
+                } else {
+                    $dateArray[] = [
+                        "date" => $date,
+                    ];
+                }
+            }
+
+            $finalResult[] = [
+                "cust_id" => $custId,
+                "uniqe" => $dateArray,
+            ];
+        }
+        // Sort the dates within each "uniqe" array
+        foreach ($finalResult as &$result) {
+            usort($result['uniqe'], function ($a, $b) {
+                $dateA = strtotime($a['date']);
+                $dateB = strtotime($b['date']);
+                return $dateA - $dateB;
+            });
+        }
+
+        // Sort the finalResult array by "date" within "uniqe" arrays
+        usort($finalResult, function ($a, $b) {
+            $dateA = strtotime($a['uniqe'][0]['date']);
+            $dateB = strtotime($b['uniqe'][0]['date']);
+            return $dateA - $dateB;
+        });
+
+
+
+        return view('/report/r_partout_by_cust', ['judul' => "User", "datdetail" => $finalResult, "date" => $request->date]);
         //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
         //return $datdetaill;
         //return view('/report/r_partout_tab', ['judul' => "User", "datdetail" => $dau, "date" => $request->date]);
-        //return $dau;
+        //return $finalResult;
     }
 
     public function report_sumpart(Request $request)
