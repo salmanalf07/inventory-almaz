@@ -118,12 +118,18 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, ], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7], // table ke 1
+                },
+                {
+                    targets: [2],
+                    render: function(oTable) {
+                        return moment(oTable).format('DD-MM-YYYY');
+                    }
                 },
                 {
                     targets: [1],
                     render: function(oTable) {
-                        return moment(oTable).format('DD-MM-YYYY');
+                        return moment(oTable).format('MM');
                     }
                 },
             ],
@@ -192,6 +198,10 @@
             columns: [{
                     data: 'customer',
                     title: 'No'
+                },
+                {
+                    data: 'date',
+                    title: 'Bulan'
                 },
                 {
                     data: 'date',
