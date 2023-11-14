@@ -28,8 +28,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form method="post" role="form" id="form-add" enctype="multipart/form-data">
+                            <form method="post" role="form" id="form-add" enctype="multipart/form-data" target="_blank">
+                                @csrf
                                 <span id="peringatan"></span>
+                                <input type="hidden" name="date_st" id="date_st" value="#">
+                                <input type="hidden" name="date_ot" id="date_ot" value="#">
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="control-group">
@@ -125,6 +128,14 @@
 <!-- <script src="/js/jquery-3.5.1.js"></script> -->
 <script>
     $(document).ready(function() {
+        $.fn.dataTable.ext.buttons.export = {
+            text: 'Planning',
+            action: function(e, dt, node, config) {
+                // alert('Export Planning');
+                $("#form-add").attr("action", "ExportPlanning");
+                $("#form-add").submit();
+            }
+        };
         var date
         var oTable = $('#example1').DataTable({
             processing: true,
@@ -164,7 +175,8 @@
                 {
                     extend: 'print',
                     footer: true
-                }
+                },
+                "export"
             ],
             footerCallback: function(row, data, start, end, display) {
                 var api = this.api();
@@ -247,6 +259,8 @@
         });
         $('.pt-2').on('click', '#in', function() {
             var date = $('#reservation').val().split(" - ");
+            $('#date_st').val(date[0]);
+            $('#date_ot').val(date[1]);
             //console.log($('#reservation').val().split(" - "));
             $('#example1').data('dt_params', {
                 'cust_id': $('#cust_id').val(),

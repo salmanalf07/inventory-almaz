@@ -302,9 +302,13 @@ class PartIn extends Controller
 
         $data = $dataa->get();
 
-
-        return DataTables::of($data)
-            ->toJson();
+        if ($request->segment(1) == "report_partin") {
+            return DataTables::of($data)
+                ->toJson();
+        }
+        if ($request->segment(1) == "ExportPlanning") {
+            return view('/report/r_planningPartIn', ['judul' => "Export Planning", 'data' => $data]);
+        }
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
     }
 
