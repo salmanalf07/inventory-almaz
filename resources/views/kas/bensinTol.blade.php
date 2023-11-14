@@ -58,7 +58,7 @@
                                             <label class="control-label">Year</label>
                                             <div class="controls">
                                                 <select name="year_search" id="year_search" class="form-control select2" style="width: 100%;">
-                                                    <option value="" selected="selected">Choose...</option>
+                                                    <option value="#" selected="selected">Choose...</option>
                                                     <option value="2019">2019</option>
                                                     <option value="2020">2020</option>
                                                     <option value="2021">2021</option>
@@ -174,8 +174,9 @@
                                 <div class="control-group">
                                     <label class="control-label">Month</label>
                                     <div class="controls">
-                                        <select name="month" id="month" class="form-control select2" style="width: 100%;">
-                                            <option value="" selected="selected">Choose...</option>
+                                        <input type="hidden" name="month" id="hiddenMonth" value="">
+                                        <select name="month_select" id="month" class="form-control select2" style="width: 100%;" disabled="disabled" onchange="updateHiddenField()">
+                                            <option value="#" selected="selected">Choose...</option>
                                             <option value="1">JANUARI</option>
                                             <option value="2">FEBRUARI</option>
                                             <option value="3">MARET</option>
@@ -233,7 +234,7 @@
                                     <label class="control-label">Driver</label>
                                     <div class="controls">
                                         <select name="driver_id" id="driver_id" class="form-control select2">
-                                            <option value="" selected="selected">Choose...</option>
+                                            <option value="#" selected="selected">Choose...</option>
                                             @foreach($driver as $driver)
                                             <option value="{{$driver->id}}">{{$driver->name}}</option>
                                             @endforeach
@@ -275,7 +276,7 @@
                                     <label class="control-label">Car</label>
                                     <div class="controls">
                                         <select name="car_id" id="car_id" class="form-control select2">
-                                            <option value="" selected="selected">Choose...</option>
+                                            <option value="#" selected="selected">Choose...</option>
                                             @foreach($car as $car)
                                             <option value="{{$car->id}}">{{$car->nopol}}</option>
                                             @endforeach
@@ -598,7 +599,7 @@
     });
 
     function reset_form() {
-        $('#form-add select').val(null).trigger('change.select2').attr("disabled", false);
+        $('#form-add select').val('#').trigger('change.select2');
         $('#form-add input').removeAttr('value').attr("disabled", false);
         // $('#form-add input').val(null);
         $("#form-add").trigger('reset');

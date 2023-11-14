@@ -170,8 +170,9 @@
                                 <div class="control-group">
                                     <label class="control-label">Month</label>
                                     <div class="controls">
-                                        <select name="month" id="month" class="form-control select2" style="width: 100%;">
-                                            <option value="" selected="selected">Choose...</option>
+                                        <input type="hidden" name="month" id="hiddenMonth" value="">
+                                        <select name="month_select" id="month" class="form-control select2" style="width: 100%;" disabled="disabled" onchange="updateHiddenField()">
+                                            <option value="#" selected="selected">Choose...</option>
                                             <option value="1">JANUARI</option>
                                             <option value="2">FEBRUARI</option>
                                             <option value="3">MARET</option>

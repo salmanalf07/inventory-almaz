@@ -787,6 +787,25 @@
                 "responsive": true,
             });
         });
+
+        function updateHiddenField() {
+            var selectedValue = document.getElementById("month").value;
+            document.getElementById("hiddenMonth").value = selectedValue;
+        }
+
+        $('#pengeluaran_id').on('change', function() {
+            // Misalkan format tanggal adalah "DD/MM/YYYY HH:mm"
+            var dateString = $('#date').val();
+            var dateParts = dateString.split(" ");
+            var dateComponents = dateParts[0].split("/");
+
+            // Membuat objek Date dari komponen tanggal yang dipecah
+            var dateObject = new Date(dateComponents[2], dateComponents[1] - 1, dateComponents[0]);
+
+            // Mendapatkan bulan (dimulai dari 0 untuk Januari, hingga 11 untuk Desember)
+            var month = dateObject.getMonth() + 1; // Ditambah 1 karena indeks bulan dimulai dari 0
+            $('#month').val(month).trigger('change');
+        })
     </script>
 </body>
 

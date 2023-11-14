@@ -79,26 +79,24 @@
                 <th class="no-border" colspan="4"></th>
             </tr>
             <tr>
-                <th colspan="8">PT. ALMAS DAYA SINERGI</th>
+                <th colspan="6">PT. ALMAS DAYA SINERGI</th>
                 <th colspan="5" style="background-color: #e8d046;">PLANNING PRODUKSI</th>
                 <th colspan="3" style="background-color: #2592f7;">PENCAPAIAN</th>
             </tr>
             <tr>
                 <th style="width: 2%;">No</th>
-                <th style="width: 5%;">Date</th>
+                <th style="width: 7%;">Date</th>
                 <th style="width: 5%;">Customer</th>
-                <th style="width: 20%;">Part Name</th>
-                <th style="width: 5%;">Type</th>
-                <th style="width: 5%;">Price</th>
-                <th style="width: 4%;">Qty</th>
-                <th style="width: 8%;">Total Price</th>
-                <th style="background-color: #e6d787;width: 5%;">Qty / Hanger</th>
-                <th style="background-color: #e6d787;width: 5%;">Plan Produksi (pcs)</th>
-                <th style="background-color: #e6d787;width: 5%;">Pending (Pcs)</th>
-                <th style="background-color: #e6d787;width: 5%;">Kebutuhan Hanger</th>
+                <th style="width: 23%;">Part Name</th>
+                <th style="width: 8%;">Type</th>
+                <th style="width: 8%;">Qty</th>
+                <th style="background-color: #e6d787;width: 6%;">Standard Qty / Hanger</th>
+                <th style="background-color: #e6d787;width: 6%;">Plan Produksi (pcs)</th>
+                <th style="background-color: #e6d787;width: 6%;">Pending (Pcs)</th>
+                <th style="background-color: #e6d787;width: 6%;">Kebutuhan Hanger</th>
                 <th style="background-color: #e6d787;width: 8%;">Keterangan</th>
-                <th style="background-color: #6fb6f7;width: 5%;">Actual Produksi (pcs)</th>
-                <th style="background-color: #6fb6f7;width: 5%;">Total Hanger</th>
+                <th style="background-color: #6fb6f7;width: 6%;">Actual Produksi (pcs)</th>
+                <th style="background-color: #6fb6f7;width: 6%;">Total Hanger</th>
                 <th style="background-color: #6fb6f7;width: 8%;">Keterangan</th>
             </tr>
         </thead>
@@ -113,9 +111,7 @@
                 <td class="text-center">{{$partIn->parts->customer->code}}</td>
                 <td>{{$partIn->parts->name_local}}</td>
                 <td>{{$partIn->type}}</td>
-                <td class="text-right">{{number_format($partIn->parts->price, 0, ',', '.')}}</td>
                 <td class="text-right">{{number_format($partIn->qty, 0, ',', '.')}}</td>
-                <td class="text-right">{{number_format($partIn->total_price, 0, ',', '.')}}</td>
                 <td class="text-right">{{number_format($partIn->parts->qty_hanger, 0, ',', '.')}}</td>
                 <td></td>
                 <td></td>
