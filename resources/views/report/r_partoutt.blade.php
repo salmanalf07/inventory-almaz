@@ -67,6 +67,7 @@
                                                     <option value="REPAINTING">REPAINTING</option>
                                                     <option value="RETURN">RETURN</option>
                                                     <option value="SAMPLE">SAMPLE</option>
+                                                    <option value="BAYAR_RETUR">BAYAR RETUR</option>
                                                 </select>
                                             </div>
                                         </div>
