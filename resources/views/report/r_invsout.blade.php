@@ -224,6 +224,10 @@
                     title: 'Part Name'
                 },
                 {
+                    data: 'type_part',
+                    title: 'Type Part'
+                },
+                {
                     data: 'send.in',
                     title: 'Cust'
                 },

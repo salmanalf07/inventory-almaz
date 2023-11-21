@@ -111,11 +111,14 @@
                 <td class="text-center">{{$partIn->parts->customer->code}}</td>
                 <td>{{$partIn->parts->name_local}}</td>
                 <td>{{$partIn->type}}</td>
-                <td class="text-right">{{number_format($partIn->qty, 0, ',', '.')}}</td>
-                <td class="text-right">{{number_format($partIn->parts->qty_hanger, 0, ',', '.')}}</td>
+                <!-- <td class="text-right">{{number_format($partIn->qty, 0, ',', '.')}}</td> -->
+                <td class="text-right">{{$partIn->qty}}</td>
+                <!-- <td class="text-right">{{number_format($partIn->parts->qty_hanger, 0, ',', '.')}}</td> -->
+                <td class="text-right">{{$partIn->parts->qty_hanger}}</td>
                 <td></td>
                 <td></td>
-                <td class="text-right">{{$partIn->parts->qty_hanger ? number_format(ceil($partIn->qty / $partIn->parts->qty_hanger), 0, ',', '.'):""}}</td>
+                <!-- <td class="text-right">{{$partIn->parts->qty_hanger ? number_format(ceil($partIn->qty / $partIn->parts->qty_hanger), 0, ',', '.'):""}}</td> -->
+                <td class="text-right">{{$partIn->parts->qty_hanger ? ceil($partIn->qty / $partIn->parts->qty_hanger):""}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
