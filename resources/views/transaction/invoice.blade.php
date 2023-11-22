@@ -497,7 +497,7 @@
                 $("#in").removeClass("btn btn-primary update");
                 $("#in").addClass("btn btn-primary add");
                 $('#in').text('Save');
-                reset_form();
+                // reset_form();
                 $('#SJJ').hide();
                 //AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 $('[name="add-tab"]').show();
