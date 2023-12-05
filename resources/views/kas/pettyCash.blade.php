@@ -275,6 +275,14 @@
 <!-- jQuery -->
 <script src="assets/css/jquery/jquery.min.js"></script>
 <script>
+    $(document).ready(function() {
+        // Log data on input change
+        $('#date').on('input', function() {
+            var dateValue = $(this).val();
+            var monthOnly = moment(dateValue, 'DD/MM/YYYY').format('M');
+            $('#month').val(monthOnly).trigger('change');
+        });
+    })
     $(function() {
         $('.select2').select2({
             placeholder: "Choose..",

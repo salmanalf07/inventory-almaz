@@ -29,7 +29,6 @@
                     <div class="card">
                         <div class="card-body">
                             <form id="form-search" method="post" role="form" enctype="multipart/form-data">
-                                <span id="peringatan"></span>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="control-group">
@@ -164,6 +163,7 @@
                     <h4 class="modal-title" id="myModalLabel">Tambah Data</h4>
                 </div>
                 <div class="modal-body">
+                    <span id="peringatan"></span>
                     <form method="post" role="form" id="form-add" enctype="multipart/form-data">
                         @csrf
                         <span id="peringatan"></span>
@@ -318,6 +318,15 @@
 <!-- jQuery -->
 <script src="assets/css/jquery/jquery.min.js"></script>
 <script>
+    $(document).ready(function() {
+
+        // Log data on input change
+        $('#date').on('input', function() {
+            var dateValue = $(this).val();
+            var monthOnly = moment(dateValue, 'DD/MM/YYYY').format('M');
+            $('#month').val(monthOnly).trigger('change');
+        });
+    })
     $(function() {
         $('.select2').select2({
             placeholder: "Choose..",
