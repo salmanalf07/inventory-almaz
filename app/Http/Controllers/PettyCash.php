@@ -13,7 +13,7 @@ class PettyCash extends Controller
     {
         $dataa = Pengeluaran::with('jenisPengeluaran');
 
-        if ($request->month != "" && $request->month) {
+        if ($request->month != "#" && $request->month) {
             $dataa->where('month', $request->month);
             $dataa->where('typeInput', $request->query('query'));
         } else {
@@ -21,13 +21,13 @@ class PettyCash extends Controller
             $dataa->where('typeInput', 'PettyCash');
         }
 
-        if ($request->year != "" && $request->year) {
+        if ($request->year != "#" && $request->year) {
             $dataa->whereYear('date', $request->year);
         } else {
             $dataa->whereYear('date', date("Y"));
         }
 
-        if ($request->status != "#") {
+        if ($request->status != "#" && $request->status) {
             $dataa->where('status', $request->status);
         }
 
