@@ -27,6 +27,10 @@ class PettyCash extends Controller
             $dataa->whereYear('date', date("Y"));
         }
 
+        if ($request->status != "#") {
+            $dataa->where('status', $request->status);
+        }
+
         $data = $dataa->get();
         //saldo Akhir
         $totalDebit = $data->sum('debit');

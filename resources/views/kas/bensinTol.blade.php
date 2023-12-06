@@ -30,7 +30,7 @@
                         <div class="card-body">
                             <form id="form-search" method="post" role="form" enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="control-group">
                                             <label class="control-label">Month</label>
                                             <div class="controls">
@@ -52,7 +52,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="control-group">
                                             <label class="control-label">Year</label>
                                             <div class="controls">
@@ -90,6 +90,18 @@
                                                     <option value="2048">2048</option>
                                                     <option value="2049">2049</option>
                                                     <option value="2050">2050</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="control-group">
+                                            <label class="control-label">Status</label>
+                                            <div class="controls">
+                                                <select name="status_search" id="status_search" class="form-control select2" style="width: 100%;">
+                                                    <option value="#" selected="selected">ALL</option>
+                                                    <option value="OPEN">OPEN</option>
+                                                    <option value="CLOSE">CLOSE</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -479,6 +491,7 @@
             $('#example1').data('dt_params', {
                 'month': $('#month_search').val(),
                 'year': $('#year_search').val(),
+                'status': $('#status_search').val(),
                 'query': 'BensinTol',
             });
             $('#example1').DataTable().draw();
