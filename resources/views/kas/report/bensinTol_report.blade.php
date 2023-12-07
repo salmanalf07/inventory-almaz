@@ -93,7 +93,13 @@
             <tr class="putih">
                 <td class="right">{{ date("d-M-Y H:i", strtotime($entry->date)) }}</td>
                 <td>{{ $entry->uraian }}</td>
-                <td>{{ $entry->customers != null?$entry->customers->code:"" }}</td>
+                <td>
+                    @if ($entry->customers != null)
+                    {{$entry->customers->code}}
+                    @elseif ($entry->cust_id === "0")
+                    OTHERS
+                    @endif
+                </td>
                 <td>{{ $entry->drivers != null?$entry->drivers->name:"" }}</td>
                 <td>{{ $entry->cars != null?$entry->cars->nopol:"" }}</td>
                 <td class="right sumDeb{{$key}}">{{ number_format($entry->debit,0,',',',') }}</td>

@@ -260,6 +260,7 @@
                                     <div class="controls">
                                         <select name="cust_id" id="cust_id" class="form-control select2">
                                             <option value="#" selected="selected">Choose...</option>
+                                            <option value="0">OTHERS</option>
                                             @foreach($cust as $cust)
                                             <option value="{{$cust->id}}">{{$cust->code}}</option>
                                             @endforeach
@@ -425,7 +426,9 @@
                 },
                 {
                     data: function(row) {
-                        if (row.customers && row.customers.code) {
+                        if (row.cust_id == 0) {
+                            return "OTHERS"; // Mengembalikan string kosong jika tidak ada nilai yang valid
+                        } else if (row.customers && row.customers.code) {
                             return row.customers.code; // Mengembalikan nilai properti name jika ada
                         } else {
                             return ""; // Mengembalikan string kosong jika tidak ada nilai yang valid
