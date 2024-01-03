@@ -66,7 +66,7 @@ use Maatwebsite\Excel\Facades\Excel;
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     //part_in
     $today = ModelsPartIn::select('id')->where('date_in', date("Y-m-d"))->get();
-    $month = ModelsPartIn::select('id')->whereMonth('date_in', date("m"))->get();
+    $month = ModelsPartIn::select('id')->whereMonth('date_in', date("m"))->whereYear('date_in', date("Y"))->get();
     $data = DetailPartIn::with('PartIn', 'Parts.customer');
     $data->whereIn("partin_id", $today->toArray());
     $part = $data->get();
@@ -74,9 +74,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     $rptoday = DetailPartIn::whereIn("partin_id", $today->toArray())->sum('total_price');
     //out
     $todayoutt = ModelsSJ::select('id')->where('date_sj', date("Y-m-d"))->get();
-    $monthoutt = ModelsSJ::select('id')->where('status', '!=', "BAYAR_RETUR")->whereMonth('date_sj', date("m"))->get();
-    $monthout = DetailSJ::whereIn("sj_id", $monthoutt->toArray())->sum('total_price');
     $todayout = DetailSJ::whereIn("sj_id", $todayoutt->toArray())->sum('total_price');
+    $monthoutt = ModelsSJ::select('id')->where('status', '!=', "BAYAR_RETUR")->whereMonth('date_sj', date("m"))->whereYear('date_sj', date("Y"))->get();
+    $monthout = DetailSJ::whereIn("sj_id", $monthoutt->toArray())->sum('total_price');
     //order booking
     $orderyearr = ModelsSJ::select('id')->where([
         ['booking_year', date("Y")],
