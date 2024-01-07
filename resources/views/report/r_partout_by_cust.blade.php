@@ -145,16 +145,20 @@
                 <td class="center" rowspan="2">NO</td>
                 <td class="center" rowspan="2">CUSTOMER</td>
                 <td class="center" colspan="{{ count($datdetail[0]['uniqe']) }}">TANGGAL</td>
-                <td class="center" rowspan="2">TOTA SA</td>
-                <td class="center" rowspan="2">TOTA QTY</td>
+                <td class="center" rowspan="2">TOTAL SA</td>
+                <td class="center" rowspan="2">TOTAL QTY</td>
                 <td class="center" rowspan="2">GRAND TOTAL</td>
                 <td class="center" rowspan="2">KETERANGAN</td>
             </tr>
 
             <tr>
-                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy('date') as $att) { ?>
+                <?php foreach (collect($datdetail[0]['uniqe'])->sortBy($tanggal) as $att) { ?>
                     <td class="center bold">
-                        <?php echo date('d', strtotime($att['date'])); ?>
+                        @if ($tanggal == "month")
+                        <?php echo date('M-Y', strtotime($att[$tanggal])); ?>
+                        @else
+                        <?php echo date('d', strtotime($att[$tanggal])); ?>
+                        @endif
                     </td>
                 <?php } ?>
             </tr>
@@ -170,8 +174,13 @@
                     <td>
                         <?php echo $datdetaill['cust_id']; ?>
                     </td>
-                    <?php foreach (collect($datdetaill['uniqe'])->sortBy('date') as $key => $sj) {
-                        $ur[$key] = date('d', strtotime($sj['date']));
+                    <?php foreach (collect($datdetaill['uniqe'])->sortBy($tanggal) as $key => $sj) {
+                        $ur[$key] = date('M-Y', strtotime($sj[$tanggal]));
+                        if ($tanggal == "month") {
+                            $ur[$key] = date('M-Y', strtotime($sj[$tanggal]));
+                        } else {
+                            $ur[$key] = date('d', strtotime($sj[$tanggal]));
+                        }
                         if (isset($sj['real'])) { ?>
                             <td class="right qtysum sum{{$key}}">{{ number_format($sj['real'][0]['total'],0,",",",") }}</td>
                             <td style="display: none;" class="right sasum sadm{{$key}}">{{number_format((float)$sj['real'][0]['sadm'], 2, '.', '') }}</td>

@@ -64,14 +64,12 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="control-group">
-                                                <label class="control-label">User</label>
+                                                <label class="control-label">Type Report</label>
                                                 <div class="controls">
-                                                    <select name="user_id" id="user_id" class="form-control select2" style="width: 100%;">
+                                                    <select name="type" id="type" class="form-control select2" style="width: 100%;">
                                                         <option value="#" selected="selected">Choose...</option>
-                                                        @foreach ($user as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }}
-                                                        </option>
-                                                        @endforeach
+                                                        <option value="day">Daily</option>
+                                                        <option value="month">Monthly</option>
                                                     </select>
                                                 </div>
                                             </div>

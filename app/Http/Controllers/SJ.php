@@ -451,55 +451,100 @@ class SJ extends Controller
         if ($request->cust_id != "#") {
             $dauu->where('cust_id', $request->cust_id);
         }
-        if ($request->user_id != "#") {
-            $dauu->where('user_id', $request->user_id);
-        }
 
         $dauu->groupBy('cust_id', 'sjs.nosj', 'my_date');
         $dau = $dauu->get();
 
         $datdetaill = [];
 
-        // Mengumpulkan semua tanggal yang ada dalam data
-        $allDates = [];
+        if ($request->type == "month") {
+            // Collect all months
+            $allMonths = [];
 
-        foreach ($dau as $att) {
-            $key = $att->customer['code'];
-            $date = $att->my_date;
+            foreach ($dau as $att) {
+                $key = $att->customer['code'];
+                $date = $att->my_date;
+                $month = date('Y-m', strtotime($date)); // Extracting year-month from the date
 
-            if (!isset($datdetaill[$key][$date])) {
-                $datdetaill[$key][$date] = [
-                    "total" => 0,
-                    "sadm" => 0,
-                    "qtytotal" => 0,
-                ];
-            }
-
-            $datdetaill[$key][$date]["total"] += $att->total;
-            $datdetaill[$key][$date]["sadm"] += $att->sadm;
-            $datdetaill[$key][$date]["qtytotal"] += $att->qtytotal;
-
-            $allDates[$date] = true;
-        }
-
-        // Mengisi data dengan tanggal yang tidak memiliki data dengan nilai 0
-        foreach ($datdetaill as $custId => $dates) {
-            foreach (array_keys($allDates) as $date) {
-                if (!isset($datdetaill[$custId][$date])) {
-                    $datdetaill[$custId][$date] = [];
+                if (!isset($datdetaill[$key][$month])) {
+                    $datdetaill[$key][$month] = [
+                        "total" => 0,
+                        "sadm" => 0,
+                        "qtytotal" => 0,
+                    ];
                 }
+
+                $datdetaill[$key][$month]["total"] += $att->total;
+                $datdetaill[$key][$month]["sadm"] += $att->sadm;
+                $datdetaill[$key][$month]["qtytotal"] += $att->qtytotal;
+
+                $allMonths[$month] = true;
             }
-        }
 
-        // Konversi kembali hasil ke dalam format yang sesuai jika diperlukan
-        $finalResult = [];
+            // Fill missing months with zero values
+            foreach ($datdetaill as &$months) {
+                $months += array_fill_keys(array_keys($allMonths), []);
+            }
 
-        foreach ($datdetaill as $custId => $dates) {
-            $dateArray = [];
+            // Convert the result to the desired format
+            $finalResult = array_map(function ($custId, $months) {
+                $monthArray = array_map(function ($month, $values) {
+                    return isset($values["qtytotal"]) ? [
+                        "month" => $month,
+                        "real" => [
+                            [
+                                "total" => $values["total"],
+                                "sadm" => $values["sadm"],
+                                "qty" => $values["qtytotal"],
+                            ],
+                        ],
+                    ] : ["month" => $month];
+                }, array_keys($months), $months);
 
-            foreach ($dates as $date => $values) {
-                if (isset($values["qtytotal"])) {
-                    $dateArray[] = [
+                return [
+                    "cust_id" => $custId,
+                    "uniqe" => $monthArray,
+                ];
+            }, array_keys($datdetaill), $datdetaill);
+
+            // Sort the months within each "uniqe" array
+            array_walk($finalResult, function (&$result) {
+                usort($result['uniqe'], function ($a, $b) {
+                    return strtotime($a['month']) - strtotime($b['month']);
+                });
+            });
+
+            // Sort the finalResult array by the month within "uniqe" arrays
+            usort($finalResult, function ($a, $b) {
+                return strtotime($a['uniqe'][0]['month']) - strtotime($b['uniqe'][0]['month']);
+            });
+        } else {
+
+            // Collect all dates
+            $allDates = [];
+
+            foreach ($dau as $att) {
+                $key = $att->customer['code'];
+                $date = $att->my_date;
+
+                $datdetaill[$key][$date] = [
+                    "total" => ($datdetaill[$key][$date]['total'] ?? 0) + $att->total,
+                    "sadm" => ($datdetaill[$key][$date]['sadm'] ?? 0) + $att->sadm,
+                    "qtytotal" => ($datdetaill[$key][$date]['qtytotal'] ?? 0) + $att->qtytotal,
+                ];
+
+                $allDates[$date] = true;
+            }
+
+            // Fill missing dates with zero values
+            foreach ($datdetaill as &$dates) {
+                $dates += array_fill_keys(array_keys($allDates), []);
+            }
+
+            // Convert the result to the desired format
+            $finalResult = array_map(function ($custId, $dates) {
+                $dateArray = array_map(function ($date, $values) {
+                    return isset($values["qtytotal"]) ? [
                         "date" => $date,
                         "real" => [
                             [
@@ -508,38 +553,32 @@ class SJ extends Controller
                                 "qty" => $values["qtytotal"],
                             ],
                         ],
-                    ];
-                } else {
-                    $dateArray[] = [
-                        "date" => $date,
-                    ];
-                }
-            }
+                    ] : ["date" => $date];
+                }, array_keys($dates), $dates);
 
-            $finalResult[] = [
-                "cust_id" => $custId,
-                "uniqe" => $dateArray,
-            ];
-        }
-        // Sort the dates within each "uniqe" array
-        foreach ($finalResult as &$result) {
-            usort($result['uniqe'], function ($a, $b) {
-                $dateA = strtotime($a['date']);
-                $dateB = strtotime($b['date']);
-                return $dateA - $dateB;
+                return [
+                    "cust_id" => $custId,
+                    "uniqe" => $dateArray,
+                ];
+            }, array_keys($datdetaill), $datdetaill);
+
+            // Sort the dates within each "uniqe" array
+            array_walk($finalResult, function (&$result) {
+                usort($result['uniqe'], function ($a, $b) {
+                    return strtotime($a['date']) - strtotime($b['date']);
+                });
+            });
+
+            // Sort the finalResult array by the date within "uniqe" arrays
+            usort($finalResult, function ($a, $b) {
+                return strtotime($a['uniqe'][0]['date']) - strtotime($b['uniqe'][0]['date']);
             });
         }
 
-        // Sort the finalResult array by "date" within "uniqe" arrays
-        usort($finalResult, function ($a, $b) {
-            $dateA = strtotime($a['uniqe'][0]['date']);
-            $dateB = strtotime($b['uniqe'][0]['date']);
-            return $dateA - $dateB;
-        });
 
 
 
-        return view('/report/r_partout_by_cust', ['judul' => "User", "datdetail" => $finalResult, "date" => $request->date]);
+        return view('/report/r_partout_by_cust', ['judul' => "User", "datdetail" => $finalResult, "date" => $request->date, "tanggal" => $request->type == "month" ? "month" : "date"]);
         //return ['dat' => $dat, 'data' => $data, 'datdetail' => $datdetail];
         //return $datdetaill;
         //return view('/report/r_partout_tab', ['judul' => "User", "datdetail" => $dau, "date" => $request->date]);
@@ -581,9 +620,6 @@ class SJ extends Controller
             $data->whereDate('sjs.date_sj', '>=', $datein)
                 ->whereDate('sjs.date_sj', '<=', $dateen);
         };
-        if ($request->user_id != "#") {
-            $data->where('sjs.user_id', $request->user_id);
-        }
         $data->groupBy('detail_sjs.part_id')
             ->groupBy('parts.name_local')
             ->groupBy('customers.code')
