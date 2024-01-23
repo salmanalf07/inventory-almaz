@@ -235,10 +235,10 @@
                     data: 'send.out',
                     title: 'ALMAZ'
                 },
-                // {
-                //     data: 'send.out',
-                //     title: 'Qty'
-                // }
+                {
+                    data: 'keterangan',
+                    title: 'Keterangan'
+                }
             ],
         });
         $('.pt-2').on('click', '#in', function() {

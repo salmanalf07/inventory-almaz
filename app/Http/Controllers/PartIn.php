@@ -361,6 +361,7 @@ class PartIn extends Controller
             $datdetail[$key]["type_part"] = $attt->type != null ? $attt->type : "";
             $datdetail[$key]["send"]["in"] = $attt->qty;
             $datdetail[$key]["send"]["out"] = 0;
+            $datdetail[$key]["keterangan"] = "";
         }
         foreach ($dataa as $ky => $att) {
             $datdetaill[$ky]["status"] = "out";
@@ -372,6 +373,7 @@ class PartIn extends Controller
             $datdetaill[$ky]["type_part"] = $att->type != null ? $att->type : "";
             $datdetaill[$ky]["send"]["in"] = 0;
             $datdetaill[$ky]["send"]["out"] = $att->qty;
+            $datdetaill[$ky]["keterangan"] = $att->keterangan;
         }
         $result = array_merge($datdetail, $datdetaill);
         usort($result, fn ($a, $b) => $a['date'] <=> $b['date']);
