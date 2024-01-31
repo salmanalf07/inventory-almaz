@@ -92,7 +92,7 @@
                                                 <div class="controls">
                                                     <select name="status" id="status" class="form-control select2" style="width: 100%;">
                                                         <option value="#" selected="selected">Choose...</option>
-                                                        <!-- <option value="OPEN">OPEN</option> -->
+                                                        <option value="OPEN">OPEN</option>
                                                         <option value="INVOICE">INVOICE</option>
                                                         <!-- <option value="CLOSE">CLOSE</option> -->
                                                     </select>
