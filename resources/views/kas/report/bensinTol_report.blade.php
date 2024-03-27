@@ -74,7 +74,7 @@
     <table id="tableId">
         <thead>
             <tr class="ungu">
-                <th colspan="9">Laporan Uang Bensin & Tol</th>
+                <th colspan="10">Laporan Uang Bensin & Tol</th>
             </tr>
             <tr class="emas">
                 <th>Tanggal</th>
@@ -82,6 +82,7 @@
                 <th>Customer</th>
                 <th>Driver</th>
                 <th>No. POL</th>
+                <th>Keterangan</th>
                 <th>Debit</th>
                 <th>Kredit</th>
                 <th>Saldo</th>
@@ -102,6 +103,7 @@
                 </td>
                 <td>{{ $entry->drivers != null?$entry->drivers->name:"" }}</td>
                 <td>{{ $entry->cars != null?$entry->cars->nopol:"" }}</td>
+                <td>{{ $entry->keterangan }}</td>
                 <td class="right sumDeb{{$key}}">{{ number_format($entry->debit,0,',',',') }}</td>
                 <td class="right sumKred{{$key}}">{{ number_format($entry->kredit,0,',',',') }}</td>
                 <td class="right">{{ number_format($saldoPerRecord[$entry->id],0,',',',') }}</td>
@@ -111,7 +113,7 @@
         </tbody>
         <tfoot>
             <tr class="kuning">
-                <th class="right" colspan="5">Total</th>
+                <th class="right" colspan="6">Total</th>
                 <th class="right" id="totDeb"></th>
                 <th class="right" id="totKred"></th>
                 <th class="right" id="totSaldo"></th>
