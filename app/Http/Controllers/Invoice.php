@@ -129,6 +129,7 @@ class Invoice extends Controller
                             ->update([
                                 //'order_id' => $id,
                                 'invoice_id' => $id,
+                                'status' => "CLOSE",
                             ]);
                     }
                     //add detail invoice
@@ -154,6 +155,7 @@ class Invoice extends Controller
                             ->update([
                                 //'order_id' => $id,
                                 'invoice_id' => $id,
+                                'status' => "CLOSE",
                             ]);
                     }
 

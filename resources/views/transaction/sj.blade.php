@@ -150,7 +150,7 @@
                                 <div class="control-group">
                                     <label class="control-label">Booking Month</label>
                                     <div class="controls">
-                                        <select name="booking_month" id="booking_month" class="form-control select2" style="width: 100%;">
+                                        <select name="booking_month" id="booking_month" class="form-control select2" style="width: 100%;" disabled>
                                             <option value="" selected="selected">Choose...</option>
                                             <option value="1">JANUARI</option>
                                             <option value="2">FEBRUARI</option>
@@ -174,7 +174,7 @@
                                 <div class="control-group">
                                     <label class="control-label">Booking Year</label>
                                     <div class="controls">
-                                        <select name="booking_year" id="booking_year" class="form-control select2" style="width: 100%;">
+                                        <select name="booking_year" id="booking_year" class="form-control select2" style="width: 100%;" disabled>
                                             <option value="" selected="selected">Choose...</option>
                                             <option value="2019">2019</option>
                                             <option value="2020">2020</option>
@@ -812,7 +812,7 @@
                                     <label class="control-label">Status</label>
                                     <div class="controls">
                                         <select name="status" id="status" class="form-control">
-                                            <option value="" selected="selected">Choose...</option>
+                                            <option value="#" selected="selected">Choose...</option>
                                             <option value="OPEN">OPEN</option>
                                             <option value="INVOICE">INVOICE</option>
                                             <option value="BAYAR_RETUR">BAYAR RETUR</option>

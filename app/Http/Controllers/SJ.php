@@ -64,8 +64,6 @@ class SJ extends Controller
                 'user_id' => ['required', 'string', 'max:255'],
                 'car_id' => ['required', 'string', 'max:255'],
                 //'type' => ['required', 'string', 'max:255'],
-                'booking_month' => ['required', 'string', 'max:255'],
-                'booking_year' => ['required', 'string', 'max:255'],
                 'grand_total' => ['required', 'string', 'max:255'],
 
             ]);
@@ -92,11 +90,11 @@ class SJ extends Controller
             $post->driver_id = $request->driver_id;
             $post->car_id = $request->car_id;
             $post->user_id = $get_user->id;
-            $post->booking_month = $request->booking_month;
-            $post->booking_year = $request->booking_year;
+            $post->date_sj = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_sj)));
+            $post->booking_month = date("m", strtotime(str_replace('/', '-', $request->date_sj)));
+            $post->booking_year = date("Y", strtotime(str_replace('/', '-', $request->date_sj)));
             $post->sadm = 0;
             $post->grand_total = str_replace(",", "", $request->grand_total);
-            $post->date_sj = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_sj)));
             if ($request->kembali_sj != "") {
                 $post->kembali_sj = date("Y-m-d", strtotime(str_replace('/', '-', $request->kembali_sj)));
             }
@@ -104,7 +102,7 @@ class SJ extends Controller
                 $post->kembali_rev = date("Y-m-d", strtotime(str_replace('/', '-', $request->kembali_rev)));
             }
             $post->revisi = $request->revisi;
-            $post->status = $request->status;
+            $post->status = $request->status == "#" ? "OPEN" : $request->status;
             $post->save();
 
             $part_id = collect($request->part_id)->filter()->all();
