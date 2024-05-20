@@ -1371,7 +1371,7 @@
         });
 
         // Set option selected onchange
-        $('#qty0,#qty1,#qty2,#qty3,#qty4,#qty5,#qty6,#qty7,#qty8,#qty9').change(function(event) {
+        $('#qty0,#qty1,#qty2,#qty3,#qty4,#qty5,#qty6,#qty7,#qty8,#qty9').on('input', function(event) {
             var matches = $(this).attr('id').match(/(\d+)/);
             var qty = $(this).val();
             //console.log(matches[0]);
