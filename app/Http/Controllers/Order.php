@@ -25,7 +25,12 @@ class Order extends Controller
                 ])->get();
 
                 $count = SJ::select('grand_total')->whereIn("id", $order->toArray())->sum('grand_total');
-                $countt = round((($count / $data->total_price) * 100), 2);
+
+                if ($data->total_price != 0) {
+                    $countt = round((($count / $data->total_price) * 100), 2);
+                } else {
+                    $countt = 0;
+                }
                 return $countt . " %";
             })
             ->addColumn('aksi', function ($data) {
