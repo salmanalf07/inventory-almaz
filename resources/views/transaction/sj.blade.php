@@ -1118,7 +1118,7 @@
                 $('#cust_id').val(data.cust_id).trigger('change').attr("disabled", true);
                 if (data.order_id != null) {
                     setTimeout(function() {
-                        $('#order_id').val(data.order_id).trigger('change').attr("disabled", true);
+                        $('#order_id').val(data.order_id).trigger('change');
                     }, 2000);
                 }
                 if (data.invoice_id != null) {

@@ -182,6 +182,9 @@ class SJ extends Controller
             $post = ModelsSJ::find($id);
             $post->date_sj = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_sj)));
             $post->grand_total = str_replace(",", "", $request->grand_total);
+            if ($request->order_id != "-") {
+                $post->order_id = $request->order_id;
+            }
             //$post->cust_id = $request->cust_id;
             if ($request->order_id && $request->order_id != "-") {
                 $post->order_id = $request->order_id;
