@@ -94,7 +94,7 @@ class SJ extends Controller
             $post->booking_month = date("m", strtotime(str_replace('/', '-', $request->date_sj)));
             $post->booking_year = date("Y", strtotime(str_replace('/', '-', $request->date_sj)));
             $post->sadm = 0;
-            $post->grand_total = str_replace(",", "", $request->grand_total);
+
             if ($request->kembali_sj != "") {
                 $post->kembali_sj = date("Y-m-d", strtotime(str_replace('/', '-', $request->kembali_sj)));
             }
@@ -110,9 +110,6 @@ class SJ extends Controller
             $qty = collect($request->qty)->filter()->all();
             $qty_pack = collect($request->qty_pack)->filter()->all();
             $type_pack = collect($request->type_pack)->filter()->all();
-            $total_price = array_filter($request->total_price, function ($value) {
-                return ($value !== null && $value !== false && $value !== '');
-            });
             $keterangan = array_filter($request->keterangan, function ($value) {
                 return ($value !== null && $value !== false && $value !== '');
             });
@@ -123,20 +120,20 @@ class SJ extends Controller
                 } else {
                     $keterangann = $keterangan[$count];
                 }
-                $angka = str_replace(",", "", $total_price[$count]);
+                $angka = Parts::find($part_id[$count])->price * str_replace(",", "", $qty[$count]);
 
-                if ($angka % 1 == 0) {
-                    $angka = rtrim($angka, '0');
-                    $angka = rtrim($angka, '.');
-                }
+                // if ($angka % 1 == 0) {
+                //     $angka = rtrim($angka, '0');
+                //     $angka = rtrim($angka, '.');
+                // }
                 $part = Parts::find($part_id[$count]);
                 $data = array(
                     'sj_id' => $post->id,
                     'part_id' => $part_id[$count],
-                    'type' => $type[$count],
+                    'type' => $type[$count] ?? "REGULER",
                     'qty'  => str_replace(",", "", $qty[$count]),
-                    'qty_pack'  => $qty_pack[$count],
-                    'type_pack'  => $type_pack[$count],
+                    'qty_pack'  => $qty_pack[$count] ?? 1,
+                    'type_pack'  => $type_pack[$count] ?? "BOX",
                     'sadm' => str_replace(",", "", $qty[$count]) * $part->sa_dm,
                     'total_price'  => $angka,
                     'keterangan'  => $keterangann,
@@ -145,14 +142,19 @@ class SJ extends Controller
 
                 $insert[] = $data;
             }
-            $sadm = DetailSJ::where('sj_id', $post->id)->sum('sadm');
-
-            ModelsSJ::where(['id' => $post->id])
-                ->update([
-                    'sadm' => number_format((float)$sadm, 2, '.', ''),
-                ]);
 
             DetailSJ::insert($insert);
+
+            $sjDetails = DetailSJ::where('sj_id', $post->id)->get();
+            $sadm = $sjDetails->sum('sadm');
+            $grand_total = $sjDetails->sum('total_price');
+
+            $updSaAndTot = ModelsSJ::find($post->id);
+            $updSaAndTot->sadm = number_format((float)$sadm, 2, '.', '');
+            $updSaAndTot->grand_total = $grand_total;
+            $updSaAndTot->save();
+
+
             $track = new TrackSj();
             $track->sj_id = $post->id;
             $track->user_id = $get_user->id;
