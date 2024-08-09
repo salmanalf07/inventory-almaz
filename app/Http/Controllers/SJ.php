@@ -183,7 +183,7 @@ class SJ extends Controller
 
             $post = ModelsSJ::find($id);
             $post->date_sj = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_sj)));
-            $post->grand_total = str_replace(",", "", $request->grand_total);
+            // $post->grand_total = str_replace(",", "", $request->grand_total);
             if ($request->order_id != "-") {
                 $post->order_id = $request->order_id;
             }
@@ -266,7 +266,7 @@ class SJ extends Controller
                     return ($value !== null && $value !== false && $value !== '');
                 });
 
-                for ($count = 0; $count < count($detail_id); $count++) {
+                for ($count = 0; $count < count($part_id); $count++) {
                     if ($keterangan[$count] === "-") {
                         $keterangann = null;
                     } else {
@@ -279,24 +279,28 @@ class SJ extends Controller
                         $angka = rtrim($angka, '.');
                     }
                     $part = Parts::find($part_id[$count]);
-                    DetailSJ::where(['id' => $detail_id[$count]])
-                        ->update([
-                            'part_id' => $part_id[$count],
-                            'qty'  => str_replace(",", "", $qty[$count]),
-                            'qty_pack'  => str_replace(",", "", $qty_pack[$count]),
-                            'type_pack'  => str_replace(",", "", $type_pack[$count]),
-                            'sadm' => str_replace(",", "", $qty[$count]) * $part->sa_dm,
-                            'total_price'  => $angka,
-                            'keterangan'  => $keterangann,
-                        ]);
+
+                    $update = DetailSJ::findOrNew($detail_id[$count] ?? '#');
+                    $update->sj_id = $id;
+                    $update->part_id = $part_id[$count];
+                    $update->type = $type[$count] ?? "REGULER";
+                    $update->qty = str_replace(",", "", $qty[$count]);
+                    $update->qty_pack = str_replace(",", "", $qty_pack[$count]);
+                    $update->type_pack = str_replace(",", "", $type_pack[$count]);
+                    $update->sadm = str_replace(",", "", $qty[$count]) * $part->sa_dm;
+                    $update->total_price = $angka;
+                    $update->keterangan = $keterangann;
+                    $update->save();
                 }
 
-                $sadm = DetailSJ::where('sj_id', $id)->sum('sadm');
+                $sjDetails = DetailSJ::where('sj_id', $id)->get();
+                $sadm = $sjDetails->sum('sadm');
+                $grand_total = $sjDetails->sum('total_price');
 
-                ModelsSJ::where(['id' => $id])
-                    ->update([
-                        'sadm' => number_format((float)$sadm, 2, '.', ''),
-                    ]);
+                $updSaAndTot = ModelsSJ::find($id);
+                $updSaAndTot->sadm = number_format((float)$sadm, 2, '.', '');
+                $updSaAndTot->grand_total = $grand_total;
+                $updSaAndTot->save();
 
                 $track = new TrackSj();
                 $track->sj_id = $id;
@@ -341,6 +345,15 @@ class SJ extends Controller
         $track->save();
 
         $post->delete();
+
+        $sjDetails = DetailSJ::where('sj_id', $post->sj_id)->get();
+        $sadm = $sjDetails->sum('sadm');
+        $grand_total = $sjDetails->sum('total_price');
+
+        $updSaAndTot = ModelsSJ::find($post->sj_id);
+        $updSaAndTot->sadm = number_format((float)$sadm, 2, '.', '');
+        $updSaAndTot->grand_total = $grand_total;
+        $updSaAndTot->save();
 
         return response()->json($post);
     }

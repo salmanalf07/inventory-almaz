@@ -129,7 +129,7 @@
                                     <label class="control-label">Number PO</label>
                                     <div class="controls">
                                         <select name="order_id" id="order_id" class="form-control select2" style="width: 100%;">
-                                            <option value="" selected="selected">Choose...</option>
+                                            <option value="#" selected="selected">Choose...</option>
 
                                         </select>
                                     </div>
@@ -902,6 +902,7 @@
 <script src="assets/css/jquery/jquery.min.js"></script>
 <!-- <script src="/js/jquery-3.5.1.js"></script> -->
 <script>
+    var rtab = 1;
     $(document).ready(function() {
         //open-user
         $.fn.dataTable.ext.buttons.add = {
@@ -1050,12 +1051,14 @@
         $("#tr2,#tr3,#tr4,#tr5,#tr6,#tr7,#tr8,#tr9,#tr10").hide();
         $('#add-tab').show();
         $('#revisi-tab').hide();
-        var rtab = 1;
+        // var rtab = 1;
         $('#add-tab').click(function() {
             rtab++;
             $("#tr" + rtab).show();
         });
         $('#revisi-tab').click(function() {
+            $('#revisi-tab').hide();
+            $('#add-tab').show();
             $('[name="part_id[]"],[name="type_pack[]"],[name="qty[]"],[name="qty_pack[]"],[name="keterangan[]"]').attr("disabled", false);
         });
     });
@@ -1112,14 +1115,14 @@
             },
             success: function(data) {
                 //console.log(data.detail_s_j.length);
-
+                rtab = data.detail_s_j.length;
                 //isi form
                 $('#id').val(data.id);
                 $('#cust_id').val(data.cust_id).trigger('change').attr("disabled", true);
                 if (data.order_id != null) {
                     setTimeout(function() {
                         $('#order_id').val(data.order_id).trigger('change');
-                    }, 2000);
+                    }, 500);
                 }
                 if (data.invoice_id != null) {
                     setTimeout(function() {
@@ -1222,7 +1225,7 @@
                     $('#myModal').modal('hide');
                     reset_form();
                     // $('#example1').DataTable().ajax.reload();
-                    location.reload();
+                    // location.reload();
                 }
             }
         });
@@ -1306,15 +1309,16 @@
     $(document).ready(function() {
         // $('#in2,#in3,#in4').hide();
         // Set option selected onchange
-        $('#cust_id').change(function() {
-            var value = $(this).val();
+        $('#cust_id,#order_id').change(function() {
+            // var value = $(this).val();
             // console.log(value);
             $.ajax({
                 type: 'POST',
                 url: 'search_part',
                 data: {
                     '_token': "{{ csrf_token() }}",
-                    'cust_id': $(this).val(),
+                    'cust_id': $('#cust_id').val(),
+                    'order_id': $('#order_id').val(),
 
                 },
                 success: function(data) {

@@ -219,10 +219,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/store_partin', [PartIn::
 Route::middleware(['auth:sanctum', 'verified'])->post('/edit_partin', [PartIn::class, 'edit']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_partin/{id}', [PartIn::class, 'update']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_partin/{id}', [PartIn::class, 'destroy']);
-Route::middleware(['auth:sanctum', 'verified'])->post('/search_part', function (Request $request) {
-    $part = ModelsParts::where('cust_id', $request->cust_id)->get();
-    return response()->json($part);
-});
 Route::middleware(['auth:sanctum', 'verified'])->post('/search_order', function (Request $request) {
     $order = Order::where([['cust_id', $request->cust_id], ['status', 'OPEN']])->get();
     return response()->json($order);
@@ -263,7 +259,13 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/update_sj/{id}', [SJ::cl
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_sj/{id}', [SJ::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/del_part/{id}', [SJ::class, 'destroy_part']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/search_part', function (Request $request) {
-    $part = ModelsParts::where('cust_id', $request->cust_id)->get();
+    if ($request->order_id != '#') {
+        $order = DetailOrder::where('order_id', $request->order_id)
+            ->pluck('part_id');
+        $part = ModelsParts::whereIn('id', $order)->get();
+    } else {
+        $part = ModelsParts::where('cust_id', $request->cust_id)->get();
+    }
     return response()->json($part);
 });
 Route::middleware(['auth:sanctum', 'verified'])->post('/search_invoice', function (Request $request) {
