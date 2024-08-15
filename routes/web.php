@@ -259,7 +259,7 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/update_sj/{id}', [SJ::cl
 Route::middleware(['auth:sanctum', 'verified'])->delete('/delete_sj/{id}', [SJ::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'verified'])->delete('/del_part/{id}', [SJ::class, 'destroy_part']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/search_part', function (Request $request) {
-    if ($request->order_id != '#') {
+    if ($request->order_id && $request->order_id != '#') {
         $order = DetailOrder::where('order_id', $request->order_id)
             ->pluck('part_id');
         $part = ModelsParts::whereIn('id', $order)->get();

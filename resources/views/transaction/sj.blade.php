@@ -1122,7 +1122,7 @@
                 if (data.order_id != null) {
                     setTimeout(function() {
                         $('#order_id').val(data.order_id).trigger('change');
-                    }, 500);
+                    }, 1800);
                 }
                 if (data.invoice_id != null) {
                     setTimeout(function() {
@@ -1133,7 +1133,7 @@
                     for (let j = 0; j < data.detail_s_j.length; j++) {
                         $('#part_id' + j).val(data.detail_s_j[j].part_id).trigger('change').attr("disabled", true);
                     }
-                }, 2000);
+                }, 3000);
                 setTimeout(function() {
                     for (let i = 0; i < data.detail_s_j.length; i++) {
                         $('#detail_id' + i).val(data.detail_s_j[i].id);
@@ -1146,7 +1146,7 @@
                             $('#keterangan' + i).val(data.detail_s_j[i].keterangan).attr("disabled", true);
                         }
                     }
-                }, 2000);
+                }, 3000);
                 let grand_total = 0;
                 setTimeout(function() {
                     for (let k = 0; k < data.detail_s_j.length; k++) {
@@ -1157,7 +1157,7 @@
                         grand_total += parseFloat(data.detail_s_j[k].total_price);
                         AutoNumeric.getAutoNumericElement('#grand_total').set(grand_total);
                     }
-                }, 2000);
+                }, 3000);
                 // setTimeout(function() {
                 //     AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 // }, 2100);
@@ -1177,11 +1177,11 @@
                 if (data.kembali_rev != null) {
                     $('#kembali_rev').val(new Date(data.kembali_rev).toLocaleString("id-ID", newDateOptions).split(' ')[0]).prop('readonly', true)
                 }
-                $('#car_id').val(data.car_id).trigger('change').attr("disabled", true);
+                $('#car_id').val(data.car_id).trigger('change');
                 $('#type').val(data.type).trigger('change').attr("disabled", true);
                 $('#booking_month').val(data.booking_month).trigger('change').attr("disabled", true);
                 $('#booking_year').val(data.booking_year).trigger('change').attr("disabled", true);
-                $('#driver_id').val(data.driver_id).trigger('change').attr("disabled", true);
+                $('#driver_id').val(data.driver_id).trigger('change');
                 $('#revisi').val(data.revisi);
                 $('#plan_delivery').val(data.plan_delivery);
                 $('#status').val(data.status).trigger('change');

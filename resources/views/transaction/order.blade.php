@@ -160,16 +160,16 @@
                                                         </select>
                                                     </td>
                                                     <td id="col1">
-                                                        <input class="form-control" type="text" name="qty[]" onchange="search_price(this)" id="qty0" placeholder="Qty" class="span15">
+                                                        <input class="form-control number-input" type="text" name="qty[]" onchange="search_price(this)" id="qty0" placeholder="Qty" class="span15">
                                                     </td>
                                                     <td id="col2">
-                                                        <input class="form-control" type="text" name="qty_progress[]" id="qty_progress0" readonly class="span15">
+                                                        <input class="form-control number-input" type="text" name="qty_progress[]" id="qty_progress0" readonly class="span15">
                                                     </td>
                                                     <td id="col3">
-                                                        <input class="form-control autonumeric-integer" type="text" name="price[]" id="price0" readonly class="span15">
+                                                        <input class="form-control number-input" type="text" name="price[]" id="price0" readonly class="span15">
                                                     </td>
                                                     <td id="col4">
-                                                        <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price0" readonly class="span15">
+                                                        <input class="form-control number-input" type="text" name="total_price[]" id="total_price0" readonly class="span15">
                                                     </td>
                                                     <td id="col5">
                                                         <button id="upd_pr0" class="btn btn-warning" type="button" onclick="update_price(this)">Update</button>
@@ -187,7 +187,7 @@
                                                         <p style="text-align: right;">Grand Total</p>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control autonumeric-integer" name="grand_total" id="grand_total" type="text" readonly>
+                                                        <input class="form-control number-input" name="grand_total" id="grand_total" type="text" readonly>
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -212,12 +212,12 @@
 </div>
 <!-- jQuery -->
 <script src="assets/css/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="assets/js/autonumeric/autoNumeric.min.js"></script>
+<!-- <script type="text/javascript" src="assets/js/autonumeric/autoNumeric.min.js"></script>
 <script>
     new AutoNumeric('[name="qty[]"]', {
         decimalPlaces: "0",
     });
-</script>
+</script> -->
 <!-- <script src="/js/jquery-3.5.1.js"></script> -->
 <script>
     $(function() {
@@ -232,7 +232,7 @@
                 // reset_form();
                 $('#SJJ').hide();
                 //document.getElementById("addfoot").removeAttribute("hidden");
-                autonumeric(0);
+                // autonumeric(0);
                 $("#addrow,#deleterow").show();
                 $('#revisi-tab').hide();
                 $('#myModal').modal('show');
@@ -347,7 +347,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'POST',
-            url: '{{ url("store_order") }}',
+            url: '/store_order',
             data: fd,
             processData: false,
             contentType: false,
@@ -373,6 +373,8 @@
     //end add data
     $('#revisi-tab').click(function() {
         $('[name="part_id[]"],[name="qty[]"],[name="detail_id[]"]').attr("disabled", false);
+        $("#addrow").show();
+        $('#revisi-tab').hide();
     });
     //edit data
     $(document).on('click', '#edit', function(e) {
@@ -400,31 +402,19 @@
                 $('#cust_id').val(data[0].cust_id).trigger('change').attr("disabled", true);;
                 $('#no_po').val(data[0].no_po);
                 $('#status').val(data[0].status).trigger('change');
-                let text = "";
+                // let text = "";
                 for (let i = 1; i < data[0].detail_order.length; i++) {
-                    text += '<tr><td>' +
-                        '<input type="hidden" id="detail_id' + i + '" name="detail_id[]"><select name="part_id[]" id="part_id' + i + '" class="form-control select2" style="width: 100%;">' +
-                        '<option selected="selected">Choose...</option>' +
-                        '</select></td><td>' +
-                        '<input class="form-control" type="text" name="qty[]" onchange="search_price(this)" id="qty' + i + '"  placeholder="Qty" class="span15">' +
-                        '</td><td>' +
-                        '<input class="form-control" type="text" name="qty_progress[]" id="qty_progress' + i + '"  class="span15">' +
-                        '</td><td>' +
-                        '<input class="form-control autonumeric-integer" type="text" name="price[]" id="price' + i + '" readonly class="span15">' +
-                        '</td><td>' +
-                        '<input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price' + i + '" readonly class="span15">' +
-                        '</td>' +
-                        '<td><button id = "upd_pr' + i + '" class = "btn btn-warning" type = "button" onclick="update_price(this)">Update</button></td></tr> ';
+                    addRows();
                 }
-                $('#roww').append(text);
+                // $('#roww').append(text);
                 setTimeout(function() {
                     for (let j = 0; j < data[0].detail_order.length; j++) {
                         // setTimeout(function() {
                         $('#detail_id' + [j]).val(data[0].detail_order[j].id).attr("disabled", true);
-                        $('#total_price' + [j]).val(data[0].detail_order[j].price);
+                        $('#total_price' + [j]).val(formatNumberr(data[0].detail_order[j].price)).attr("disabled", true);
                         $('#part_id' + [j]).val(data[0].detail_order[j].part_id).trigger('change').attr("disabled", true);
-                        $('#qty' + [j]).val(data[0].detail_order[j].qty).attr("disabled", true);
-                        $('#price' + [j]).val(data[0].detail_order[j].price / data[0].detail_order[j].qty);
+                        $('#qty' + [j]).val(formatNumberr(data[0].detail_order[j].qty)).attr("disabled", true);;
+                        $('#price' + [j]).val(formatNumberr(data[0].detail_order[j].price / data[0].detail_order[j].qty));
                         $.ajax({
                             type: 'POST',
                             url: 'search_progress_po',
@@ -436,17 +426,17 @@
                             },
                             success: function(data) {
                                 if (data != "false") {
-                                    $('#qty_progress' + [j]).val(data.qty).attr("disabled", true);
+                                    $('#qty_progress' + [j]).val(formatNumberr(data.qty)).attr("disabled", true);
                                 } else {
-                                    $('#qty_progress' + [j]).val(data.qty).attr("disabled", true);
+                                    $('#qty_progress' + [j]).val(formatNumberr(data.qty)).attr("disabled", true);
                                 }
                             },
                         });
-                        autonumeric(j);
+                        // autonumeric(j);
                         // }, 1000);
                     }
                     findTotal(data[0].detail_order.length);
-                }, 500);
+                }, 1000);
 
                 $('#date').val(new Date(data[0].date).toLocaleString("id-ID", newDateOptions).split(' ')[0]).attr("disabled", true);;
                 $('#SJJ').show();
@@ -540,7 +530,7 @@
             //console.log(value);
             $.ajax({
                 type: 'POST',
-                url: 'search_part',
+                url: '/search_part',
                 data: {
                     '_token': "{{ csrf_token() }}",
                     'cust_id': $(this).val(),
@@ -580,14 +570,14 @@
             },
             success: function(data) {
                 if (total_price === "") {
-                    $('#price' + matches[0]).val(data);
-                    // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
+                    $('#price' + matches[0]).val(formatNumberr(data));
+                    // $('#total_price' + matches[0]).val(qty.replaceAll(".", "") * data);
                     // autonumeric(matches[0]);
-                    AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
-                } else if (price.replaceAll(",", "") == data) {
-                    // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
+                    $('#total_price' + matches[0]).val(formatNumberr(qty.replaceAll(".", "") * data));
+                } else if (price.replaceAll(".", "") == data) {
+                    // $('#total_price' + matches[0]).val(qty.replaceAll(".", "") * data);
                     // autonumeric(matches[0]);
-                    AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
+                    $('#total_price' + matches[0]).val(formatNumberr(qty.replaceAll(".", "") * data));
                 }
                 findTotal(matches[0] + 1);
             },
@@ -612,10 +602,10 @@
             },
             success: function(data) {
                 // if (total_price === "") {
-                $('#price' + matches[0]).val(data);
-                AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
-                // } else if (price.replaceAll(",", "") == data) {
-                //     $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
+                $('#price' + matches[0]).val(formatNumberr(data));
+                $('#total_price' + matches[0]).val(formatNumberr(qty.replaceAll(".", "") * data));
+                // } else if (price.replaceAll(".", "") == data) {
+                //     $('#total_price' + matches[0]).val(qty.replaceAll(".", "") * data);
                 //     autonumeric(matches[0]);
                 // }
                 findTotal(matches[0] + 1);
@@ -646,12 +636,12 @@
         var tot = 0;
         for (var i = 0; i < id; i++) {
             if (parseFloat($('#total_price' + i).val())) {
-                var total_p = $('#total_price' + i).val().replaceAll(",", "");
+                var total_p = $('#total_price' + i).val().replaceAll(".", "");
                 tot += parseFloat(total_p);
             }
         }
         //AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
-        AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
+        $('#grand_total').val(formatNumberr(tot));
     }
 
     function addRows() {
@@ -667,6 +657,9 @@
             cell.innerHTML = copycel;
 
             if (i == 0) {
+                var detailId = document.getElementById('col0' + rowCount).getElementsByTagName('input');
+                detailId[0].id = 'detail_id' + rowCount;
+                detailId[0].value = "";
                 var partidinput = document.getElementById('col0' + rowCount).getElementsByTagName('select');
                 partidinput[0].id = 'part_id' + rowCount;
                 $('#part_id' + rowCount).select2({
@@ -678,17 +671,11 @@
                 var qtyinput = document.getElementById('col1' + rowCount).getElementsByTagName('input');
                 qtyinput[0].id = 'qty' + rowCount;
                 qtyinput[0].value = "";
-                new AutoNumeric('#qty' + rowCount, {
-                    decimalPlaces: "0",
-                });
             }
             if (i == 2) {
                 var progressinput = document.getElementById('col2' + rowCount).getElementsByTagName('input');
-                progressinput[0].id = 'progress' + rowCount;
+                progressinput[0].id = 'qty_progress' + rowCount;
                 progressinput[0].value = "";
-                new AutoNumeric('#progress' + rowCount, {
-                    decimalPlaces: "0",
-                });
             }
             if (i == 3) {
                 var priceinput = document.getElementById('col3' + rowCount).getElementsByTagName('input');
@@ -700,12 +687,14 @@
                 var radioinput = document.getElementById('col4' + rowCount).getElementsByTagName('input');
                 radioinput[0].id = 'total_price' + rowCount;
                 radioinput[0].value = "";
-                autonumeric(rowCount);
             }
             if (i == 5) {
                 var upd_pr = document.getElementById('col5' + rowCount).getElementsByTagName('button');
                 upd_pr[0].id = 'upd_pr' + rowCount;
             }
+            $(".number-input").on("input", function() {
+                formatNumber(this);
+            });
         }
     }
 
@@ -734,35 +723,6 @@
         }
         //$('#user_id').val('{{ Auth::user()->name }}');
     };
-
-    function autonumeric(i) {
-        // new AutoNumeric('#qty' + i, {
-        //     decimalPlaces: "0",
-        // });
-        // inisialisasi AutoNumeric
-        const mixedOptions = {
-            ...AutoNumeric.getPredefinedOptions().all,
-            unformatOnSubmit: true,
-        };
-
-        // tambahkan event listener untuk mengatur opsi decimalPlaces secara dinamis
-        const mixedInput = document.querySelector('.autonumeric-integer');
-        mixedInput.addEventListener('input', () => {
-            const value = mixedInput.value;
-            const decimalIndex = value.indexOf('.');
-
-            // set opsi decimalPlaces ke null jika tidak ada angka desimal atau set opsi decimalPlaces ke 2 jika ada angka desimal
-            mixedOptions.decimalPlaces = decimalIndex === -1 ? null : 2;
-        });
-
-        // terapkan AutoNumeric pada input field
-        // AutoNumeric.multiple('.autonumeric-integer', mixedOptions);
-        if (i == 0) {
-            new AutoNumeric('#grand_total', mixedOptions);
-        }
-        new AutoNumeric('#price' + i, mixedOptions);
-        new AutoNumeric('#total_price' + i, mixedOptions);
-    }
 </script>
 
 @endsection

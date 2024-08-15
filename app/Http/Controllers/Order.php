@@ -67,9 +67,9 @@ class Order extends Controller
             $post = new ModelsOrder();
             $post->no_po = $request->no_po;
             $post->cust_id = $request->cust_id;
-            $post->total_price = str_replace(",", "", $request->grand_total);
             $post->date = date("Y-m-d", strtotime(str_replace('/', '-', $request->date)));
             $post->save();
+
 
             $part_id = collect($request->part_id)->filter()->all();
             //$qty = collect($request->qty)->filter()->all();
@@ -77,22 +77,15 @@ class Order extends Controller
             $qty = array_filter($request->qty, function ($value) {
                 return ($value !== null && $value !== false && $value !== '');
             });
-            $total_price = array_filter($request->total_price, function ($value) {
-                return ($value !== null && $value !== false && $value !== '');
-            });
 
             for ($count = 0; $count < count($part_id); $count++) {
-                $angka = str_replace(",", "", $total_price[$count]);
-
-                if ($angka % 1 == 0) {
-                    $angka = rtrim($angka, '0');
-                    $angka = rtrim($angka, '.');
-                }
+                $parts = Parts::find($part_id[$count]);
+                $qtyBase = str_replace(".", "", $qty[$count]);
                 $data = array(
                     'order_id' => $post->id,
                     'part_id' => $part_id[$count],
-                    'qty'  => str_replace(",", "", $qty[$count]),
-                    'price'  => $angka,
+                    'qty'  => $qtyBase,
+                    'price'  => $qtyBase * $parts->price,
                     'created_at' => date("Y-m-d H:i:s", strtotime('now'))
                 );
 
@@ -100,6 +93,8 @@ class Order extends Controller
             }
 
             DetailOrder::insert($insert);
+            $detailOrder = DetailOrder::where('order_id', $post->id)->get();
+            ModelsOrder::where('id', $post->id)->update(['total_price' => $detailOrder->sum('price')]);
 
             $data = [$post];
             return response()->json($data);
@@ -133,31 +128,25 @@ class Order extends Controller
             $post->no_po = $request->no_po;
             $post->status = $request->status;
             if (count(collect($request->detail_id)->filter()->all()) != 0) {
-                $post->total_price = str_replace(",", "", $request->grand_total);
 
                 $detail_id = collect($request->detail_id)->filter()->all();
                 $part_id = collect($request->part_id)->filter()->all();
                 $qty = array_filter($request->qty, function ($value) {
                     return ($value !== null && $value !== false && $value !== '');
                 });
-                $total_price = array_filter($request->total_price, function ($value) {
-                    return ($value !== null && $value !== false && $value !== '');
-                });
-                for ($count = 0; $count < count($detail_id); $count++) {
-                    $angka = str_replace(",", "", $total_price[$count]);
-
-                    if ($angka % 1 == 0) {
-                        $angka = rtrim($angka, '0');
-                        $angka = rtrim($angka, '.');
-                    }
-                    DetailOrder::where(['id' => $detail_id[$count]])
-                        ->update([
-                            'part_id' => $part_id[$count],
-                            'qty'  => str_replace(",", "", $qty[$count]),
-                            'price'  => $angka,
-                        ]);
+                for ($count = 0; $count < count($part_id); $count++) {
+                    $parts = Parts::find($part_id[$count]);
+                    $qtyBase = str_replace(".", "", $qty[$count]);
+                    $saveDetail = DetailOrder::findOrNew($detail_id[$count] ?? "#");
+                    $saveDetail->order_id = $id;
+                    $saveDetail->part_id = $part_id[$count];
+                    $saveDetail->qty = $qtyBase;
+                    $saveDetail->price = $qtyBase * $parts->price;
+                    $saveDetail->save();
                 }
             }
+            $detailOrder = DetailOrder::where('order_id', $post->id)->get();
+            $post->total_price = $detailOrder->sum('price');
             $post->save();
             return response()->json($post);
         } catch (ValidationException $error) {
