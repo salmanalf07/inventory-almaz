@@ -120,12 +120,6 @@ class SJ extends Controller
                 } else {
                     $keterangann = $keterangan[$count];
                 }
-                $angka = Parts::find($part_id[$count])->price * str_replace(",", "", $qty[$count]);
-
-                // if ($angka % 1 == 0) {
-                //     $angka = rtrim($angka, '0');
-                //     $angka = rtrim($angka, '.');
-                // }
                 $part = Parts::find($part_id[$count]);
                 $data = array(
                     'sj_id' => $post->id,
@@ -135,7 +129,7 @@ class SJ extends Controller
                     'qty_pack'  => $qty_pack[$count] ?? 1,
                     'type_pack'  => $type_pack[$count] ?? "BOX",
                     'sadm' => str_replace(",", "", $qty[$count]) * $part->sa_dm,
-                    'total_price'  => $angka,
+                    'total_price' => str_replace(",", "", $qty[$count]) * $part->price,
                     'keterangan'  => $keterangann,
                     'created_at' => date("Y-m-d H:i:s", strtotime('now'))
                 );
@@ -277,12 +271,6 @@ class SJ extends Controller
                     } else {
                         $keterangann = $keterangan[$count];
                     }
-                    $angka = str_replace(",", "", $total_price[$count]);
-
-                    if ($angka % 1 == 0) {
-                        $angka = rtrim($angka, '0');
-                        $angka = rtrim($angka, '.');
-                    }
                     $part = Parts::find($part_id[$count]);
 
                     $update = DetailSJ::findOrNew($detail_id[$count] ?? '#');
@@ -293,7 +281,7 @@ class SJ extends Controller
                     $update->qty_pack = str_replace(",", "", $qty_pack[$count]);
                     $update->type_pack = str_replace(",", "", $type_pack[$count]);
                     $update->sadm = str_replace(",", "", $qty[$count]) * $part->sa_dm;
-                    $update->total_price = $angka;
+                    $update->total_price = str_replace(",", "", $qty[$count]) * $part->price;
                     $update->keterangan = $keterangann;
                     $update->save();
                 }
