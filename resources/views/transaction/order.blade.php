@@ -530,7 +530,7 @@
             //console.log(value);
             $.ajax({
                 type: 'POST',
-                url: '/search_part',
+                url: 'search_part',
                 data: {
                     '_token': "{{ csrf_token() }}",
                     'cust_id': $(this).val(),
