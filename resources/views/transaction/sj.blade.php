@@ -768,7 +768,7 @@
                                                         <p style="text-align: right;">Progress PO</p>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control autonumeric-integer" name="qty_po" id="qty_po" type="text" readonly>
+                                                        <input class="form-control" name="qty_po" id="qty_po" type="text" readonly>
                                                     </td>
                                                     <td colspan="3">
                                                         <p style="text-align: right;">Grand Total</p>
@@ -903,6 +903,7 @@
 <!-- <script src="/js/jquery-3.5.1.js"></script> -->
 <script>
     var rtab = 1;
+    var statQty = 1;
     $(document).ready(function() {
         //open-user
         $.fn.dataTable.ext.buttons.add = {
@@ -925,6 +926,7 @@
                 $("#date_sj").val(date.getDate() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear());
                 $("#nosj").val(parseInt("{{$sj->nosj}}") + 1);
                 rtab = 1;
+                statQty = 1;
                 $('[name="part_id[]"],[name="type_pack[]"],[name="qty[]"],[name="qty_pack[]"]').attr("disabled", false);
                 //AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 $('#myModal').modal('show');
@@ -1116,6 +1118,7 @@
             success: function(data) {
                 //console.log(data.detail_s_j.length);
                 rtab = data.detail_s_j.length;
+                statQty = 2;
                 //isi form
                 $('#id').val(data.id);
                 $('#cust_id').val(data.cust_id).trigger('change').attr("disabled", true);
@@ -1225,7 +1228,7 @@
                     $('#myModal').modal('hide');
                     reset_form();
                     // $('#example1').DataTable().ajax.reload();
-                    // location.reload();
+                    location.reload();
                 }
             }
         });
@@ -1346,7 +1349,7 @@
                 },
                 success: function(data) {
                     $('[name="order_id"]').empty();
-                    $('[name="order_id"]').append('<option value="-">Choose...</option>');
+                    $('[name="order_id"]').append('<option value="#">Choose...</option>');
                     $.each(data, function(i) {
                         $('[name="order_id"]').append('<option value="' + data[i].id + '">' + data[i].no_po + '</option>');
                     })
@@ -1373,12 +1376,19 @@
             });
 
         });
-
         // Set option selected onchange
         $('#qty0,#qty1,#qty2,#qty3,#qty4,#qty5,#qty6,#qty7,#qty8,#qty9').on('input', function(event) {
             var matches = $(this).attr('id').match(/(\d+)/);
             var qty = $(this).val();
-            //console.log(matches[0]);
+            var compareQty = Number(qty.replace(/,/g, ''))
+            var qtyPO = $('#qty_po').val();
+            var compareQtyPO = qtyPO == '' ? 0 : Number(qtyPO.replace(/,/g, ''));
+
+            if (statQty != 2 && compareQtyPO != 0 && compareQty > compareQtyPO) {
+                alert('Jumlah Qty (' + qty + ') melebihi PO (' + qtyPO + ')');
+                qty = qtyPO;
+                AutoNumeric.getAutoNumericElement('#qty' + matches[0]).set(qtyPO);
+            }
             $.ajax({
                 type: 'POST',
                 url: 'search_price',

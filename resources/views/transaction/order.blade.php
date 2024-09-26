@@ -347,7 +347,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'POST',
-            url: '/store_order',
+            url: 'store_order',
             data: fd,
             processData: false,
             contentType: false,

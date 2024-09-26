@@ -97,8 +97,8 @@ class Invoice extends Controller
         $get = ModelsInvoice::with('customer', 'DetailInvoice.Parts', 'application')->find($request->id);
 
         //$SJ = SJ::where([['cust_id', '=', $get->cust_id], ['status', "=", "INVOICE"]])->get();
-        $SJ = SJ::with('customer')->where([['cust_id', '=', $get->cust_id], ['invoice_id', "=", $request->id]])
-            ->orWhere([['invoice_id', "=", null]])->get();
+        $SJ = SJ::with('customer')->where('invoice_id', "=", $request->id)
+            ->orWhere([['cust_id', '=', $get->cust_id], ['invoice_id', "=", null]])->get();
         $noSJ = SJ::select('id')->where('invoice_id', '=', $get->id)->get();
         //->first() = hanya menampilkan satu saja dari hasil query
         //->get() = returnnya berbentuk array atau harus banyak data

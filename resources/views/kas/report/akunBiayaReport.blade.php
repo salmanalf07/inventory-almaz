@@ -62,12 +62,21 @@
                 $found = true; // Set variabel bantu menjadi true jika ada rekord yang cocok
                 @endphp
 
-                @foreach($dataa['data'] as $dataaa)
-                <td class="text-end sum{{$no}}">{{number_format($dataaa['total'],0,',','.')}}</td>
+                @foreach($datdetail[0]['data'] as $key => $data)
+                @php
+                $currentData = collect($dataa['data'])->firstWhere('bulan', $data['bulan']);
+                @endphp
+
+                @if($currentData)
+                <td class="text-end sum{{$no}}">{{number_format($currentData['total'],0,',','.')}}</td>
+                @else
+                <td class="text-end">0</td>
+                @endif
                 <?php $no++ ?>
                 @endforeach
                 @endif
                 @endforeach
+
 
                 @if(!$found)
                 @foreach($datdetail[0]['data'] as $data)
@@ -98,8 +107,16 @@
                 @php
                 $found = true; // Set variabel bantu menjadi true jika ada rekord yang cocok
                 @endphp
-                @foreach($dataa['data'] as $dataaa)
-                <td class="text-end sum{{$noo}}">{{number_format($dataaa['total'],0,',','.')}}</td>
+                @foreach($datdetail[0]['data'] as $key => $data)
+                @php
+                $currentData = collect($dataa['data'])->firstWhere('bulan', $data['bulan']);
+                @endphp
+
+                @if($currentData)
+                <td class="text-end sum{{$noo}}">{{number_format($currentData['total'],0,',','.')}}</td>
+                @else
+                <td class="text-end">0</td>
+                @endif
                 <?php $noo++ ?>
                 @endforeach
                 @endif

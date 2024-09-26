@@ -13,6 +13,7 @@ use App\Models\SJ;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class Parts extends Controller
 {
@@ -96,29 +97,34 @@ class Parts extends Controller
                 'part_no' => ['required', 'string', 'max:255'],
                 'part_name' => ['required', 'string', 'max:255'],
             ]);
+            $module = Auth::user()->module;
+            $dataModule = explode(",", $module);
 
             $get = Customer::find($request->cust_id);
 
             $post = ModelsParts::find($id);
-            if ($post->price != str_replace(",", "", $request->price)) {
+            if (array_intersect($dataModule, ['EDITOR-PART', 'ALL'])) {
+                if ($post->price != str_replace(",", "", $request->price)) {
 
-                $postt = new HistoryPart();
-                $postt->cust_id = $post->cust_id;
-                $postt->part_id = $post->id;
-                $postt->name_local = $post->name_local;
-                $postt->part_no = $post->part_no;
-                $postt->part_name = $post->part_name;
-                $postt->price = $post->price;
-                $postt->periode = date("d-m-Y", strtotime($post->updated_at)) . " - " . date("d-m-Y", strtotime('now'));
-                $postt->save();
+                    $postt = new HistoryPart();
+                    $postt->cust_id = $post->cust_id;
+                    $postt->part_id = $post->id;
+                    $postt->name_local = $post->name_local;
+                    $postt->part_no = $post->part_no;
+                    $postt->part_name = $post->part_name;
+                    $postt->price = $post->price;
+                    $postt->periode = date("d-m-Y", strtotime($post->updated_at)) . " - " . date("d-m-Y", strtotime('now'));
+                    $postt->user_id = Auth::user()->id;
+                    $postt->save();
 
-                $angka = str_replace(",", "", $request->price);
+                    $angka = str_replace(",", "", $request->price);
 
-                if ($angka % 1 == 0) {
-                    $angka = rtrim($angka, '0');
-                    $angka = rtrim($angka, '.');
+                    if ($angka % 1 == 0) {
+                        $angka = rtrim($angka, '0');
+                        $angka = rtrim($angka, '.');
+                    }
+                    $post->price = $angka;
                 }
-                $post->price = $angka;
             }
             $post->cust_id = $request->cust_id;
             $post->name_local = $request->part_name . '-' . $get->code . '-' . substr($request->part_no, -5);

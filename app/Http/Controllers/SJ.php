@@ -84,7 +84,7 @@ class SJ extends Controller
             if ($request->invoice_id != "-") {
                 $post->invoice_id = $request->invoice_id;
             }
-            if ($request->order_id != "-") {
+            if ($request->order_id != "#") {
                 $post->order_id = $request->order_id;
             }
             $post->driver_id = $request->driver_id;
@@ -180,14 +180,11 @@ class SJ extends Controller
             $post->driver_id = $request->driver_id;
             $post->car_id = $request->car_id;
             // $post->grand_total = str_replace(",", "", $request->grand_total);
-            if ($request->order_id == "-") {
+            if ($request->order_id == "#") {
                 $post->order_id = null;
             }
-            if ($request->order_id != "-") {
-                $post->order_id = $request->order_id;
-            }
             //$post->cust_id = $request->cust_id;
-            if ($request->order_id && $request->order_id != "-") {
+            if ($request->order_id && $request->order_id != "#") {
                 $post->order_id = $request->order_id;
 
                 $track = new TrackSj();

@@ -17,10 +17,16 @@ class HistoryPart extends Model
         'part_name',
         'price',
         'periode',
+        'user_id',
     ];
 
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'cust_id', 'id');
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
