@@ -31,7 +31,7 @@ class PettyCash extends Controller
             $dataa->where('status', $request->status);
         }
 
-        $data = $dataa->get();
+        $data = $dataa->orderBy('date', 'desc')->orderBy('id', 'desc')->get();
         //saldo Akhir
         $totalDebit = $data->sum('debit');
         $totalKredit = $data->sum('kredit');
@@ -114,7 +114,7 @@ class PettyCash extends Controller
         if ($request->akun != "#") {
             $data->where('pengeluaran_id', $request->akun);
         }
-        $pettyCashEntries = $data->get();
+        $pettyCashEntries = $data->orderBy('date', 'asc')->get();
 
         // Menginisialisasi saldo awal
         $saldoAwal = 0;

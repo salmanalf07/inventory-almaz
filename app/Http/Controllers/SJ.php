@@ -229,13 +229,12 @@ class SJ extends Controller
             if ($request->status == "BAYAR_RETUR") {
                 $post->status = $request->status;
                 //edit type detail_sjs
-                $detail_idd = DetailSJ::select('id')->where(['sj_id' => $id])->get();
+                $detail_idd = DetailSJ::select('id')->where('sj_id', $id)->get();
 
                 foreach ($detail_idd as $data) {
-                    DetailSJ::where(['id' => $data->id])
-                        ->update([
-                            'type'  => $request->status,
-                        ]);
+                    $updRetur = DetailSJ::find($data->id);
+                    $updRetur->type = $request->status;
+                    $updRetur->save();
                 }
                 //tracking
                 $track = new TrackSj();

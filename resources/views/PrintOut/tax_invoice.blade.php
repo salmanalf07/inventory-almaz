@@ -332,9 +332,6 @@
         <tr>
             <td colspan="10" class="border-left border-right center" style="font-size: 8pt;">Kantor Pusat : Jl. Raya Serang Setu Km 1,5 / No. 99 Sukadami, Cikarang Selatan, Bekasi 17530 ( Telp / Fax : 021 – 22180714)</td>
         </tr>
-        <tr>
-            <td colspan="10" class="no-border center" style="font-size: 8pt;">Kantor Cabang : Jl. Brigjend Katamso No.47, Muara Teweh 73811, Kalimantan Tengah</td>
-        </tr>
     </table>
 
 </body>
