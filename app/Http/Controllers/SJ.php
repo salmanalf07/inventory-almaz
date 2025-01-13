@@ -351,10 +351,19 @@ class SJ extends Controller
     {
         $data = ModelsSJ::with('customer', 'car', 'driver', 'order', 'DetailSJ.Part')->find($request->id_print);
 
+        $str = Auth::user()->module;
+        $datas = explode(",", $str);
+
+        if (in_array("setDateSj", $datas)) {
+            $date = $request->datee;
+        } else {
+            $date = date("d/m/Y", strtotime($data->date_sj));
+        }
+
         $trackk = new TrackSj();
         $trackk->sj_id = $data->id;
         $trackk->user_id = Auth::user()->id;
-        $trackk->tracking = "Add Date SJ -" . $request->datee;
+        $trackk->tracking = "Add Date SJ -" . $date;
         $trackk->save();
 
         $track = new TrackSj();
@@ -363,7 +372,7 @@ class SJ extends Controller
         $track->tracking = "Printed";
         $track->save();
 
-        $pdf = PDF::loadView('/PrintOut/surat_sj', ['data' => $data, 'datee' => $request->datee])
+        $pdf = PDF::loadView('/PrintOut/surat_sj', ['data' => $data, 'datee' => $date])
             ->setPaper('A4', "portrait");
         return $pdf->stream();
 

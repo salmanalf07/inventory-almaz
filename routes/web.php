@@ -99,19 +99,29 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     if (Auth::user()->role == "ADMIN") {
         return view('dashboard-admin', [
             'part' => $part,
-            'valuetoday' => $rptoday, 'valuemonth' => $rpmonth,
-            'todayout' => $todayout, 'monthout' => $monthout,
-            'ordermonth' => $ordermonth, 'orderyear' => $orderyear,
-            'production' => $Production, 'prodtoday' => $ProdToday, 'prodmonth' => $ProdMonth
+            'valuetoday' => $rptoday,
+            'valuemonth' => $rpmonth,
+            'todayout' => $todayout,
+            'monthout' => $monthout,
+            'ordermonth' => $ordermonth,
+            'orderyear' => $orderyear,
+            'production' => $Production,
+            'prodtoday' => $ProdToday,
+            'prodmonth' => $ProdMonth
 
         ]);
     }
     return view('dashboard', [
         'part' => $part,
-        'valuetoday' => $rptoday, 'valuemonth' => $rpmonth,
-        'todayout' => $todayout, 'monthout' => $monthout,
-        'ordermonth' => $ordermonth, 'orderyear' => $orderyear,
-        'production' => $Production, 'prodtoday' => $ProdToday, 'prodmonth' => $ProdMonth
+        'valuetoday' => $rptoday,
+        'valuemonth' => $rpmonth,
+        'todayout' => $todayout,
+        'monthout' => $monthout,
+        'ordermonth' => $ordermonth,
+        'orderyear' => $orderyear,
+        'production' => $Production,
+        'prodtoday' => $ProdToday,
+        'prodmonth' => $ProdMonth
 
     ]);
 });
@@ -250,7 +260,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/sj', function () {
     $car = ModelsCar::select(['nopol', 'id'])->where('status', 'ACTIVE')->get();
     $driver = ModelsDriver::select(['name', 'id'])->where('status', 'ACTIVE')->get();
     $sj = ModelsSJ::latest()->first();
-    return view('/transaction/sj', ['judul' => "Part Out", 'customer' => $cust, 'car' => $car, 'driver' => $driver, 'sj' => $sj]);
+
+    $str = Auth::user()->module;
+    $datas = explode(",", $str);
+
+    $hak = in_array("setDateSj", $datas) ? true : false;
+
+    return view('/transaction/sj', ['judul' => "Part Out", 'customer' => $cust, 'car' => $car, 'driver' => $driver, 'sj' => $sj, 'hak' => $hak]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/json_sj', [SJ::class, 'json']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/store_sj', [SJ::class, 'store']);

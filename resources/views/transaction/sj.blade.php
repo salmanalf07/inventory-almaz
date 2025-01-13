@@ -876,6 +876,7 @@
                         <span id="peringatan"></span>
                         <input class="form-control" type="text" name="id_print" id="id_print" hidden>
                         <div class="row">
+                            @if ($hak == "true")
                             <div class="col-md-12">
                                 <div class="control-group">
                                     <label>Date</label>
@@ -887,6 +888,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer">
