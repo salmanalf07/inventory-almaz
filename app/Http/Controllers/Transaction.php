@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailTransaction;
 use App\Models\PackingTransaction;
+use App\Models\Parts;
 use App\Models\Stock;
 use App\Models\Transaction as ModelsTransaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -16,13 +18,16 @@ class Transaction extends Controller
 {
     public function json(Request $request)
     {
-        $dataa = DetailTransaction::with('Transaction', 'Part.customer')
-            ->whereHas('Transaction', function ($query) use ($request) {
+        $dataa = DetailTransaction::with('transaction', 'part.customer')
+            ->whereHas('transaction', function ($query) use ($request) {
                 if ($request->datein && $request->dateen) {
                     $query->whereDate('date_transaction', '>=', $request->datein)
                         ->whereDate('date_transaction', '<=', $request->dateen);
                 } else {
-                    $query->whereDate('date_transaction', '=', date("Y-m-d"));
+                    $query->whereBetween('date_transaction', [
+                        Carbon::now()->subWeek()->startOfDay(),
+                        Carbon::now()->subDay()->endOfDay()
+                    ]);
                 }
             });
         $data = $dataa->orderBy('created_at', 'DESC');
@@ -143,7 +148,6 @@ class Transaction extends Controller
             $post->no_transaction = $request->no_transaction;
             $post->date_transaction = date("Y-m-d", strtotime(str_replace('/', '-', $request->date_transaction)));
             $post->no_rak = $request->no_rak;
-            $post->shift = $request->shift;
             if ($post->time_start != date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_start)))) {
                 $post->time_start = date("Y-m-d H:i", strtotime(str_replace('/', '-', $request->time_start)));
             }
@@ -166,23 +170,25 @@ class Transaction extends Controller
             for ($count = 0; $count < count($detail_id); $count++) {
                 $recent = DetailTransaction::where(['id' => $detail_id[$count]]);
                 $recentt = $recent->first();
+                $part = Parts::where(['id' => $recentt->part_id])->first();
                 $qty_up = str_replace(",", "", $qty_in[$count]);
-                $price_up = str_replace(",", "", $price[$count]);
-                if ($recentt->qty_in != str_replace(",", "", $qty_in[$count])) {
-                    $qty_up = str_replace(",", "", $qty_in[$count]) - $recentt->qty_in;
-                    $price_up = str_replace(",", "", $price[$count]) - $recentt->total_price;
-                }
-                $angka = str_replace(",", "", $price_up[$count]);
+                // $price_up = str_replace(",", "", $price[$count]);
+                // if ($recentt->qty_in != str_replace(",", "", $qty_in[$count])) {
+                //     $qty_up = str_replace(",", "", $qty_in[$count]) - $recentt->qty_in;
+                //     $price_up = str_replace(",", "", $price[$count]) - $recentt->total_price;
+                // }
+                $angka = $qty_up * $part->price;
+                $sa = $qty_up * $part->sa_dm;
 
                 if ($angka % 1 == 0) {
                     $angka = rtrim($angka, '0');
                     $angka = rtrim($angka, '.');
                 }
                 $recent->update([
-                    'cust_id' => $cust_id[$count],
-                    'part_id' => $part_id[$count],
-                    'qty_in'  => str_replace(",", "", $qty_up),
-                    'sa'  => str_replace(",", "", $sa[$count]),
+                    // 'cust_id' => $cust_id[$count],
+                    // 'part_id' => $part_id[$count],
+                    'qty_in'  => $qty_up,
+                    'sa'  => $sa,
                     'price'  => $angka,
                     'updated_at' => date("Y-m-d H:i:s", strtotime('now'))
                 ]);

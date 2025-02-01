@@ -119,12 +119,13 @@
                                         <th>Type</th>
                                         <th>Qty In</th>
                                         <th>Time Start</th>
+                                        <th>SA dm</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="8" style="text-align:right">Total:</th>
+                                        <th colspan="9" style="text-align:right">Total:</th>
                                         <th></th>
                                     </tr>
                                 </tfoot>
@@ -162,7 +163,7 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, , 8, 9], // table ke 1
                 },
                 {
                     targets: [1],
@@ -177,7 +178,7 @@
                     },
                 },
                 {
-                    targets: [8],
+                    targets: [9],
                     render: $.fn.dataTable.render.number('.')
                 },
             ],
@@ -213,9 +214,9 @@
 
                 // Total over all pages
 
-                if (api.column(8).data().length) {
+                if (api.column(9).data().length) {
                     var total = api
-                        .column(8)
+                        .column(9)
                         .data()
                         .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
@@ -225,7 +226,7 @@
                 };
 
                 // Update footer
-                $(api.column(8).footer()).html(
+                $(api.column(9).footer()).html(
                     new Intl.NumberFormat().format(total)
                 );
             },
@@ -274,6 +275,10 @@
                 {
                     data: 'transaction.time_start',
                     name: 'transaction.time_start'
+                },
+                {
+                    data: 'sa',
+                    name: 'sa'
                 },
                 {
                     data: 'price',

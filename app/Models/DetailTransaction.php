@@ -19,11 +19,11 @@ class DetailTransaction extends Model
         'price',
     ];
 
-    public function Transaction()
+    public function transaction()
     {
         return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
     }
-    public function Part()
+    public function part()
     {
         return $this->belongsTo(Parts::class, 'part_id', 'id');
     }
