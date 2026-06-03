@@ -63,6 +63,10 @@ use Maatwebsite\Excel\Facades\Excel;
 |
  */
 
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     //part_in
     $today = ModelsPartIn::select('id')->where('date_in', date("Y-m-d"))->get();
