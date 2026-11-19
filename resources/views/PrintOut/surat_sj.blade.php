@@ -163,7 +163,7 @@
         <tr>
             <td colspan="2" rowspan="2" class="center"><img src="./img/almaz.jpg" width="65"></td>
             <td colspan="4" class="border-left border-bottom">
-                <h1>PT. ALMAS DAYA SINERGI</h1>
+                <h1>PT. CED Anjoka Raya</h1>
             </td>
             <td colspan="4" class="border-left border-bottom border-right">Head Office:</td>
             <td colspan="2" class="border-bottom right" style="font-size:6pt">ADS-F-EDP-056<br>Rev : 00/01.03.23</td>

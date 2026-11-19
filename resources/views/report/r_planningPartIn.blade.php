@@ -79,7 +79,7 @@
                 <th class="no-border" colspan="4"></th>
             </tr>
             <tr>
-                <th colspan="6">PT. ALMAS DAYA SINERGI</th>
+                <th colspan="6">PT. CED Anjoka Raya</th>
                 <th colspan="5" style="background-color: #e8d046;">PLANNING PRODUKSI</th>
                 <th colspan="3" style="background-color: #2592f7;">PENCAPAIAN</th>
             </tr>
