@@ -325,8 +325,8 @@
                     name: 'id'
                 },
                 {
-                    data: 'customer.code',
-                    name: 'customer.code'
+                    data: 'customer_code',
+                    name: 'customer_code'
                 },
                 {
                     data: 'name_local',

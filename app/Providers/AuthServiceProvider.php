@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        \Illuminate\Support\Facades\Gate::define('view_prices', function ($user) {
+            return $user->hasPermission('view_prices');
+        });
     }
 }

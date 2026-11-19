@@ -102,15 +102,21 @@
                                 <div class="control-group">
                                     <label class="control-label">Hak Akses</label>
                                     <div class="controls">
-                                        <select name="role" id="role" class="form-control">
-                                            <option selected>Choose...</option>
-                                            <option value="ADMINISTRATOR">ADMINISTRATOR</option>
-                                            <option value="ADMIN">ADMIN</option>
+                                        <select name="role_id" id="role_id" class="form-control">
+                                            <option value="">Choose...</option>
+                                            @foreach($roles as $role)
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- Module/Permission checkboxes removed -->
+                        <input type="hidden" name="module" value="">
+                        <input type="hidden" name="permissions" value="">
+
+
 
                     </form>
                 </div>
@@ -195,6 +201,7 @@
     $('.modal-footer').on('click', '.add', function() {
         var form = document.getElementById("form-add");
         var fd = new FormData(form);
+        
         $.ajax({
             type: 'POST',
             url: '{{ url("store_user") }}',
@@ -217,6 +224,26 @@
 
             },
         });
+    });
+    // module ALL toggle
+    $(document).on('change', '#mod_all', function() {
+        var isChecked = $(this).is(':checked');
+        $('.module-check').prop('checked', isChecked);
+    });
+    $(document).on('change', '.module-check', function() {
+        if (!$(this).is(':checked')) {
+            $('#mod_all').prop('checked', false);
+        }
+    });
+    // report ALL toggle
+    $(document).on('change', '#rpt_all', function() {
+        var isChecked = $(this).is(':checked');
+        $('.report-check').prop('checked', isChecked);
+    });
+    $(document).on('change', '.report-check', function() {
+        if (!$(this).is(':checked')) {
+            $('#rpt_all').prop('checked', false);
+        }
     });
     //end add data
     //update password
@@ -243,7 +270,7 @@
                 $('#id').val(data.id);
                 $('#name').val(data.name);
                 $('#username').val(data.username);
-                $('#role').val(data.role);
+                $('#role_id').val(data.role_id);
 
                 id = $('#id').val();
 
@@ -264,6 +291,7 @@
     $('.modal-footer').on('click', '.update', function() {
         var form = document.getElementById("form-add");
         var fd = new FormData(form);
+        
         $.ajax({
             type: 'POST',
             url: 'update_user/' + id,

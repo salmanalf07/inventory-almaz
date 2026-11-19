@@ -97,13 +97,13 @@
         <tr>
             <td colspan="2" class="border-right" rowspan="2" class="center"><img src="../img/almaz.jpg" width="80"></td>
             <td colspan="4" class="border-left border-bottom">
-                <h1>PT. ALMAS DAYA SINERGI</h1>
+                <h1>PT. CED Anjoka Raya</h1>
             </td>
             <td colspan="6" class="border-bottom">Head Office:</td>
         </tr>
         <tr>
             <td colspan="4" class="border-top">SPECIALIS METAL SURFACE TREATMENT</td>
-            <td colspan="6" class="border-top">Jl. Raya Serang Setu KM 1,5. No.99 Kel. Sukadami, Kec. Cikarang Selatan, Kab. Bekasi 17530</td>
+            <td colspan="6" class="border-top">Jl. Irigasi No.8, RT/RW 07/04,Kp. Cibenda, Sirnajaya, Serang Baru, Bekasi 17330.</td>
         </tr>
         <tr>
             <td colspan="5" style="height:30pt">SURAT TERIMA BARANG, DARI :</td>

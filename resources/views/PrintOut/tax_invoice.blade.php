@@ -100,7 +100,7 @@
         </tr>
         <tr>
             <td colspan="10" class="no-border">
-                <img src="./img/tt_invoice.jpg" width="400" alt="">
+                <img src="./img/tt_invoice.png" width="400" alt="">
             </td>
         </tr>
         <tr>
@@ -297,7 +297,7 @@
             </td>
             <td class="center border-left border-right border-bottom">:</td>
             <td colspan="7" class="border-bottom border-right">
-                PT. ALMAS DAYA SINERGI
+                PT. CED Anjoka Raya
             </td>
         </tr>
         <tr class="bold border-left">
@@ -315,7 +315,7 @@
             </td>
             <td class="center border-left border-right border-bottom">:</td>
             <td colspan="7" class="border-bottom border-right">
-                1270003280466
+                123280466
             </td>
         </tr>
         <tr>

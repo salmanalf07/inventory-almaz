@@ -72,7 +72,7 @@
     </section>
     <!-- /.content -->
     <!-- Modal user -->
-    <div id="myModal" class="modal fade bd-example-modal-xl" tabindex="-1" data-focus="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="myModal" class="modal fade bd-example-modal-xl" tabindex="-1" data-focus="false" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -203,6 +203,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="restoreDraftBtn" style="display:none;" onclick="restoreDraft()"><i class="fas fa-undo"></i> Restore Draft</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="reset_form()">Close</button>
                     <button id="in" type="button" class="btn btn-primary">Save changes</button>
                 </div>
@@ -236,6 +237,16 @@
                 $("#addrow,#deleterow").show();
                 $('#revisi-tab').hide();
                 $('#myModal').modal('show');
+                // Init Select2 untuk part_id0 setelah modal tampil
+                setTimeout(function() {
+                    if (!$('#part_id0').data('select2')) {
+                        $('#part_id0').select2({
+                            dropdownParent: $('#myModal'),
+                            theme: 'bootstrap4',
+                            width: '100%'
+                        });
+                    }
+                }, 300);
             }
         };
 
@@ -653,13 +664,21 @@
             var cell = 'cell' + i;
             cell = row.insertCell(i);
             var copycel = document.getElementById('col' + i).innerHTML;
+            // Bersihkan dari artifact Select2 (.select2-container dll) tapi jaga <input> & <select>
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = copycel;
+            $(tempDiv).find('.select2, .select2-container, .select2-selection, .selection').remove();
+            $(tempDiv).find('select').removeAttr('data-select2-id tabindex aria-hidden');
+            $(tempDiv).find('input').removeAttr('data-select2-id');
+            cell.innerHTML = tempDiv.innerHTML;
             cell.id = 'col' + i + rowCount;
-            cell.innerHTML = copycel;
 
             if (i == 0) {
                 var detailId = document.getElementById('col0' + rowCount).getElementsByTagName('input');
-                detailId[0].id = 'detail_id' + rowCount;
-                detailId[0].value = "";
+                if (detailId[0]) {
+                    detailId[0].id = 'detail_id' + rowCount;
+                    detailId[0].value = "";
+                }
                 var partidinput = document.getElementById('col0' + rowCount).getElementsByTagName('select');
                 partidinput[0].id = 'part_id' + rowCount;
                 $('#part_id' + rowCount).select2({
@@ -723,6 +742,136 @@
         }
         //$('#user_id').val('{{ Auth::user()->name }}');
     };
+
+    /** ─── DRAFT AUTO-SAVE ─────────────────────────────────────────── **/
+    const DRAFT_KEY = 'order_draft';
+
+    function saveDraft() {
+        // Only save when modal is in "add" (new) mode or unknown mode
+        if (!$('#in').hasClass('add') && !$('#in').hasClass('update')) return;
+
+        var form = document.getElementById("form-add");
+        if (!form) return;
+
+        var fd = new FormData(form);
+        var data = {};
+        for (var pair of fd.entries()) {
+            var key = pair[0], val = pair[1];
+            if (key.match(/^part_id\[\]$|^qty\[\]$|^detail_id\[\]$/)) {
+                if (!data[key]) data[key] = [];
+                data[key].push(val);
+            } else {
+                data[key] = val;
+            }
+        }
+        var table = document.getElementById('roww');
+        data._rowCount = table ? table.rows.length : 0;
+        data._isAdd = $('#in').hasClass('add') ? true : false;
+
+        try {
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+        } catch(e) { /* storage full */ }
+    }
+
+    function restoreDraft() {
+        var raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) { alert('Tidak ada draft tersimpan.'); return; }
+
+        var data;
+        try { data = JSON.parse(raw); } catch(e) { alert('Draft rusak.'); return; }
+
+        // Trigger add mode via button click
+        $('.modal-title').text('Tambah Data');
+        $("#in").removeClass("btn btn-primary update");
+        $("#in").addClass("btn btn-primary add");
+        $('#in').text('Save');
+        $('#SJJ').hide();
+        $("#addrow,#deleterow").show();
+        $('#revisi-tab').hide();
+
+        // Fill simple fields
+        if (data.date) $('#date').val(data.date);
+        if (data.cust_id) $('#cust_id').val(data.cust_id).trigger('change');
+        if (data.no_po) $('#no_po').val(data.no_po);
+        if (data.status) $('#status').val(data.status).trigger('change');
+
+        var savedParts = data['part_id[]'] || [];
+        var savedQtys  = data['qty[]'] || [];
+        var rowCount = Math.max(data._rowCount || 1, savedParts.length, 1);
+
+        // Add extra rows
+        for (var i = 1; i < rowCount; i++) {
+            addRows();
+        }
+
+        // Poll for part options to be ready, then set values
+        var pollInterval = setInterval(function() {
+            var ready = true;
+            for (var i = 0; i < savedParts.length; i++) {
+                if (savedParts[i] && $('#part_id' + i + ' option[value="' + savedParts[i] + '"]').length === 0) {
+                    ready = false;
+                    break;
+                }
+            }
+            if (ready) {
+                clearInterval(pollInterval);
+                // Set part values
+                for (var i = 0; i < savedParts.length; i++) {
+                    if (savedParts[i]) {
+                        $('#part_id' + i).val(savedParts[i]).trigger('change');
+                    }
+                }
+                // After setting parts, poll again for price calc readiness
+                setTimeout(function() {
+                    for (var i = 0; i < savedQtys.length; i++) {
+                        if (savedQtys[i]) {
+                            $('#qty' + i).val(formatNumberr(savedQtys[i]));
+                        }
+                    }
+                    // Trigger price search for each row
+                    for (var i = 0; i < savedParts.length; i++) {
+                        if (savedParts[i] && savedQtys[i]) {
+                            search_price({ id: 'qty' + i });
+                        }
+                    }
+                }, 800);
+            }
+        }, 300);
+
+        // Clean up
+        localStorage.removeItem(DRAFT_KEY);
+        $('#restoreDraftBtn').hide();
+    }
+
+    // Auto-save draft periodically
+    setInterval(function() {
+        if ($('#myModal').is(':visible')) {
+            saveDraft();
+        }
+    }, 3000);
+
+    // Show restore button on page load if draft exists
+    $(document).ready(function() {
+        if (localStorage.getItem(DRAFT_KEY)) {
+            $('#restoreDraftBtn').show();
+        }
+    });
+
+    // Warn user before leaving page with unsaved data
+    $(window).on('beforeunload', function() {
+        if ($('#myModal').is(':visible') && ($('#in').hasClass('add') || $('#in').hasClass('update'))) {
+            saveDraft();
+            return 'Anda memiliki data PO yang belum disimpan!';
+        }
+    });
+
+    // Clear draft after successful save
+    $(document).ready(function() {
+        $('.modal-footer').on('click', '.add', function() {
+            localStorage.removeItem(DRAFT_KEY);
+            $('#restoreDraftBtn').hide();
+        });
+    });
 </script>
 
 @endsection

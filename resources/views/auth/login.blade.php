@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <img src="img/almaz.png" width="200" alt="">
+            <img src="img/anjoka.png" width="200" alt="">
         </x-slot>
         <style>
             .extends {

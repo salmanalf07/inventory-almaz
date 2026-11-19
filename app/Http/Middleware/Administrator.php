@@ -17,7 +17,7 @@ class Administrator
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role == 'ADMINISTRATOR') {
+        if (Auth::user()->hasPermission('ALL') || Auth::user()->roles->contains('slug', 'administrator')) {
             return $next($request);
         }
         return redirect('/dashboard');

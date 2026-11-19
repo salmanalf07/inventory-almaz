@@ -12,9 +12,12 @@ class User extends Controller
 {
     public function json()
     {
-        $data = ModelsUser::all();
+        $data = ModelsUser::with('roles')->get();
 
         return DataTables::of($data)
+            ->addColumn('role', function ($data) {
+                return $data->roles->pluck('name')->implode(', ');
+            })
             ->addColumn('aksi', function ($data) {
                 return
                     '<button id="edit" data-id="' . $data->id . '" class="btn btn-primary">Edit</button>
@@ -30,17 +33,18 @@ class User extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255', 'unique:users'],
-                'phone' => ['nullable', 'string', 'max:255'],
                 'password' => ['required', 'string', new Password],
+                'role_id' => ['required', 'exists:roles,id'],
             ]);
 
             $post = new ModelsUser();
             $post->name = $request->name;
             $post->username = $request->username;
             $post->password = bcrypt($request->password);
-            $post->role = $request->role;
             $post->phone = $request->phone;
             $post->save();
+            
+            $post->roles()->sync([$request->role_id]);
 
             $data = [$post];
             return response()->json($data);
@@ -49,18 +53,18 @@ class User extends Controller
             return response($data);
         }
     }
+
     public function edit(Request $request)
     {
-        $get = ModelsUser::find($request->id);
-        //->first() = hanya menampilkan satu saja dari hasil query
-        //->get() = returnnya berbentuk array atau harus banyak data
-        return response()->json($get);
+        $user = ModelsUser::with('roles')->find($request->id);
+        $data = $user->toArray();
+        $data['role_id'] = $user->roles->first() ? $user->roles->first()->id : null;
+        return response()->json($data);
     }
 
     public function update(Request $request, $id)
     {
         try {
-
             $post = ModelsUser::find($id);
             $post->name = $request->name;
             $post->username = $request->username;
@@ -71,8 +75,11 @@ class User extends Controller
                 $post->password = bcrypt($request->password);
             }
             $post->phone = $request->phone;
-            $post->role = $request->role;
             $post->save();
+            
+            if ($request->role_id) {
+                $post->roles()->sync([$request->role_id]);
+            }
 
             $data = [$post];
             return response()->json($data);

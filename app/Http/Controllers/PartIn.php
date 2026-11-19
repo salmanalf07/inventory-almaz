@@ -26,9 +26,14 @@ class PartIn extends Controller
         // };
         $data = $dataa->orderBy('created_at', 'DESC');
 
+        // Check if user has permission to view prices
+        $canViewPrices = auth()->user()->hasPermission('view_prices');
 
         return DataTables::of($data)
-            ->addColumn('count', function ($data) {
+            ->addColumn('count', function ($data) use ($canViewPrices) {
+                if (!$canViewPrices) {
+                    return '***';
+                }
                 $partin = ModelsPartIn::select('id')->where([
                     ['id', '=', $data->id],
                 ])->get();
@@ -42,7 +47,19 @@ class PartIn extends Controller
                     <button id="edit" data-id="' . $data->id . '" class="btn btn-warning">Update</button>
                     <button id="delete" data-id="' . $data->id . '" class="btn btn-danger">Delete</button>';
             })
-            ->rawColumns(['aksi', 'count', 'no_partin'])
+            ->addColumn('price', function ($data) use ($canViewPrices) {
+                if (!$canViewPrices) {
+                    return '***';
+                }
+                return $data->price ?? '***';
+            })
+            ->addColumn('total_price', function ($data) use ($canViewPrices) {
+                if (!$canViewPrices) {
+                    return '***';
+                }
+                return $data->total_price ?? '***';
+            })
+            ->rawColumns(['aksi', 'count', 'no_partin', 'price', 'total_price'])
             ->toJson();
         // <a href="print_partin/' . $data->id . '" class="btn btn-primary">Print</a>
     }

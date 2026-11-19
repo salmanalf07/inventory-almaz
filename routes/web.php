@@ -18,6 +18,7 @@ use App\Http\Controllers\Pengeluaran as ControllersPengeluaran;
 use App\Http\Controllers\PettyCash;
 use App\Http\Controllers\Production;
 use App\Http\Controllers\ProductionStd;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SJ;
 use App\Http\Controllers\Stock as ControllersStock;
 use App\Http\Controllers\Transaction;
@@ -159,7 +160,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/edit_productStd', [Produ
 Route::middleware(['auth:sanctum', 'verified'])->post('/update_productStd/{id}', [ProductionStd::class, 'update']);
 //User
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/user', function () {
-    return view('/manage/user', ['judul' => "User"]);
+    $roles = \App\Models\Role::all();
+    return view('/manage/user', ['judul' => "User", 'roles' => $roles]);
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/json_user', [User::class, 'json']);
 Route::middleware(['auth:sanctum', 'verified'])->post('/store_user', [User::class, 'store']);
@@ -263,7 +265,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/sj', function () {
     $cust = ModelsCustomer::select(['code', 'id'])->get();
     $car = ModelsCar::select(['nopol', 'id'])->where('status', 'ACTIVE')->get();
     $driver = ModelsDriver::select(['name', 'id'])->where('status', 'ACTIVE')->get();
-    $sj = ModelsSJ::latest()->first();
+    $sj = ModelsSJ::latest()->first() ?? (object) ['nosj' => 0];
 
     $str = Auth::user()->module;
     $datas = explode(",", $str);
@@ -579,6 +581,17 @@ Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/r_akunBiay
 });
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->post('/akunBiayaReport', [ControllersPengeluaran::class, 'r_akunBiaya']);
 
+
+// Role & Permission Routes
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('/store_role', [RoleController::class, 'store']);
+    Route::post('/edit_role', [RoleController::class, 'edit']);
+    Route::post('/update_role/{id}', [RoleController::class, 'update']);
+    Route::post('/toggle_role_permission', [RoleController::class, 'togglePermission']);
+    Route::post('/store_permission', [RoleController::class, 'storePermission']);
+    Route::delete('/delete_role/{id}', [RoleController::class, 'destroy']);
+});
 
 Route::middleware(['auth:sanctum', 'verified', 'admistrator'])->get('/sadm', function () {
     $detsj =  DetailSJ::get();

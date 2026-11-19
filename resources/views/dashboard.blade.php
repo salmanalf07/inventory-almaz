@@ -18,7 +18,7 @@
                 $module = Auth::user()->module;
                 $data = explode(",", $module);
                 ?>
-                @if(!empty(array_intersect($data, ['PARTIN','ALL'])))
+                @if(Auth::user()->hasAnyPermission(['view_partin', 'ALL']))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <h4 class="font-weight-bold mb-0" style="text-align: center;">PART IN</h4>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 @endif
-                @if(!empty(array_intersect($data, ['PARTOUT','ALL'])))
+                @if(Auth::user()->hasAnyPermission(['view_partout', 'ALL']))
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 @endif
-                @if(!empty(array_intersect($data, ['PRODUCTION','ALL'])))
+                @if(Auth::user()->hasAnyPermission(['view_production', 'ALL']))
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 @endif
-                @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
+                @if(Auth::user()->hasAnyPermission(['view_order', 'view_invoice', 'ALL']))
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->

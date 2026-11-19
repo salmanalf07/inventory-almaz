@@ -140,9 +140,13 @@
                                                     <th style="width: 5%">#</th>
                                                     <th style="width: 40%">Part Name</th>
                                                     <th style="width: 15%;">Type</th>
+                                                    @can('view_prices')
                                                     <th style="width: 10%">Price</th>
                                                     <th style="width: 10%">Qty</th>
                                                     <th style="width: 20%">Total Price</th>
+                                                    @else
+                                                    <th style="width: 20%">Qty</th>
+                                                    @endcan
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -163,6 +167,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price0" readonly class="span15">
                                                     </td>
@@ -172,6 +177,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price0" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input autocomplete="off" class="form-control autonumeric-integer" type="text" name="qty[]" id="qty0" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr2">
                                                     <td>2.</td>
@@ -190,6 +200,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price1" readonly class="span15">
                                                     </td>
@@ -199,6 +210,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price1" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty1" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr3">
                                                     <td>3.</td>
@@ -217,6 +233,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price2" readonly class="span15">
                                                     </td>
@@ -226,6 +243,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price2" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty2" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr4">
                                                     <td>4.</td>
@@ -244,6 +266,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price3" readonly class="span15">
                                                     </td>
@@ -253,6 +276,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price3" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty3" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr5">
                                                     <td>5.</td>
@@ -271,6 +299,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price4" readonly class="span15">
                                                     </td>
@@ -280,6 +309,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price4" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty4" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr6">
                                                     <td>6.</td>
@@ -298,6 +332,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price5" readonly class="span15">
                                                     </td>
@@ -307,6 +342,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price5" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty5" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr7">
                                                     <td>7.</td>
@@ -325,6 +365,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price6" readonly class="span15">
                                                     </td>
@@ -334,6 +375,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price6" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty6" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr8">
                                                     <td>8.</td>
@@ -352,6 +398,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price7" readonly class="span15">
                                                     </td>
@@ -361,6 +408,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price7" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty7" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr9">
                                                     <td>9.</td>
@@ -379,6 +431,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price8" readonly class="span15">
                                                     </td>
@@ -388,6 +441,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price8" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty8" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                                 <tr id="tr10">
                                                     <td>10.</td>
@@ -406,6 +464,7 @@
                                                             <option value="SAMPLE">SAMPLE</option>
                                                         </select>
                                                     </td>
+                                                    @can('view_prices')
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="price[]" id="price9" readonly class="span15">
                                                     </td>
@@ -415,6 +474,11 @@
                                                     <td>
                                                         <input class="form-control autonumeric-integer" type="text" name="total_price[]" id="total_price9" readonly class="span15">
                                                     </td>
+                                                    @else
+                                                    <td>
+                                                        <input class="form-control autonumeric-integer" type="text" name="qty[]" id="qty9" placeholder="Qty" class="span15">
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                             </tbody>
                                         </table>

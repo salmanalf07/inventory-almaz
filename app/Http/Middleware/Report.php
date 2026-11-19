@@ -17,7 +17,7 @@ class Report
      */
     public function handle(Request $request, Closure $next, $route)
     {
-        $str = Auth::user()->phone;
+        $str = Auth::user()->permissions;
         $data = explode(",", $str);
 
         if ($str) {

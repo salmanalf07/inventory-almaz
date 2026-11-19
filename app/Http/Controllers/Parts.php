@@ -22,6 +22,9 @@ class Parts extends Controller
         $data = ModelsParts::with('customer')->orderBy('created_at', 'DESC');
 
         return DataTables::of($data)
+            ->addColumn('customer_code', function ($data) {
+                return $data->customer ? $data->customer->code : '-';
+            })
             ->addColumn('aksi', function ($data) {
                 return
                     '<div class="btn-group">

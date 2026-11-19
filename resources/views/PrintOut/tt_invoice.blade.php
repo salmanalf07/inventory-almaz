@@ -77,7 +77,7 @@
         </tr>
         <tr>
             <td colspan="5">
-                <img src="./img/tt_invoice.jpg" width="400" alt="">
+                <img src="./img/tt_invoice.png" width="400" alt="">
             </td>
         </tr>
         <tr>
@@ -96,7 +96,7 @@
             </td>
             <td>:</td>
             <td colspan="2">
-                PT. ALMAS DAYA SINERGI
+                PT. CED Anjoka Raya
             </td>
         </tr>
         <tr>
@@ -164,7 +164,7 @@
         </tr>
         <tr>
             <td class="center">
-                PT. ALMAS DAYA SINERGI
+                PT. CED Anjoka Raya
             </td>
             <td colspan="3"></td>
             <td class="center">
@@ -201,7 +201,7 @@
             </td>
             <td>:</td>
             <td colspan="2">
-                PT. ALMAS DAYA SINERGI
+                PT. CED Anjoka Raya
             </td>
         </tr>
         <tr>
@@ -269,7 +269,7 @@
         </tr>
         <tr>
             <td class="center">
-                PT. ALMAS DAYA SINERGI
+                PT. CED Anjoka Raya
             </td>
             <td colspan="3"></td>
             <td class="center">

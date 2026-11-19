@@ -67,6 +67,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="control-group">
+                                            <label class="control-label">Module Access</label>
+                                            <div class="controls">
+                                                <input class="form-control" type="text" value="{{$user->module}}" class="span15" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="control-group">
+                                            <label class="control-label">Hak Akses</label>
+                                            <div class="controls">
+                                                <select name="role" id="role" class="form-control">
+                                                    <option value="ADMINISTRATOR" {{ $user->role == 'ADMINISTRATOR' ? 'selected' : '' }}>ADMINISTRATOR</option>
+                                                    <option value="ADMIN" {{ $user->role == 'ADMIN' ? 'selected' : '' }}>ADMIN</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
                                     <div class="col-md-12">
                                         <div class="control-group">
                                             <label class="control-label"></label>
@@ -147,6 +172,13 @@
                                     <option value="ADMINISTRATOR">ADMINISTRATOR</option>
                                     <option value="ADMIN">ADMIN</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="control-group mt-3">
+                            <label class="control-label">Phone Access</label>
+                            <div class="controls">
+                                <input class="form-control" type="text" name="phone" id="phone_access" value="{{$user->phone}}" class="span15" disabled>
+                                <small class="text-muted">Report access hanya bisa diubah oleh Administrator melalui Menu Manajemen Sistem > User</small>
                             </div>
                         </div>
 

@@ -30,7 +30,8 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
-        'module'
+        'module',
+        'permissions'
     ];
 
     /**
@@ -62,4 +63,44 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Check if user has a specific permission
+     *
+     * @param string $permission
+     * @return bool
+     */
+    public function hasPermission($permission)
+    {
+        // Check direct permissions first (legacy support)
+        if ($this->permissions) {
+            $permissions = explode(',', $this->permissions);
+            if (in_array('ALL', $permissions) || in_array($permission, $permissions)) {
+                return true;
+            }
+        }
+        
+        // Check permissions via roles
+        foreach ($this->roles as $role) {
+            if ($role->permissions->contains('slug', $permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasAnyPermission(array $permissions)
+    {
+        foreach ($permissions as $permission) {
+            if ($this->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

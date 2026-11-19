@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PT. ALMAS DAYA SINERGI</title>
+    <title>PT. CED Anjoka Raya</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -68,7 +68,7 @@
 
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake brand-image img-circle elevation-3" src="img/almaz.png" width="80">
+            <img class="animation__shake brand-image img-circle elevation-3" src="img/logo.png" width="80">
         </div>
 
         <!-- Navbar -->
@@ -146,8 +146,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="dashboard" class="brand-link">
-                <img src="img/almaz.png" class="brand-image img-circle elevation-3" style="margin-left:0;margin-top:-9px;max-height: 48px;">
-                <span class="brand-text font-weight-light" style="font-size: 12pt;">PT. ALMAS DAYA SINERGI</span>
+                <img src="img/logo.png" class="brand-image img-circle elevation-3" style="margin-left:0;margin-top:-9px;max-height: 48px;">
+                <span class="brand-text font-weight-light" style="font-size: 12pt;">PT. CED Anjoka Raya</span>
             </a>
 
             <!-- Sidebar -->
@@ -172,12 +172,8 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <?php
-                        $module = Auth::user()->module;
-                        $data = explode(",", $module);
-                        ?>
-                        @if($module)
-                        @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
+
+                        @if(Auth::user()->hasAnyPermission(['view_order', 'view_invoice', 'ALL', 'REPORT_KAS', 'EMPLOYEE_SALARY', 'BENSIN_TOL', 'PETTY_CASH', 'UANG_MAKAN']))
                         <li class="nav-item {{ request()->is('r_saldoAkhir','bensinTol','r_bensinTol','pettyCash','r_pettyCash','uMakan','r_uMakan','akuns', 'jenisPengeluaran','r_akunBiaya','employeeSalary') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-money" aria-hidden="true"></i>
@@ -187,8 +183,7 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                @foreach($data as $dataa)
-                                @if($dataa == "REPORT_KAS" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['REPORT_KAS', 'ALL_REPORT', 'ALL']))
                                 <li class="nav-item {{ request()->is('r_saldoAkhir','r_bensinTol','r_pettyCash','r_uMakan','r_akunBiaya') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -231,7 +226,7 @@
                                     </ul>
                                 </li>
                                 @endif
-                                @if($dataa == "EMPLSALARY" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['EMPLOYEE_SALARY', 'ALL']))
                                 <li class="nav-item">
                                     <a href="employeeSalary" class="nav-link {{ request()->is('employeeSalary') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -239,7 +234,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "BENSINTOL" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['BENSIN_TOL', 'ALL']))
                                 <li class="nav-item">
                                     <a href="bensinTol" class="nav-link {{ request()->is('bensinTol') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -247,7 +242,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "PETTYCASH" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['PETTY_CASH', 'ALL']))
                                 <li class="nav-item">
                                     <a href="pettyCash" class="nav-link {{ request()->is('pettyCash') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -255,7 +250,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "uMakan" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['UANG_MAKAN', 'ALL']))
                                 <li class="nav-item">
                                     <a href="uMakan" class="nav-link {{ request()->is('uMakan') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -263,35 +258,8 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "settingKas" || $dataa == "ALL")
-                                <li class="nav-item {{ request()->is('akuns','jenisPengeluaran') ? 'menu-open' : '' }}">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>
-                                            Setting
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="akuns" class="nav-link  {{ request()->is('akuns') ? 'active' : '' }}">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Akun</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="jenisPengeluaran" class="nav-link {{ request()->is('jenisPengeluaran') ? 'active' : '' }}">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Jenis Pengeluaran</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                @endif
-                                @endforeach
                             </ul>
                         </li>
-                        @endif
                         @endif
                         <li class="nav-item {{ request()->is('dashboard', 'r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice','tracking_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo','r_sumng','r_sumprod','r_topinv') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
@@ -313,7 +281,6 @@
                                 $str = Auth::user()->phone;
                                 $data = explode(",", $str);
                                 ?>
-                                @if($str)
                                 <li class="nav-item {{ request()->is('r_partin','r_partinn','r_partoutt', 'r_partout','r_sumpart', 'r_order', 'r_invoice','tracking_invoice', 'rekap_inv','r_production','r_invsout','r_sumpo','r_sumng','r_sumprod','r_topinv') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -322,8 +289,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    @foreach($data as $dataa)
-                                    @if($dataa == "r_invsout" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_invsout') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_invsout" class="nav-link {{ request()->is('r_invsout') ? 'active' : '' }}">
@@ -333,7 +299,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_partin" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_partin') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_partin" class="nav-link {{ request()->is('r_partin') ? 'active' : '' }}">
@@ -343,7 +309,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_partinn" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_partinn') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_partinn" class="nav-link {{ request()->is('r_partinn') ? 'active' : '' }}">
@@ -353,7 +319,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_partoutt" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_partoutt') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_partoutt" class="nav-link {{ request()->is('r_partoutt') ? 'active' : '' }}">
@@ -363,7 +329,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_partout" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_partout') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_partout" class="nav-link {{ request()->is('r_partout') ? 'active' : '' }}">
@@ -373,7 +339,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_sumpart" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_sumpart') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_sumpart" class="nav-link {{ request()->is('r_sumpart') ? 'active' : '' }}">
@@ -383,7 +349,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_sumpo" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_sumpo') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_sumpo" class="nav-link {{ request()->is('r_sumpo') ? 'active' : '' }}">
@@ -393,7 +359,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_sumprod" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_sumprod') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_sumprod" class="nav-link {{ request()->is('r_sumprod') ? 'active' : '' }}">
@@ -403,7 +369,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_sumng" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_sumng') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_sumng" class="nav-link {{ request()->is('r_sumng') ? 'active' : '' }}">
@@ -413,7 +379,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_order" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_order') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_order" class="nav-link {{ request()->is('r_order') ? 'active' : '' }}">
@@ -423,7 +389,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_invoice" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_invoice') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_invoice" class="nav-link {{ request()->is('r_invoice') ? 'active' : '' }}">
@@ -433,7 +399,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if ($dataa == "r_production" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_production') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_production" class="nav-link {{ request()->is('r_production') ? 'active' : '' }}">
@@ -443,7 +409,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "rekap_inv" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('rekap_inv') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="rekap_inv" class="nav-link {{ request()->is('rekap_inv') ? 'active' : '' }}">
@@ -453,7 +419,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "tracking_invoice" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('tracking_invoice') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="tracking_invoice" class="nav-link {{ request()->is('tracking_invoice') ? 'active' : '' }}">
@@ -463,7 +429,7 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @if($dataa == "r_topinv" || $dataa == "ALL")
+                                    @if(Auth::user()->hasPermission('r_topinv') || Auth::user()->hasPermission('ALL'))
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="r_topinv" class="nav-link {{ request()->is('r_topinv') ? 'active' : '' }}">
@@ -473,8 +439,6 @@
                                         </li>
                                     </ul>
                                     @endif
-                                    @endforeach
-                                    @endif
                                 </li>
                             </ul>
                         </li>
@@ -483,7 +447,7 @@
                         $data = explode(",", $module);
                         ?>
                         @if($module)
-                        @if(!empty(array_intersect($data, ['ORDER','INVOICE','ALL'])))
+                        @if(Auth::user()->hasAnyPermission(['view_order', 'view_invoice', 'ALL']))
                         <li class="nav-item {{ request()->is('orders', 'invoices') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="fas fa-cart-arrow-down nav-icon"></i>
@@ -514,7 +478,7 @@
                             </ul>
                         </li>
                         @endif
-                        @if(!empty(array_intersect($data, ['PARTIN','PRODUCTION','PAROUT','ALL'])))
+                        @if(Auth::user()->hasAnyPermission(['view_partin', 'view_production', 'view_partout', 'ALL']))
                         <li class="nav-item {{ request()->is('partin', 'sj', 'production','process','packing','stockfg') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-cubes"></i>
@@ -524,8 +488,7 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                @foreach($data as $dataa)
-                                @if($dataa == "PARTIN" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_partin', 'ALL']))
                                 <li class="nav-item">
                                     <a href="partin" class="nav-link {{ request()->is('partin') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -533,7 +496,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "PRODUCTION" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_production', 'ALL']))
                                 <li class="nav-item {{ request()->is('production','process','packing','stockfg') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -570,7 +533,7 @@
                                     </ul>
                                 </li>
                                 @endif
-                                @if($dataa == "PARTOUT" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_partout', 'ALL']))
                                 <li class="nav-item">
                                     <a href="sj" class="nav-link {{ request()->is('sj') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -578,11 +541,10 @@
                                     </a>
                                 </li>
                                 @endif
-                                @endforeach
                             </ul>
                         </li>
                         @endif
-                        @if(!empty(array_intersect($data, ['CUSTOMER','PART','ALL'])))
+                        @if(Auth::user()->hasAnyPermission(['view_customer', 'view_part', 'ALL']))
                         <li class="nav-item {{ request()->is('customer', 'parts','hisparts') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-database"></i>
@@ -592,8 +554,7 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                @foreach($data as $dataa)
-                                @if($dataa == "CUSTOMER" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_customer', 'ALL']))
                                 <li class="nav-item">
                                     <a href="customer" class="nav-link {{ request()->is('customer') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -601,7 +562,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "PART" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_part', 'ALL']))
                                 <li class="nav-item {{ request()->is('parts','hisparts') ? 'menu-open' : '' }}">
                                     <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -626,12 +587,11 @@
                                     </ul>
                                 </li>
                                 @endif
-                                @endforeach
                             </ul>
                         </li>
                         @endif
-                        @if(!empty(array_intersect($data, ['USER','CAR','DRIVER','application','productStd','ALL'])))
-                        <li class="nav-item {{ request()->is('user', 'car', 'driver','application','productStd') ? 'menu-open' : '' }}">
+                        @if(Auth::user()->hasAnyPermission(['view_user', 'view_car', 'view_driver', 'view_application', 'view_production_std', 'ALL']))
+                        <li class="nav-item {{ request()->is('user', 'car', 'driver','application','productStd', 'roles') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
@@ -640,16 +600,21 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                @foreach($data as $dataa)
-                                @if($dataa == "USER" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_user', 'ALL']))
                                 <li class="nav-item">
                                     <a href="user" class="nav-link {{ request()->is('user') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>User</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="roles" class="nav-link {{ request()->is('roles') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Roles & Permissions</p>
+                                    </a>
+                                </li>
                                 @endif
-                                @if($dataa == "CAR" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_car', 'ALL']))
                                 <li class="nav-item">
                                     <a href="car" class="nav-link {{ request()->is('car') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -657,7 +622,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "DRIVER" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_driver', 'ALL']))
                                 <li class="nav-item">
                                     <a href="driver" class="nav-link {{ request()->is('driver') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -665,7 +630,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "application" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_application', 'ALL']))
                                 <li class="nav-item">
                                     <a href="application" class="nav-link {{ request()->is('application') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -673,7 +638,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($dataa == "productStd" || $dataa == "ALL")
+                                @if(Auth::user()->hasAnyPermission(['view_production_std', 'ALL']))
                                 <li class="nav-item">
                                     <a href="productStd" class="nav-link {{ request()->is('productStd') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
@@ -681,7 +646,6 @@
                                     </a>
                                 </li>
                                 @endif
-                                @endforeach
                             </ul>
                         </li>
                         @endif
@@ -699,7 +663,7 @@
         <!-- </div> -->
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2022 PT. ALMAS DAYA SINERGI</strong>
+            <strong>Copyright &copy; 2026 PT. CED Anjoka Raya</strong>
         </footer>
 
     </div>
@@ -788,11 +752,47 @@
             });
         });
 
+        // Global AJAX error handler untuk semua form & menu
+        $.ajaxSetup({
+            error: function(xhr, status, error) {
+                let msg = 'Terjadi kesalahan server. Silahkan coba lagi.';
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        msg = response.message;
+                    }
+                    if (response.errors) {
+                        msg = '';
+                        $.each(response.errors, function(key, val) {
+                            msg += val + '<br>';
+                        });
+                    }
+                } catch (e) {
+                    if (xhr.status === 422) msg = 'Validasi gagal. Periksa kembali input Anda.';
+                    else if (xhr.status === 404) msg = 'Halaman tidak ditemukan.';
+                    else if (xhr.status === 500) msg = 'Terjadi kesalahan server internal.';
+                }
+                // Tampilkan di element #peringatan jika ada, fallback ke alert
+                if ($('#peringatan').length) {
+                    $('#peringatan').html('<div class="alert alert-danger alert-dismissible fade show"><strong>Error!</strong> ' + msg + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                } else {
+                    alert(msg);
+                }
+            }
+        });
+
+        // Global: cegah semua modal auto-close saat klik di luar (backdrop) & tekan ESC
+        $(document).on('show.bs.modal', '.modal', function() {
+            $(this).data('bs.modal')._config.backdrop = 'static';
+            $(this).data('bs.modal')._config.keyboard = false;
+        });
+
         function updateHiddenField() {
             var selectedValue = $("#month").val();
             $("#hiddenMonth").val(selectedValue);
         }
     </script>
+    @stack('page-scripts')
 </body>
 
 </html>

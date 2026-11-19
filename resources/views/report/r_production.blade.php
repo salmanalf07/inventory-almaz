@@ -116,6 +116,7 @@
                                         <th>No Rak</th>
                                         <th>Customer</th>
                                         <th>Name Part</th>
+                                        <th>Price</th>
                                         <th>Type</th>
                                         <th>Qty In</th>
                                         <th>Time Start</th>
@@ -125,7 +126,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="9" style="text-align:right">Total:</th>
+                                        <th colspan="10" style="text-align:right">Total:</th>
                                         <th></th>
                                     </tr>
                                 </tfoot>
@@ -163,7 +164,7 @@
             "autoWidth": false,
             "columnDefs": [{
                     "className": "text-center",
-                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, , 8, 9], // table ke 1
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, , 8, 9, 10], // table ke 1
                 },
                 {
                     targets: [1],
@@ -172,13 +173,13 @@
                     },
                 },
                 {
-                    targets: [7],
+                    targets: [8],
                     render: function(oTable) {
                         return moment(oTable).format('H:mm:s');
                     },
                 },
                 {
-                    targets: [9],
+                    targets: [6, 10],
                     render: $.fn.dataTable.render.number('.')
                 },
             ],
@@ -214,9 +215,9 @@
 
                 // Total over all pages
 
-                if (api.column(9).data().length) {
+                if (api.column(10).data().length) {
                     var total = api
-                        .column(9)
+                        .column(10)
                         .data()
                         .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
@@ -226,7 +227,7 @@
                 };
 
                 // Update footer
-                $(api.column(9).footer()).html(
+                $(api.column(10).footer()).html(
                     new Intl.NumberFormat().format(total)
                 );
             },
@@ -263,6 +264,10 @@
                 {
                     data: 'part.name_local',
                     name: 'part.name_local'
+                },
+                {
+                    data: 'part.price',
+                    name: 'part.price'
                 },
                 {
                     data: 'type',
