@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="assets/css/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
@@ -62,7 +62,7 @@
 
 <body class="hold-transition sidebar-mini layout-fixed" onload="countdowntimes()">
     <div id="pageloader">
-        <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
+        <img src="{{ asset('assets/img/loader-large.gif') }}" alt="processing..." />
     </div>
     <div class="wrapper">
 
@@ -682,7 +682,7 @@
     <!-- Select2 -->
     <script src="assets/css/select2/js/select2.full.min.js"></script>
     <!-- ChartJS -->
-    <script src="assets/css/chart.js/Chart.min.js"></script>
+    <script src="assets/css/chart.js/Chart.bundle.min.js"></script>
     <!-- Sparkline -->
     <script src="assets/css/sparklines/sparkline.js"></script>
     <!-- JQVMap -->

@@ -576,6 +576,8 @@ class Invoice extends Controller
 
         $ar = array();
         $arr = array();
+        $unique_data = array();
+        $unique_dataa = array();
         foreach ($dataa as $key => $attt) {
             $ar[] = $attt->jatuh_tempo;
             $arr[] = $attt['customer']->code;
@@ -584,10 +586,12 @@ class Invoice extends Controller
         }
 
         $filteredData = [];
+        $datein = $datein ?? null;
+        $dateen = $dateen ?? null;
 
 
         foreach ($unique_data as $ke => $value) {
-            if ($value !== null && strtotime($value) >= strtotime($datein) && strtotime($value) <= strtotime($dateen)) {
+            if ($value !== null && ($datein === null || (strtotime($value) >= strtotime($datein) && strtotime($value) <= strtotime($dateen)))) {
                 $filteredData[$ke] = $value;
             }
         }

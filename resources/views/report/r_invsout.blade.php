@@ -233,7 +233,7 @@
                 },
                 {
                     data: 'send.out',
-                    title: 'ALMAZ'
+                    title: 'ANJOKA'
                 },
                 {
                     data: 'keterangan',

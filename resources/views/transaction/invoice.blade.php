@@ -478,14 +478,9 @@
 <!-- jQuery -->
 <script src="assets/css/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="assets/js/autonumeric/autoNumeric.min.js"></script>
-<script>
-    new AutoNumeric('[name="qty[]"]', {
-        decimalPlaces: "0",
-    });
-</script>
 <!-- <script src="/js/jquery-3.5.1.js"></script> -->
 <script>
-    var ppn_st, pph_st;
+    var ppn_st, pph_st, tax;
     $(function() {
         //open-user
         $.fn.dataTable.ext.buttons.add = {
@@ -502,6 +497,7 @@
                 //AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 $('[name="add-tab"]').show();
                 $("#status").val('OPEN').trigger('change');
+                autonumeric(0); // Initialize row 0
                 $('#myModal').modal('show');
             }
         };
@@ -751,6 +747,9 @@
                 if (data[0].tanggal_bayar != null) {
                     $('#tanggal_bayar').val(new Date(data[0].tanggal_bayar).toLocaleString("id-ID", newDateOptions).split(' ')[0]).prop('readonly', true);
                 }
+                
+                // Trigger calculation
+                findTotal(data[0].detail_invoice.length);
                 //AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
                 setTimeout(function() {
                     for (let j = 0; j < data[0].detail_invoice.length; j++) {
@@ -991,24 +990,31 @@
 
                 },
                 success: function(data) {
-                    if (total_price === "") {
+                    // Update price and total price
+                    // Assuming data is the raw number
+                    if (AutoNumeric.getAutoNumericElement('#price' + matches[0])) {
+                        AutoNumeric.getAutoNumericElement('#price' + matches[0]).set(data);
+                    } else {
                         $('#price' + matches[0]).val(data);
-                        // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
-                        // autonumeric(matches[0]);
-                        AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
-                    } else if (price.replaceAll(",", "") == data) {
-                        // $('#total_price' + matches[0]).val(qty.replaceAll(",", "") * data);
-                        // autonumeric(matches[0]);
-                        AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(qty.replaceAll(",", "") * data);
-                    }
-                    //findTotal(matches[0]);
+                    } 
+                    
+                    // Recalculate total
+                    var qtyVal = $('#qty' + matches[0]).val().replaceAll(",", "");
+                    var total = parseFloat(qtyVal) * parseFloat(data);
+                    
+                    // Set total
+                    AutoNumeric.getAutoNumericElement('#total_price' + matches[0]).set(total);
+                    
+                    // Update grand total
+                    var rowCount = document.getElementById('roww').rows.length;
+                    findTotal(rowCount);
                 },
             });
         }
     };
     $(function() {
         //Initialize Select2 Elements
-        $('#cust_id,#order_id,#book_month,#book_year').select2({
+        $('#cust_id,#order_id,#book_month,#book_year,#part_id0').select2({
             dropdownParent: $('#myModal'),
             theme: 'bootstrap4'
         })
@@ -1058,6 +1064,11 @@
             $('#cetak_date2').val($('#date_cetak').val());
         });
 
+        // Set initial tax value
+        tax = "{{$pajak->ppn_status}};{{$pajak->pph_status}}";
+        ppn_st = {{$pajak->ppn}};
+        pph_st = {{$pajak->pph}};
+
     });
 
 
@@ -1087,10 +1098,74 @@
             var pph_val = 0;
         }
 
-        AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
-        AutoNumeric.getAutoNumericElement('#ppn').set(ppn_val);
-        AutoNumeric.getAutoNumericElement('#pph').set(pph_val);
-        AutoNumeric.getAutoNumericElement('#total_harga').set(tot + ppn_val - pph_val);
+        if (AutoNumeric.getAutoNumericElement('#grand_total')) AutoNumeric.getAutoNumericElement('#grand_total').set(tot);
+        if (AutoNumeric.getAutoNumericElement('#ppn')) AutoNumeric.getAutoNumericElement('#ppn').set(ppn_val);
+        if (AutoNumeric.getAutoNumericElement('#pph')) AutoNumeric.getAutoNumericElement('#pph').set(pph_val);
+        if (AutoNumeric.getAutoNumericElement('#total_harga')) AutoNumeric.getAutoNumericElement('#total_harga').set(tot + ppn_val - pph_val);
+    }
+
+    function addRows() {
+        var table = document.getElementById('roww');
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+        
+        // Destroy Select2 on source to get clean options
+        var $source = $('#part_id0');
+        var isSelect2 = $source.data('select2');
+        if (isSelect2) $source.select2('destroy');
+
+        var sourceSelect = document.getElementById('part_id0');
+        var cleanSelect = sourceSelect.cloneNode(true);
+        cleanSelect.removeAttribute('data-select2-id');
+        cleanSelect.removeAttribute('tabindex');
+        cleanSelect.removeAttribute('aria-hidden');
+        cleanSelect.classList.remove('select2-hidden-accessible');
+        cleanSelect.id = 'part_id' + rowCount;
+        cleanSelect.value = '';
+
+        // Re-init source
+        $source.select2({
+            placeholder: 'Choose...',
+            theme: 'bootstrap4',
+            width: '100%'
+        });
+
+        // Add cells
+        var sourceRow = document.getElementById('roww').rows[0];
+        for (var i = 0; i < sourceRow.cells.length; i++) {
+            var cell = row.insertCell(i);
+            if (i === 0) {
+                cell.id = 'col0' + rowCount;
+                cell.appendChild(cleanSelect);
+            } else {
+                var copycel = sourceRow.cells[i].innerHTML;
+                var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = copycel;
+                
+                // Clean up inputs
+                var inputs = tempDiv.querySelectorAll('input');
+                inputs.forEach(function(input) {
+                    if (input.id) {
+                        input.id = input.id.replace(/\d+$/, '') + rowCount;
+                    }
+                    input.value = '';
+                    input.removeAttribute('data-auto-numeric'); // Important for fresh init
+                });
+                
+                cell.innerHTML = tempDiv.innerHTML;
+                cell.id = 'col' + i + rowCount;
+            }
+        }
+
+        // Init Select2 for new row
+        $('#part_id' + rowCount).select2({
+            placeholder: 'Choose...',
+            theme: 'bootstrap4',
+            width: '100%'
+        });
+        
+        // Re-init AutoNumeric
+        autonumeric(rowCount);
     }
 
     function deleteRows() {
@@ -1128,26 +1203,16 @@
             unformatOnSubmit: true,
         };
 
-        // tambahkan event listener untuk mengatur opsi decimalPlaces secara dinamis
-        const mixedInput = document.querySelector('.autonumeric-integer');
-        mixedInput.addEventListener('input', () => {
-            const value = mixedInput.value;
-            const decimalIndex = value.indexOf('.');
-
-            // set opsi decimalPlaces ke null jika tidak ada angka desimal atau set opsi decimalPlaces ke 2 jika ada angka desimal
-            mixedOptions.decimalPlaces = decimalIndex === -1 ? null : 2;
-        });
-
-        // terapkan AutoNumeric pada input field
-        // AutoNumeric.multiple('.autonumeric-integer', mixedOptions);
-        if (i == "edit") {
-            new AutoNumeric('#grand_total', mixedOptions);
-            new AutoNumeric('#ppn', mixedOptions);
-            new AutoNumeric('#pph', mixedOptions);
-            new AutoNumeric('#total_harga', mixedOptions);
+        if (i === "edit") {
+            if (!AutoNumeric.getAutoNumericElement('#grand_total')) new AutoNumeric('#grand_total', mixedOptions);
+            if (!AutoNumeric.getAutoNumericElement('#ppn')) new AutoNumeric('#ppn', mixedOptions);
+            if (!AutoNumeric.getAutoNumericElement('#pph')) new AutoNumeric('#pph', mixedOptions);
+            if (!AutoNumeric.getAutoNumericElement('#total_harga')) new AutoNumeric('#total_harga', mixedOptions);
         } else {
-            new AutoNumeric('#price' + i, mixedOptions);
-            new AutoNumeric('#total_price' + i, mixedOptions);
+            // Initialize specific elements for this row
+            if (!AutoNumeric.getAutoNumericElement('#qty' + i)) new AutoNumeric('#qty' + i, { decimalPlaces: "0" });
+            if (!AutoNumeric.getAutoNumericElement('#price' + i)) new AutoNumeric('#price' + i, mixedOptions);
+            if (!AutoNumeric.getAutoNumericElement('#total_price' + i)) new AutoNumeric('#total_price' + i, mixedOptions);
         }
     }
 </script>

@@ -7,6 +7,7 @@
         background-color: #007bff;
         border-color: #007bff;
     }
+
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
@@ -156,7 +157,7 @@
                                                     <td id="col0">
                                                         <input type="hidden" id="detail_id0" name="detail_id[]">
                                                         <select name="part_id[]" id="part_id0" class="form-control select2" style="width: 100%;">
-                                                            <option selected="selected">Choose...</option>
+                                                            <option value="" selected="selected">Choose...</option>
                                                         </select>
                                                     </td>
                                                     <td id="col1">
@@ -221,6 +222,15 @@
 </script> -->
 <!-- <script src="/js/jquery-3.5.1.js"></script> -->
 <script>
+    // Fix Select2 di dalam modal: prevent modal dari focus-trap saat dropdown terbuka
+    $(document).on('select2:open', function() {
+        // Pastikan input search Select2 bisa dapat focus
+        setTimeout(function() {
+            var searchInput = document.querySelector('.select2-container--open .select2-search__field');
+            if (searchInput) searchInput.focus();
+        }, 10);
+    });
+
     $(function() {
         //open-user
         $.fn.dataTable.ext.buttons.add = {
@@ -501,9 +511,9 @@
                     }
                     $('#peringatan').append(text);
                 } else {
+                    isSubmitting = true; // Tandai sedang submit agar tidak muncul alert
                     $('#myModal').modal('hide');
                     reset_form();
-                    // $('#example1').DataTable().ajax.reload();
                     location.reload();
                 }
             }
@@ -548,12 +558,16 @@
 
                 },
                 success: function(data) {
-                    $('[name="part_id[]"]').empty();
-                    $('[name="part_id[]"]').append('<option value="">Choose...</option>');
-                    $.each(data, function(i) {
-                        $('[name="part_id[]"]').append('<option value="' + data[i].id + '">' + data[i].name_local + '</option>');
-                    })
-
+                    $('[name="part_id[]"]').each(function() {
+                        var $sel = $(this);
+                        $sel.empty().append('<option value="">Choose...</option>');
+                        $.each(data, function(i) {
+                            $sel.append('<option value="' + data[i].id + '">' + data[i].name_local + '</option>');
+                        });
+                        if ($sel.data('select2')) {
+                            $sel.trigger('change.select2');
+                        }
+                    });
                 },
             });
         });
@@ -663,29 +677,57 @@
         for (var i = 0; i < cellCount; i++) {
             var cell = 'cell' + i;
             cell = row.insertCell(i);
+
+            if (i === 0) {
+                // Destroy Select2 on source to get clean options
+                var $source = $('#part_id0');
+                var isSelect2 = $source.data('select2');
+                if (isSelect2) $source.select2('destroy');
+
+                var sourceSelect = document.getElementById('part_id0');
+                var cleanSelect = sourceSelect.cloneNode(true); // Clone everything including options
+                cleanSelect.removeAttribute('data-select2-id');
+                cleanSelect.removeAttribute('tabindex');
+                cleanSelect.removeAttribute('aria-hidden');
+                cleanSelect.classList.remove('select2-hidden-accessible');
+                cleanSelect.id = 'part_id' + rowCount;
+                cleanSelect.value = '';
+
+                // Re-init source
+                $source.select2({
+                    placeholder: 'Choose...',
+                    theme: 'bootstrap4',
+                    width: '100%'
+                });
+
+                // Build hidden input + select directly in DOM
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.id = 'detail_id' + rowCount;
+                hiddenInput.name = 'detail_id[]';
+                cell.id = 'col0' + rowCount;
+                cell.appendChild(hiddenInput);
+                cell.appendChild(cleanSelect);
+                
+                // Init Select2 after element is in DOM
+                $('#part_id' + rowCount).select2({
+                    placeholder: 'Choose...',
+                    theme: 'bootstrap4',
+                    width: '100%'
+                });
+                continue;
+            }
+
             var copycel = document.getElementById('col' + i).innerHTML;
-            // Bersihkan dari artifact Select2 (.select2-container dll) tapi jaga <input> & <select>
             var tempDiv = document.createElement('div');
             tempDiv.innerHTML = copycel;
-            $(tempDiv).find('.select2, .select2-container, .select2-selection, .selection').remove();
+            $(tempDiv).find('.select2-container').remove();
             $(tempDiv).find('select').removeAttr('data-select2-id tabindex aria-hidden');
             $(tempDiv).find('input').removeAttr('data-select2-id');
             cell.innerHTML = tempDiv.innerHTML;
             cell.id = 'col' + i + rowCount;
 
-            if (i == 0) {
-                var detailId = document.getElementById('col0' + rowCount).getElementsByTagName('input');
-                if (detailId[0]) {
-                    detailId[0].id = 'detail_id' + rowCount;
-                    detailId[0].value = "";
-                }
-                var partidinput = document.getElementById('col0' + rowCount).getElementsByTagName('select');
-                partidinput[0].id = 'part_id' + rowCount;
-                $('#part_id' + rowCount).select2({
-                    placeholder: "Choose..",
-                    theme: 'bootstrap4'
-                })
-            }
+
             if (i == 1) {
                 var qtyinput = document.getElementById('col1' + rowCount).getElementsByTagName('input');
                 qtyinput[0].id = 'qty' + rowCount;
@@ -857,9 +899,11 @@
         }
     });
 
+    var isSubmitting = false;
+
     // Warn user before leaving page with unsaved data
     $(window).on('beforeunload', function() {
-        if ($('#myModal').is(':visible') && ($('#in').hasClass('add') || $('#in').hasClass('update'))) {
+        if (!isSubmitting && $('#myModal').is(':visible') && ($('#in').hasClass('add') || $('#in').hasClass('update'))) {
             saveDraft();
             return 'Anda memiliki data PO yang belum disimpan!';
         }

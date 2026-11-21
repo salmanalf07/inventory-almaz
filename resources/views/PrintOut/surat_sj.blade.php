@@ -161,7 +161,7 @@
             <td style="width: 13%;" class="border-left border-right border-top"></td>
         </tr>
         <tr>
-            <td colspan="2" rowspan="2" class="center"><img src="./img/almaz.jpg" width="65"></td>
+            <td colspan="2" rowspan="2" class="center"><img src="./img/anjoka.png" width="65"></td>
             <td colspan="4" class="border-left border-bottom">
                 <h1>PT. CED Anjoka Raya</h1>
             </td>

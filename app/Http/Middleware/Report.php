@@ -17,15 +17,8 @@ class Report
      */
     public function handle(Request $request, Closure $next, $route)
     {
-        $str = Auth::user()->permissions;
-        $data = explode(",", $str);
-
-        if ($str) {
-            foreach ($data as $dataa) {
-                if ($dataa == $route || $dataa == "ALL") {
-                    return $next($request);
-                }
-            }
+        if (Auth::user()->hasPermission($route) || Auth::user()->hasPermission('ALL')) {
+            return $next($request);
         }
         return redirect('/dashboard');
     }

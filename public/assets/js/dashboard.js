@@ -115,7 +115,8 @@ $(function () {
 
   /* Chart.js Charts */
   // Sales chart
-  var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d')
+  var salesChartCanvas = document.getElementById('revenue-chart-canvas');
+  var salesChartCtx = salesChartCanvas ? salesChartCanvas.getContext('2d') : null;
   // $('#revenue-chart').get(0).getContext('2d');
 
   var salesChartData = {
@@ -168,14 +169,21 @@ $(function () {
 
   // This will get the first returned node in the jQuery collection.
   // eslint-disable-next-line no-unused-vars
-  var salesChart = new Chart(salesChartCanvas, { // lgtm[js/unused-local-variable]
-    type: 'line',
-    data: salesChartData,
-    options: salesChartOptions
-  })
+  if (salesChartCtx) {
+    try {
+      var salesChart = new Chart(salesChartCtx, { // lgtm[js/unused-local-variable]
+        type: 'line',
+        data: salesChartData,
+        options: salesChartOptions
+      })
+    } catch (e) {
+      console.error('Error initializing salesChart:', e);
+    }
+  }
 
   // Donut Chart
-  var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
+  var pieChartCanvas = $('#sales-chart-canvas').length > 0 ? $('#sales-chart-canvas').get(0) : null;
+  var pieChartCtx = pieChartCanvas ? pieChartCanvas.getContext('2d') : null;
   var pieData = {
     labels: [
       'Instore Sales',
@@ -199,14 +207,21 @@ $(function () {
   // Create pie or douhnut chart
   // You can switch between pie and douhnut using the method below.
   // eslint-disable-next-line no-unused-vars
-  var pieChart = new Chart(pieChartCanvas, { // lgtm[js/unused-local-variable]
-    type: 'doughnut',
-    data: pieData,
-    options: pieOptions
-  })
+  if (pieChartCtx) {
+    try {
+      var pieChart = new Chart(pieChartCtx, { // lgtm[js/unused-local-variable]
+        type: 'doughnut',
+        data: pieData,
+        options: pieOptions
+      })
+    } catch (e) {
+      console.error('Error initializing pieChart:', e);
+    }
+  }
 
   // Sales graph chart
-  var salesGraphChartCanvas = $('#line-chart').get(0).getContext('2d')
+  var salesGraphChartCanvas = $('#line-chart').length > 0 ? $('#line-chart').get(0) : null;
+  var salesGraphChartCtx = salesGraphChartCanvas ? salesGraphChartCanvas.getContext('2d') : null;
   // $('#revenue-chart').get(0).getContext('2d');
 
   var salesGraphChartData = {
@@ -261,9 +276,15 @@ $(function () {
 
   // This will get the first returned node in the jQuery collection.
   // eslint-disable-next-line no-unused-vars
-  var salesGraphChart = new Chart(salesGraphChartCanvas, { // lgtm[js/unused-local-variable]
-    type: 'line',
-    data: salesGraphChartData,
-    options: salesGraphChartOptions
-  })
+  if (salesGraphChartCtx) {
+    try {
+      var salesGraphChart = new Chart(salesGraphChartCtx, { // lgtm[js/unused-local-variable]
+        type: 'line',
+        data: salesGraphChartData,
+        options: salesGraphChartOptions
+      })
+    } catch (e) {
+      console.error('Error initializing salesGraphChart:', e);
+    }
+  }
 })

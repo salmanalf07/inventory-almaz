@@ -775,7 +775,9 @@
                 reset_form();
                 $('#id').val(data.id);
                 $('#cust_id').val(data.cust_id).trigger('change');
-                $('#order_id').val(data.order_id).trigger('change');
+                setTimeout(function() {
+                    $('#order_id').val(data.order_id).trigger('change');
+                }, 500);
                 setTimeout(function() {
                     for (let i = 0; i < data.detail_part_in.length; i++) {
                         $('#part_id' + i).val(data.detail_part_in[i].part_id).trigger(
