@@ -23,7 +23,8 @@ class SJ extends Model
         'date_sj',
         'kembali_sj',
         'revisi',
-        'status'
+        'status',
+        'lbp_gr'
     ];
 
     public function car()

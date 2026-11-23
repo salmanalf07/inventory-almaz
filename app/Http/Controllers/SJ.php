@@ -103,6 +103,9 @@ class SJ extends Controller
             }
             $post->revisi = $request->revisi;
             $post->status = $request->status == "#" ? "OPEN" : $request->status;
+            if ($request->lbp_gr != "") {
+                $post->lbp_gr = date("Y-m-d", strtotime(str_replace('/', '-', $request->lbp_gr)));
+            }
             $post->save();
 
             $part_id = collect($request->part_id)->filter()->all();
@@ -210,6 +213,9 @@ class SJ extends Controller
                 $track->save();
             }
             $post->revisi = $request->revisi;
+            if ($request->lbp_gr != "") {
+                $post->lbp_gr = date("Y-m-d", strtotime(str_replace('/', '-', $request->lbp_gr)));
+            }
             if ($request->status == "INVOICE") {
                 $post->status = $request->status;
                 $track = new TrackSj();

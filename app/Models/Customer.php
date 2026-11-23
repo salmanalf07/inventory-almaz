@@ -26,6 +26,7 @@ class Customer extends Model
         'information',
         'ppn',
         'pph',
+        'lbp_gr'
     ];
 
     public function part_in()

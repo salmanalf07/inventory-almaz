@@ -798,6 +798,17 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="control-group">
+                                    <label>LBP/GR</label>
+                                    <div class="input-group date" id="reservationlbpgr" data-target-input="nearest">
+                                        <input type="text" name="lbp_gr" id="lbp_gr" class="form-control datetimepicker-input" data-target="#reservationlbpgr" />
+                                        <div class="input-group-append" data-target="#reservationlbpgr" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="control-group">
                                     <label>Return Date SJ Rev.</label>
                                     <div class="input-group date" id="reservationrev" data-target-input="nearest">
                                         <input type="text" name="kembali_rev" id="kembali_rev" class="form-control datetimepicker-input" data-target="#reservationrev" />
@@ -1183,6 +1194,9 @@
                     $('#kembali_rev').val(new Date(data.kembali_rev).toLocaleString("id-ID", newDateOptions).split(' ')[0]).prop('readonly', true)
                 }
                 $('#car_id').val(data.car_id).trigger('change');
+                if (data.lbp_gr != null) {
+                    $('#lbp_gr').val(new Date(data.lbp_gr).toLocaleString("id-ID", newDateOptions).split(' ')[0]);
+                }
                 $('#type').val(data.type).trigger('change').attr("disabled", true);
                 $('#booking_month').val(data.booking_month).trigger('change').attr("disabled", true);
                 $('#booking_year').val(data.booking_year).trigger('change').attr("disabled", true);
@@ -1471,10 +1485,15 @@
             theme: 'bootstrap4'
         })
         //Date picker
-        $('#reservationdate,#reservationrev,#reservationsj,#reservationdate1').datetimepicker({
+        $('#reservationdate,#reservationrev,#reservationsj').datetimepicker({
             format: 'DD/MM/YYYY'
-
         });
+
+        if ($('#reservationlbpgr').length) {
+            $('#reservationlbpgr').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        }
 
         //AutoNumeric.multiple('.autonumeric-integer', AutoNumeric.getPredefinedOptions().integerPos);
         // inisialisasi AutoNumeric

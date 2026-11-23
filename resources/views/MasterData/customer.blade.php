@@ -203,12 +203,18 @@
                                     <label class="form-check-label" style="font-weight: bold;" for="pph">PPH 23</label>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="lbp_gr" id="lbp_gr" value="1">
+                                    <label class="form-check-label" style="font-weight: bold;" for="lbp_gr">LBP/GR</label>
+                                </div>
+                            </div>
                         </div>
 
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('form-add').reset();">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('form-add').reset(); $('#ppn').prop('checked', false); $('#pph').prop('checked', false); $('#lbp_gr').prop('checked', false);">Close</button>
                     <button id="in" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
@@ -447,6 +453,9 @@
                 }
                 if (data.pph === "Y") {
                     $("#pph").prop('checked', true);
+                }
+                if (data.lbp_gr == 1) {
+                    $("#lbp_gr").prop('checked', true);
                 }
 
                 id = $('#id').val();

@@ -56,6 +56,7 @@ class Customer extends Controller
             $post->invoice_schedule = $request->invoice_schedule;
             $post->ppn = $request->ppn;
             $post->pph = $request->pph;
+            $post->lbp_gr = $request->lbp_gr ? 1 : 0;
             $post->information  = $request->information;
             $post->save();
 
@@ -106,6 +107,7 @@ class Customer extends Controller
             $post->information  = $request->information;
             $post->ppn = $request->ppn;
             $post->pph = $request->pph;
+            $post->lbp_gr = $request->lbp_gr ? 1 : 0;
             $post->save();
 
             $data = [$post];
